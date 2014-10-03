@@ -3,11 +3,4 @@
 
 Chess game for CIS*3260 Software Design 4
 
-Edit mia
-
-bills edit
-
-Tim's edit
-
-
-Zack Test
+Assumes there is only 2 players.
