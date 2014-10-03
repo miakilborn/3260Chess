@@ -22,6 +22,10 @@ public class Move {
 		this.valid = valid;
 	}
 
+	public Coordinate getNextPostion(){
+		return nextPosition;
+	}
+
 	public Piece getPieceCaptured(){
 		return captured;
 	}
