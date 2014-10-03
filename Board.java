@@ -1,13 +1,3 @@
-
-
-
-
-public class Board {
-    public void checkState(){
-        
-    }
-    
-    public void play(){
-        
-    }
+public interface IBoard {
+    //List of pieces
 }
