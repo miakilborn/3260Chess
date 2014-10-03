@@ -18,6 +18,10 @@ public class Move {
 		return valid;
 	}
 
+	public void setValid(boolean valid){
+		this.valid = valid;
+	}
+
 	public Piece getPieceCaptured(){
 		return captured;
 	}
