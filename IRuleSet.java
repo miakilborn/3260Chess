@@ -1,8 +1,8 @@
 public interface IRuleSet {
 
-	//checkMove(Board, CurrentPos, NextPos);
+	//checkMove(Board, Move);
 	
-	//setupBoard(Board)
+	//setupBoard(Board);
 
 
 }
