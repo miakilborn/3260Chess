@@ -1,17 +1,33 @@
-public abstract class Piece {
+import Coordinate;
 
-	public void setPosition(Coordinate position);
-
-	public Coordinate getPosition();
-
-	public String getColour();
-
-	/**
-	*  set this piece to be captured state, to uncapture
-	*  set its position once again
-	*/
-	public void capture();
-
-
+public abstract class Piece{
+    private Coordinate position;
+    private String colour;
+    private boolean isCaptured = false;
+    
+    public void capture(){
+        this.isCaptured = true;
+        this.position = null;
+    }
+    
+    public void setPosition(Coordinate position) {
+        this.position = position;
+    }
+    
+    public Coordinate getPosition(){
+        return this.position;
+    }
+    
+    public void setColour(String colour){
+        this.colour = colour;
+    }
+    
+    public String getColour(){
+        return this.colour;
+    }
+    
+    public boolean isCaptured(){
+        return this.isCaptured;
+    }
+    
 }
-
