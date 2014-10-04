@@ -119,7 +119,51 @@ public class Standard8x8 implements IRuleSet {
 	private boolean checkMoveBishop(ArrayList<Piece> pieces, Move move){
 		ArrayList<Coordinate> validMoves = new ArrayList<Coordinate>();
 		Coordinate cPos = move.getCurrentPosition();
-
+		
+		//Top Left
+		validMoves.add(new Coordinate(cPos.getX()-1, cPos.getY()-1));
+		validMoves.add(new Coordinate(cPos.getX()-2, cPos.getY()-2));
+		validMoves.add(new Coordinate(cPos.getX()-3, cPos.getY()-3));
+		validMoves.add(new Coordinate(cPos.getX()-4, cPos.getY()-4));
+		validMoves.add(new Coordinate(cPos.getX()-5, cPos.getY()-5));
+		validMoves.add(new Coordinate(cPos.getX()-6, cPos.getY()-6));
+		validMoves.add(new Coordinate(cPos.getX()-7, cPos.getY()-7));
+		
+		//Bottom Right
+		validMoves.add(new Coordinate(cPos.getX()+1, cPos.getY()+1));
+		validMoves.add(new Coordinate(cPos.getX()+2, cPos.getY()+2));
+		validMoves.add(new Coordinate(cPos.getX()+3, cPos.getY()+3));
+		validMoves.add(new Coordinate(cPos.getX()+4, cPos.getY()+4));
+		validMoves.add(new Coordinate(cPos.getX()+5, cPos.getY()+5));
+		validMoves.add(new Coordinate(cPos.getX()+6, cPos.getY()+6));
+		validMoves.add(new Coordinate(cPos.getX()+7, cPos.getY()+7));
+		
+		//Bottom Left
+		validMoves.add(new Coordinate(cPos.getX()-1, cPos.getY()+1));
+		validMoves.add(new Coordinate(cPos.getX()-2, cPos.getY()+2));
+		validMoves.add(new Coordinate(cPos.getX()-3, cPos.getY()+3));
+		validMoves.add(new Coordinate(cPos.getX()-4, cPos.getY()+4));
+		validMoves.add(new Coordinate(cPos.getX()-5, cPos.getY()+5));
+		validMoves.add(new Coordinate(cPos.getX()-6, cPos.getY()+6));
+		validMoves.add(new Coordinate(cPos.getX()-7, cPos.getY()+7));
+		
+		//Top Right
+		validMoves.add(new Coordinate(cPos.getX()+1, cPos.getY()-1));
+		validMoves.add(new Coordinate(cPos.getX()+2, cPos.getY()-2));
+		validMoves.add(new Coordinate(cPos.getX()+3, cPos.getY()-3));
+		validMoves.add(new Coordinate(cPos.getX()+4, cPos.getY()-4));
+		validMoves.add(new Coordinate(cPos.getX()+5, cPos.getY()-5));
+		validMoves.add(new Coordinate(cPos.getX()+6, cPos.getY()-6));
+		validMoves.add(new Coordinate(cPos.getX()+7, cPos.getY()-7));
+		
+		for (int i=0;i<validMoves.size();i++){
+			Coordinate validMove = validMoves.get(i);
+			if (validMove.getX() < 1 || validMove.getY() < 1 || validMove.getX() > 8|| validMove.getY() > 8) //any moves off the board, skip
+				continue;
+			if (move.getNextPosition().equals(validMove)) //if player's move matches a valid move
+				return true;
+		}
+		return false;
 	}
 
 	private boolean checkMoveKing(ArrayList<Piece> pieces, Move move){
