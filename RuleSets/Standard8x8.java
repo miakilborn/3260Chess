@@ -291,7 +291,6 @@ public class Standard8x8 implements IRuleSet {
 				return true;
 		}
 		return false;
-
 	}
 
 	private boolean checkMoveQueen(IBoard board, Move move){
@@ -423,6 +422,29 @@ public class Standard8x8 implements IRuleSet {
 
 	}
 
+	public boolean isInCheck(IBoard board, String colour){
+		ArrayList<Piece> pieces = board.getPieces();
+		Coordinate kingCoords = null;
+
+		for (int i=0;i<pieces.size();i++){ //obtain position of opponent King to that of specified colour
+			Piece piece = pieces.get(i);
+			if (!piece.getColour().equals(colour) && (piece instanceof King)){
+				kingCoords = piece.getPosition();
+				break;
+			}
+		}
+
+		for (int i=0;i<pieces.size();i++){
+			Piece piece = pieces.get(i);
+			if (!piece.getColour().equals(colour)){
+				Move move = new Move(piece, kingCoords);
+				if (checkMove(board, move))
+					return true;
+			}
+		}
+		return false;
+	}
+
 	private boolean checkOpponents(Piece piece1, Piece piece2){
 		if (piece1 != null && piece2 != null)
 			if (piece1.getColour().equals(piece2.getColour())) //if piece colours match, same player owns pieces
@@ -467,6 +489,15 @@ public class Standard8x8 implements IRuleSet {
 			validMove = checkMoveKing(board, move);
 		else if  (piece instanceof Queen)
 			validMove = checkMoveQueen(board, move);
+
+
+		if (validMove){ //Perform the piece move temporarly, check if it makes the player in check who is making the move
+			Move oldSpot = new Move(piece, piece.getPosition());
+			board.makeMove(move);
+			if (isInCheck(board, piece.getColour())) //this move has made player put him/herself in check, invalid move!
+				validMove = false;
+			board.makeMove(oldSpot);
+		}
 
 		if (validMove){
 			lastMove = move;
