@@ -2,9 +2,9 @@ JC = javac
 JCF = 
 JRE = java
 JREF = -Djava.library.path="${PWD}"
-javaSOURCE = Controller.java
+javaSOURCE = Game/Coordinate.java Game/Move.java Game/Player.java Game/IBoard.java Game/Controller.java Pieces/Piece.java Pieces/Knight.java Pieces/Bishop.java Pieces/King.java Pieces/Pawn.java Pieces/Queen.java Pieces/Rook.java RuleSets/IRuleSet.java RuleSets/Standard8x8.java
 javaCLASS = ${javaSOURCE:.java=.class}
-javaMAINCLASS = Controller
+javaMAINCLASS = Game.Controller
 
 default: $(javaCLASS)
 	@ echo "Make completed - type 'make run' to run the application."
@@ -19,7 +19,7 @@ run:
 	
 clean:
 	@ echo "Cleaning Up..."
-	@ rm *.class
+	@ rm $(javaCLASS)
 
 rebuild: clean default
 

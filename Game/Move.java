@@ -1,9 +1,12 @@
+package Game;
+import Pieces.*;
+import Game.*;
 public class Move {
 	private boolean valid;
 	private final Piece piece;
 	private final Coordinate nextPosition;
 
-	private final Piece captured;
+	private Piece captured;
 
 	public Move(Piece piece, Coordinate nextPosition){
 		this.piece = piece;
@@ -14,14 +17,14 @@ public class Move {
 		return valid;
 	}
 
-	public Coordinate getCurrentPostion(){
+	public Coordinate getCurrentPosition(){
 		if (piece != null)
 			return piece.getPosition();
 		else
 			return null;
 	}
 
-	public Coordinate getNextPostion(){
+	public Coordinate getNextPosition(){
 		return nextPosition;
 	}
 
@@ -42,5 +45,5 @@ public class Move {
 	}
 
 
-	
+
 }

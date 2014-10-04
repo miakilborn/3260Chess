@@ -1,7 +1,9 @@
+package Game;
 import java.util.*;
 import java.net.*;
 import java.io.*;
 import java.lang.reflect.Method;
+import RuleSets.Standard8x8;
 
 public class Controller{
     public static final Boolean MASTER = true;
@@ -76,7 +78,7 @@ public class Controller{
     }
 
     public Boolean test(String example){
-        System.out.println("TEST: "+example);
+        System.out.println("TEST FUNCTION: "+example);
         return true;
     }
 
