@@ -6,4 +6,5 @@ public interface IBoard {
     public void addPiece(Piece p);
     public ArrayList<Piece> getPieces();
     public void makeMove(Move m);
+    
 }
