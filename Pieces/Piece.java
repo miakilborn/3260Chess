@@ -1,11 +1,17 @@
-//Abstract class - all of these are implemented in this class
+public abstract class Piece {
 
-//setPosition(coordinate) - moves piece there 
+	public void setPosition(Coordinate position);
 
-//getPosition() - gets the position of piece (returns Coordinate)
+	public Coordinate getPosition();
 
-//getColour() - get the colour of piece
+	public String getColour();
 
-//capture() - kill the piece
+	/**
+	*  set this piece to be captured state, to uncapture
+	*  set its position once again
+	*/
+	public void capture();
 
-//colour
+
+}
+
