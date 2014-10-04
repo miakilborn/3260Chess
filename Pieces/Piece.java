@@ -6,6 +6,7 @@ public abstract class Piece{
     private Coordinate position;
     private String colour;
     private boolean isCaptured = false;
+    private boolean hasMoved = false;
 
     public void capture(){
         this.isCaptured = true;
@@ -22,6 +23,10 @@ public abstract class Piece{
 
     public void setColour(String colour){
         this.colour = colour;
+    }
+
+    public void setHasMoved(boolean state){
+        this.hasMoved = state;
     }
 
     public String getColour(){
