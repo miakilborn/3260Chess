@@ -120,41 +120,65 @@ public class Standard8x8 implements IRuleSet {
 		ArrayList<Coordinate> validMoves = new ArrayList<Coordinate>();
 		Coordinate cPos = move.getCurrentPosition();
 		
+		boolean pieceHit = false;
+		
 		//Top Left
-		validMoves.add(new Coordinate(cPos.getX()-1, cPos.getY()-1));
-		validMoves.add(new Coordinate(cPos.getX()-2, cPos.getY()-2));
-		validMoves.add(new Coordinate(cPos.getX()-3, cPos.getY()-3));
-		validMoves.add(new Coordinate(cPos.getX()-4, cPos.getY()-4));
-		validMoves.add(new Coordinate(cPos.getX()-5, cPos.getY()-5));
-		validMoves.add(new Coordinate(cPos.getX()-6, cPos.getY()-6));
-		validMoves.add(new Coordinate(cPos.getX()-7, cPos.getY()-7));
-		
-		//Bottom Right
-		validMoves.add(new Coordinate(cPos.getX()+1, cPos.getY()+1));
-		validMoves.add(new Coordinate(cPos.getX()+2, cPos.getY()+2));
-		validMoves.add(new Coordinate(cPos.getX()+3, cPos.getY()+3));
-		validMoves.add(new Coordinate(cPos.getX()+4, cPos.getY()+4));
-		validMoves.add(new Coordinate(cPos.getX()+5, cPos.getY()+5));
-		validMoves.add(new Coordinate(cPos.getX()+6, cPos.getY()+6));
-		validMoves.add(new Coordinate(cPos.getX()+7, cPos.getY()+7));
-		
-		//Bottom Left
-		validMoves.add(new Coordinate(cPos.getX()-1, cPos.getY()+1));
-		validMoves.add(new Coordinate(cPos.getX()-2, cPos.getY()+2));
-		validMoves.add(new Coordinate(cPos.getX()-3, cPos.getY()+3));
-		validMoves.add(new Coordinate(cPos.getX()-4, cPos.getY()+4));
-		validMoves.add(new Coordinate(cPos.getX()-5, cPos.getY()+5));
-		validMoves.add(new Coordinate(cPos.getX()-6, cPos.getY()+6));
-		validMoves.add(new Coordinate(cPos.getX()-7, cPos.getY()+7));
+		for (int i = 1; i <= 7; i++)
+		{
+			Coordinate coord = new Coordinate(cPos.getX() - i, cPos.getY() - i);
+			
+			validMoves.add(coord);
+			
+			//Checks if we have hit a piece, can't go past it in this direction
+			if (getPieceAtLocation(coord) != null)
+			{
+				break;
+			}
+		}
 		
 		//Top Right
-		validMoves.add(new Coordinate(cPos.getX()+1, cPos.getY()-1));
-		validMoves.add(new Coordinate(cPos.getX()+2, cPos.getY()-2));
-		validMoves.add(new Coordinate(cPos.getX()+3, cPos.getY()-3));
-		validMoves.add(new Coordinate(cPos.getX()+4, cPos.getY()-4));
-		validMoves.add(new Coordinate(cPos.getX()+5, cPos.getY()-5));
-		validMoves.add(new Coordinate(cPos.getX()+6, cPos.getY()-6));
-		validMoves.add(new Coordinate(cPos.getX()+7, cPos.getY()-7));
+		for (int i = 1; i <= 7; i++)
+		{
+			Coordinate coord = new Coordinate(cPos.getX() + i, cPos.getY() - i);
+			
+			validMoves.add(coord);
+			
+			//Checks if we have hit a piece, can't go past it in this direction
+			if (getPieceAtLocation(coord) != null)
+			{
+				break;
+			}
+		}
+		
+		//Bottom Left
+		for (int i = 1; i <= 7; i++)
+		{
+			Coordinate coord = new Coordinate(cPos.getX() - i, cPos.getY() + i);
+			
+			validMoves.add(coord);
+			
+			//Checks if we have hit a piece, can't go past it in this direction
+			if (getPieceAtLocation(coord) != null)
+			{
+				break;
+			}
+		}
+		
+		//Bottom Right
+		for (int i = 1; i <= 7; i++)
+		{
+			Coordinate coord = new Coordinate(cPos.getX() + i, cPos.getY() + i);
+			
+			validMoves.add(coord);
+			
+			//Checks if we have hit a piece, can't go past it in this direction
+			if (getPieceAtLocation(coord) != null)
+			{
+				break;
+			}
+		}
+		
+		
 		
 		for (int i=0;i<validMoves.size();i++){
 			Coordinate validMove = validMoves.get(i);
