@@ -50,11 +50,11 @@ public class Standard8x8 implements IRuleSet {
 	* @return	The reference to the Piece object if found otherwise null
 	* 
 	*/
-	private Piece getPieceAtPosition(Standard8x8Board board, Coordinate coord){
+	private Piece getPieceAtPosition(IBoard board, Coordinate coord){
 		return board.getPieceAtPosition(coord);
 	}
 
-	private boolean checkMovePawn(Standard8x8Board board, Move move){
+	private boolean checkMovePawn(IBoard board, Move move){
 		ArrayList<Coordinate> validMoves = new ArrayList<Coordinate>();
 		Coordinate cPos = move.getCurrentPosition();
 		String colour = move.getPiece().getColour();
@@ -93,7 +93,7 @@ public class Standard8x8 implements IRuleSet {
 		return false;
 	}
 
-	private boolean checkMoveKnight(Standard8x8Board board, Move move){
+	private boolean checkMoveKnight(IBoard board, Move move){
 		ArrayList<Coordinate> validMoves = new ArrayList<Coordinate>();
 		Coordinate cPos = move.getCurrentPosition();
 		ArrayList<Piece> pieces = board.getPieces();
@@ -118,7 +118,7 @@ public class Standard8x8 implements IRuleSet {
 		return false;
 	}
 
-	private boolean checkMoveBishop(Board board, Move move){
+	private boolean checkMoveBishop(IBoard board, Move move){
 		ArrayList<Coordinate> validMoves = new ArrayList<Coordinate>();
 		Coordinate cPos = move.getCurrentPosition();
 		ArrayList<Piece> pieces = board.getPieces();
@@ -191,7 +191,7 @@ public class Standard8x8 implements IRuleSet {
 		return false;
 	}
 
-	private boolean checkMoveRook(Standard8x8Board board, Move move){
+	private boolean checkMoveRook(IBoard board, Move move){
 		ArrayList<Coordinate> validMoves = new ArrayList<Coordinate>();
 		Coordinate cPos = move.getCurrentPosition();
 		ArrayList<Piece> pieces = board.getPieces();
@@ -264,7 +264,7 @@ public class Standard8x8 implements IRuleSet {
 		return false;
 	}
 
-	private boolean checkMoveKing(Standard8x8Board board, Move move){
+	private boolean checkMoveKing(IBoard board, Move move){
 		ArrayList<Coordinate> validMoves = new ArrayList<Coordinate>();
 		Coordinate cPos = move.getCurrentPosition();
 		ArrayList<Piece> pieces = board.getPieces();
@@ -289,7 +289,7 @@ public class Standard8x8 implements IRuleSet {
 
 	}
 
-	private boolean checkMoveQueen(Standard8x8Board board, Move move){
+	private boolean checkMoveQueen(IBoard board, Move move){
 		ArrayList<Coordinate> validMoves = new ArrayList<Coordinate>();
 		Coordinate cPos = move.getCurrentPosition();
 		ArrayList<Piece> pieces = board.getPieces();
