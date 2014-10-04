@@ -286,7 +286,7 @@ public class Standard8x8 implements IRuleSet {
 
 		for (int i=0;i<validMoves.size();i++){
 			Coordinate logicalMove = validMoves.get(i);
-			if (logicalMove.getX() < 1 || logicalMove.getY() < 1 || logicalMove.getX() > 8|| logicalMove.getY() > 8) 
+			if (logicalMove.getX() < 1 || logicalMove.getY() < 1 || logicalMove.getX() > 8|| logicalMove.getY() > 8)
 				continue;
 			validMoves.add(logicalMove);
 		}

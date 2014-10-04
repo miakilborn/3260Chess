@@ -159,10 +159,12 @@ public class Controller{
         Scanner keyboard = new Scanner(System.in);
 
         if(me.isMaster()){
-            me.makeMove(new Move("M(Rook(C(0,0),Black,false),C(0,1))"));
+            Boolean ret = me.makeMove(new Move(me.board.getPieceAtPosition(new Coordinate(1,2)),new Coordinate(1,4)));
+            System.out.println("Master Move Response: "+ret);
         }
         else if(me.isSlave()){
-            me.makeMove(new Move("M(Knight(C(0,0),White,false),C(0,1))"));
+            Boolean ret = me.makeMove(new Move("M(Pawn(C(1,7),Black,false),C(1,6))"));
+            System.out.println("Slave Move Response: "+ret);
         }
         else{
             System.err.println("An error occurred");
