@@ -63,12 +63,14 @@ public class Controller{
             System.exit(1);
         }
 
-        board = new Standard8x8Board();
-        rules = new Standard8x8();
-        rules.setupBoard(board);
+        if(this.isMaster()){
+            board = new Standard8x8Board();
+            rules = new Standard8x8();
+            rules.setupBoard(board);
 
-        listener = new ControllerListener(this);
-        listener.start();
+            listener = new ControllerListener(this);
+            listener.start();
+        }
     }
 
 
@@ -140,7 +142,9 @@ public class Controller{
         try{
             this.slavePipe.shutdownInput();
             this.slavePipe.shutdownOutput();
-            listener.join();
+            if(this.isMaster()){
+                listener.join();
+            }
         }
         catch(IOException e){
             System.err.println("Could not shut down cleanly!");
