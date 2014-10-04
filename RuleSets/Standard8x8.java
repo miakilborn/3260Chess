@@ -590,7 +590,7 @@ public class Standard8x8 implements IRuleSet {
 			message = "generic invalid move";
 		}
 
-		System.out.println("Move result, piece: " + piece + ", valid: " + validMove +", msg: " + message);
+		System.out.println("Move result, move: " + move + ", valid: " + validMove + (validMove ? "" :  ", msg: " + message));
 		return validMove;
 	}
 
