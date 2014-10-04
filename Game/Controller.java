@@ -63,14 +63,12 @@ public class Controller{
             System.exit(1);
         }
 
-        if(this.isMaster()){
-            board = new Standard8x8Board();
-            rules = new Standard8x8();
-            rules.setupBoard(board);
+        board = new Standard8x8Board();
+        rules = new Standard8x8();
+        rules.setupBoard(board);
 
-            listener = new ControllerListener(this);
-            listener.start();
-        }
+        listener = new ControllerListener(this);
+        listener.start();
     }
 
 
@@ -124,14 +122,23 @@ public class Controller{
         if(this.isMaster()){
             if(rules.checkMove(this.board,m)){
                 board.makeMove(m);
+                this.send("makeMove|"+m.toString());
                 return true;
             }
-            return false;
+            else{
+                return false;
+            }
         }
         else{
             this.send("makeMove|"+m.toString());
-            String ret = this.read();
-            return Boolean.getBoolean(ret);
+            Boolean ret = Boolean.getBoolean(this.read());
+            if(ret){
+                board.makeMove(m);
+                return true;
+            }
+            else{
+                return false;
+            }
         }
     }
 
@@ -163,11 +170,11 @@ public class Controller{
         Scanner keyboard = new Scanner(System.in);
 
         if(me.isMaster()){
-            Boolean ret = me.makeMove(new Move(me.board.getPieceAtPosition(new Coordinate(1,2)),new Coordinate(1,4)));
+            Boolean ret = me.makeMove(new Move(me.board.getPieceAtPosition(new Coordinate(1,7)),new Coordinate(1,6)));
             System.out.println("Master Move Response: "+ret);
         }
         else if(me.isSlave()){
-            Boolean ret = me.makeMove(new Move("M(Pawn(C(1,7),Black,false),C(1,6))"));
+            Boolean ret = me.makeMove(new Move(me.board.getPieceAtPosition(new Coordinate(1,2)),new Coordinate(1,3)));
             System.out.println("Slave Move Response: "+ret);
         }
         else{
@@ -192,7 +199,7 @@ public class Controller{
         public void run(){ //Thread that watches for commands from the second controller
             //TODO: Make this work with any number of arguments... may have to build objects in here dynamically
 
-            while(c.isMaster()){
+            while(true){
                 try{
                     String get = c.read();
                     String [] cmd = get.split("\\|");
@@ -213,7 +220,7 @@ public class Controller{
                     }
                     catch(InterruptedException ie){
                         //No Messages
-                        System.out.println("Interrupted");
+                        System.err.println("Interrupted");
                     }
                 }
             }
