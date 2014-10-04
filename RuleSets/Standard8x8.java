@@ -164,7 +164,6 @@ public class Standard8x8 implements IRuleSet {
 				return true;
 		}
 		return false;
-
 	}
 
 	private boolean checkMoveKing(ArrayList<Piece> pieces, Move move){
