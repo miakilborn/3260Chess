@@ -108,7 +108,7 @@ public class Standard8x8 implements IRuleSet {
 
 		for (int i=0;i<validMoves.size();i++){
 			Coordinate validMove = validMoves.get(i);
-			if (validMove.getX() < 1 || validMove.getY() < 1) //any moves off the board, skip
+			if (validMove.getX() < 1 || validMove.getY() < 1 || validMove.getX() > 8|| validMove.getY() > 8) //any moves off the board, skip
 				continue;
 			if (move.getNextPosition().equals(validMove)) //if player's move matches a valid move
 				return true;
@@ -125,6 +125,23 @@ public class Standard8x8 implements IRuleSet {
 	private boolean checkMoveKing(ArrayList<Piece> pieces, Move move){
 		ArrayList<Coordinate> validMoves = new ArrayList<Coordinate>();
 		Coordinate cPos = move.getCurrentPosition();
+		validMoves.add(new Coordinate(cPos.getX()-1, cPos.getY()+1));
+		validMoves.add(new Coordinate(cPos.getX()+0, cPos.getY()+1));
+		validMoves.add(new Coordinate(cPos.getX()+1, cPos.getY()+1));
+		validMoves.add(new Coordinate(cPos.getX()-1, cPos.getY()+0));
+		validMoves.add(new Coordinate(cPos.getX()+1, cPos.getY()+0));
+		validMoves.add(new Coordinate(cPos.getX()-1, cPos.getY()-1));
+		validMoves.add(new Coordinate(cPos.getX()+0, cPos.getY()-1));
+		validMoves.add(new Coordinate(cPos.getX()+1, cPos.getY()-1));
+
+		for (int i=0;i<validMoves.size();i++){
+			Coordinate validMove = validMoves.get(i);
+			if (validMove.getX() < 1 || validMove.getY() < 1 || validMove.getX() > 8|| validMove.getY() > 8) //any moves off the board, skip
+				continue;
+			if (move.getNextPosition().equals(validMove)) //if player's move matches a valid move
+				return true;
+		}
+		return false;
 
 	}
 
