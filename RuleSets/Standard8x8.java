@@ -269,24 +269,38 @@ public class Standard8x8 implements IRuleSet {
 		return false;
 	}
 
-	private boolean checkMoveKing(IBoard board, Move move){
+	/**
+	* @param current position of the king
+	*/
+	private ArrayList<Coordinate> getValidMovesKing(Coordinate cPos){
+		ArrayList<Coordinate> logicalMoves = new ArrayList<Coordinate>();
 		ArrayList<Coordinate> validMoves = new ArrayList<Coordinate>();
+		logicalMoves.add(new Coordinate(cPos.getX()-1, cPos.getY()+1));
+		logicalMoves.add(new Coordinate(cPos.getX()+0, cPos.getY()+1));
+		logicalMoves.add(new Coordinate(cPos.getX()+1, cPos.getY()+1));
+		logicalMoves.add(new Coordinate(cPos.getX()-1, cPos.getY()+0));
+		logicalMoves.add(new Coordinate(cPos.getX()+1, cPos.getY()+0));
+		logicalMoves.add(new Coordinate(cPos.getX()-1, cPos.getY()-1));
+		logicalMoves.add(new Coordinate(cPos.getX()+0, cPos.getY()-1));
+		logicalMoves.add(new Coordinate(cPos.getX()+1, cPos.getY()-1));
+
+		for (int i=0;i<validMoves.size();i++){
+			Coordinate logicalMove = validMoves.get(i);
+			if (logicalMove.getX() < 1 || logicalMove.getY() < 1 || logicalMove.getX() > 8|| logicalMove.getY() > 8) 
+				continue;
+			validMoves.add(logicalMove);
+		}
+		return validMoves;
+	}
+
+	private boolean checkMoveKing(IBoard board, Move move){
 		Coordinate cPos = move.getCurrentPosition();
 		ArrayList<Piece> pieces = board.getPieces();
 
-		validMoves.add(new Coordinate(cPos.getX()-1, cPos.getY()+1));
-		validMoves.add(new Coordinate(cPos.getX()+0, cPos.getY()+1));
-		validMoves.add(new Coordinate(cPos.getX()+1, cPos.getY()+1));
-		validMoves.add(new Coordinate(cPos.getX()-1, cPos.getY()+0));
-		validMoves.add(new Coordinate(cPos.getX()+1, cPos.getY()+0));
-		validMoves.add(new Coordinate(cPos.getX()-1, cPos.getY()-1));
-		validMoves.add(new Coordinate(cPos.getX()+0, cPos.getY()-1));
-		validMoves.add(new Coordinate(cPos.getX()+1, cPos.getY()-1));
+		ArrayList<Coordinate> validMoves = getValidMovesKing(cPos);
 
 		for (int i=0;i<validMoves.size();i++){
 			Coordinate validMove = validMoves.get(i);
-			if (validMove.getX() < 1 || validMove.getY() < 1 || validMove.getX() > 8|| validMove.getY() > 8) //any moves off the board, skip
-				continue;
 			if (move.getNextPosition().equals(validMove)) //if player's move matches a valid move
 				return true;
 		}
@@ -422,35 +436,103 @@ public class Standard8x8 implements IRuleSet {
 
 	}
 
-	public boolean isInCheck(IBoard board, String colour){
+	/**
+	* Gets the Piece object of the king owned by specified colour
+	* @param	board reference, and player colour (White/Black)
+	*/
+	private Piece getKing(IBoard board, String colour){
 		ArrayList<Piece> pieces = board.getPieces();
-		Coordinate kingCoords = null;
-
-		for (int i=0;i<pieces.size();i++){ //obtain position of opponent King to that of specified colour
+		for (int i=0;i<pieces.size();i++){ //obtain position of King to that of specified colour
 			Piece piece = pieces.get(i);
-			if (!piece.getColour().equals(colour) && (piece instanceof King)){
-				kingCoords = piece.getPosition();
-				break;
+			if (piece.getColour().equals(colour) && (piece instanceof King)){
+				return piece;
 			}
 		}
+		return null;
+	}
+
+	/**
+	* Gets the position of the king owned by specified colour
+	* @param	board reference, and player colour (White/Black)
+	*/
+	private Coordinate getKingPosition(IBoard board, String colour){
+		Piece king = getKing(board, colour);
+		if (king != null)
+			return king.getPosition();
+		else
+			return null;
+	}
+
+
+	/**
+	* Checks if specified colour is currently in checkmate
+	* @param	board reference, and player colour (White/Black)
+	*/
+	public boolean isInCheckMate(IBoard board, String colour){
+		Piece king = getKing(board, colour);
+		Coordinate kingCoords = king.getPosition();
+		ArrayList<Coordinate> validMoves = getValidMovesKing(kingCoords);
+		for (int i=0;i<validMoves.size();i++){
+			Coordinate validMove = validMoves.get(i);
+			Move move = new Move(king, validMove);
+			board.makeMove(move);
+			Move moveBack = new Move(king, move.getCurrentPosition());
+			if (!isInCheck(board, colour)){
+				board.makeMove(moveBack);
+				return false;
+			}
+			board.makeMove(moveBack);
+		}
+		return true;
+	}
+
+	/**
+	* Checks if specified colour is currently in check
+	* @param	board reference, and player colour (White/Black)
+	*/
+	public boolean isInCheck(IBoard board, String colour){
+		ArrayList<Piece> pieces = board.getPieces();
+		Coordinate kingCoords = getKingPosition(board, colour);
 
 		for (int i=0;i<pieces.size();i++){
 			Piece piece = pieces.get(i);
 			if (!piece.getColour().equals(colour)){
 				Move move = new Move(piece, kingCoords);
-				if (checkMove(board, move))
+				if (checkMoveByPiece(board, move))
 					return true;
 			}
 		}
 		return false;
 	}
 
+	/**
+	* Checks if two pieces provided are of the opposite colour
+	* @param	two Piece references
+	*/
 	private boolean checkOpponents(Piece piece1, Piece piece2){
 		if (piece1 != null && piece2 != null)
 			if (piece1.getColour().equals(piece2.getColour())) //if piece colours match, same player owns pieces
 				return false;
 			else
 				return true;
+		else
+			return false;
+	}
+
+	private boolean checkMoveByPiece(IBoard board, Move move){
+		Piece piece =  move.getPiece(); //players piece he/she wants to move
+		if (piece instanceof Pawn)
+			return checkMovePawn(board, move);
+		else if  (piece instanceof Knight)
+			return checkMoveKnight(board, move);
+		else if  (piece instanceof Rook)
+			return checkMoveRook(board, move);
+		else if  (piece instanceof Bishop)
+			return checkMoveBishop(board, move);
+		else if  (piece instanceof King)
+			return checkMoveKing(board, move);
+		else if  (piece instanceof Queen)
+			return checkMoveQueen(board, move);
 		else
 			return false;
 	}
@@ -477,18 +559,7 @@ public class Standard8x8 implements IRuleSet {
 				return false;
 		}
 
-		if (piece instanceof Pawn)
-			validMove = checkMovePawn(board, move);
-		else if  (piece instanceof Knight)
-			validMove = checkMoveKnight(board, move);
-		else if  (piece instanceof Rook)
-			validMove = checkMoveRook(board, move);
-		else if  (piece instanceof Bishop)
-			validMove = checkMoveBishop(board, move);
-		else if  (piece instanceof King)
-			validMove = checkMoveKing(board, move);
-		else if  (piece instanceof Queen)
-			validMove = checkMoveQueen(board, move);
+		validMove = checkMoveByPiece(board, move);
 
 
 		if (validMove){ //Perform the piece move temporarly, check if it makes the player in check who is making the move
