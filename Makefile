@@ -19,7 +19,7 @@ run:
 	
 clean:
 	@ echo "Cleaning Up..."
-	@ rm $(javaCLASS)
+	@ rm -f $(javaCLASS)
 
 rebuild: clean default
 
