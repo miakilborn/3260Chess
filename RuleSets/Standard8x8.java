@@ -48,7 +48,7 @@ public class Standard8x8 implements IRuleSet {
 	/**
 	* Checks if any board provided list of pieces are at the position 'coord'
 	* @return	The reference to the Piece object if found otherwise null
-	*
+	* TODO: PUT THIS IN BOARD
 	*/
 	private Piece getPieceAtLocation(ArrayList<Piece> pieces, Coordinate coord){
 		for (int i=0;i<pieces.size();i++){

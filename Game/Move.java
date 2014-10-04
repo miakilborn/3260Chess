@@ -13,6 +13,14 @@ public class Move {
 		this.nextPosition = nextPosition;
 	}
 
+	public Move(String s){
+		//Need a basic string constructor... this will rely on a coordinate
+		//toString and a coordinate string constructor as well.
+		piece = null;
+		nextPosition = null;
+
+	}
+
 	public boolean isValid(){
 		return valid;
 	}
@@ -44,6 +52,9 @@ public class Move {
 		this.valid = valid;
 	}
 
-
+	public String tostring(){
+		//Should return a string that you can use in the constructor to rebuild the object.
+		return null;
+	}
 
 }
