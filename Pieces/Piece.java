@@ -30,7 +30,7 @@ public abstract class Piece{
     }
 
     public boolean hasMoved(){
-        return this.hasMoved();
+        return this.hasMoved;
     }
 
     public String getColour(){
