@@ -5,27 +5,13 @@ public abstract class Piece{
     private String colour;
     private boolean isCaptured = false;
     
-    public Piece(){
-        
-    }
-    
-    public Piece(String colour, Coordinate position){
-        this.setColour(colour);
-        this.setPosition(position);
-    }
-    
     public void capture(){
         this.isCaptured = true;
-        this.setPosition(-1,-1);
+        this.position = null;
     }
     
     public void setPosition(Coordinate position) {
         this.position = position;
-    }
-    
-    public void setPosition(int x, int y){
-        this.position.setX(x);
-        this.position.setY(y);
     }
     
     public Coordinate getPosition(){

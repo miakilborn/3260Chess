@@ -1,3 +1,3 @@
-public class Rook extends APiece{
+public class Rook extends Piece{
     //this class is intentionally left blank, see Piece
 }

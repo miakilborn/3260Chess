@@ -10,16 +10,35 @@ public class Move {
 		this.nextPosition = nextPosition;
 	}
 
-	public void setPieceCaptured(Piece piece){
-		captured = piece;
-	}
-
 	public boolean isValid(){
 		return valid;
 	}
 
+	public Coordinate getCurrentPostion(){
+		if (piece != null)
+			return piece.getPosition();
+		else
+			return null;
+	}
+
+	public Coordinate getNextPostion(){
+		return nextPosition;
+	}
+
 	public Piece getPieceCaptured(){
 		return captured;
+	}
+
+	public Piece getPiece(){
+		return this.piece;
+	}
+
+	public void setPieceCaptured(Piece piece){
+		captured = piece;
+	}
+
+	public void setValid(boolean valid){
+		this.valid = valid;
 	}
 
 
