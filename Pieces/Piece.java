@@ -2,8 +2,8 @@
 
 //setPosition(coordinate) - moves piece there 
 
-//capture() - kill the piece
+//getPosition() - gets the position of piece (returns Coordinate)
 
-//current position
+//capture() - kill the piece
 
 //colour
