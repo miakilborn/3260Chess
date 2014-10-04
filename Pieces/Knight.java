@@ -6,4 +6,18 @@ public class Knight extends Piece{
         super.setPosition(position);
         super.setColour(colour);
     }
+
+    public Knight(String s){
+        if(s.substring(0,"Knight".length()).equals("Knight")){
+            s = s.replaceAll("Knight\\(|\\)$","");
+            String coordString = s.substring(0,s.lastIndexOf(")")+1);
+            s = s.replace(coordString,"");
+            String[] sp = s.split(",");
+            super.setPosition(new Coordinate(coordString));
+            super.setColour(sp[1]);
+            if(Boolean.getBoolean(sp[2])){
+                super.capture();
+            }
+        }
+    }
 }
