@@ -33,6 +33,13 @@ public class Coordinate{
         this.y = y;
     }
 
+    public Boolean equals(Coordinate b){
+        if (x==b.getX() && y==b.getY()){
+            return true;
+        }
+        return false;
+    }
+
     public String toString(){
         return "C("+x+","+y+")";
     }
