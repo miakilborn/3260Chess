@@ -3,6 +3,7 @@ import java.util.*;
 import java.net.*;
 import java.io.*;
 import RuleSets.*;
+import Pieces.*;
 
 public class Controller{
     public static final Boolean MASTER = true;
@@ -158,10 +159,10 @@ public class Controller{
         Scanner keyboard = new Scanner(System.in);
 
         if(me.isMaster()){
-            me.makeMove(new Move("A2,B3"));
+            me.makeMove(new Move("M(Rook(C(0,0),Black,false),C(0,1))"));
         }
         else if(me.isSlave()){
-            me.makeMove(new Move("F5,E5"));
+            me.makeMove(new Move("M(Knight(C(0,0),White,false),C(0,1))"));
         }
         else{
             System.err.println("An error occurred");
