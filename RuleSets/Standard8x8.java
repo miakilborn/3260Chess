@@ -4,13 +4,15 @@ import Game.*;
 import Pieces.*;
 public class Standard8x8 implements IRuleSet {
 
+	private Move lastMove = null;
+
 	public Standard8x8(){
 
 	}
 
 	/**
 	* Creates Pieces for the board, and sets up all their positions
-	*
+	* @author	Tim
 	*/
 	public void setupBoard(IBoard board){
 		ArrayList<Piece> pieces = new ArrayList<Piece>();
@@ -48,12 +50,15 @@ public class Standard8x8 implements IRuleSet {
 	/**
 	* Checks if any board provided list of pieces are at the position 'coord'
 	* @return	The reference to the Piece object if found otherwise null
-	* 
+	* @author	Tim
 	*/
 	private Piece getPieceAtPosition(IBoard board, Coordinate coord){
 		return board.getPieceAtPosition(coord);
 	}
 
+	/**
+	* @author	Tim
+	*/
 	private boolean checkMovePawn(IBoard board, Move move){
 		ArrayList<Coordinate> validMoves = new ArrayList<Coordinate>();
 		Coordinate cPos = move.getCurrentPosition();
@@ -433,34 +438,41 @@ public class Standard8x8 implements IRuleSet {
 	* Verify the provided move is valid to this ruleset
 	* @return	Sets the valid flag in Move object, and updates the
 	*			captured piece in the Move object if tile conflict occurs
-	*
+	* @author	Tim
 	*/
 	public boolean checkMove(IBoard board, Move move){
+		boolean validMove = true;
 		ArrayList<Piece> pieces = board.getPieces();
 		Piece piece =  move.getPiece(); //players piece he/she wants to move
 		Coordinate nextPostion = move.getNextPosition();
 		Piece capture = getPieceAtPosition(board, nextPostion);
+
+		if (lastMove != null && lastMove.getColour().equals(move.getColour())) // If same player is trying to move again, invalid move!
+			return false;
+
 		if (capture != null){
 			if (!checkOpponents(capture, piece)) //if there is collision with the players OWN piece, invalid move!
 				return false;
 		}
 
 		if (piece instanceof Pawn)
-			return checkMovePawn(board, move);
+			validMove = checkMovePawn(board, move);
 		else if  (piece instanceof Knight)
-			return checkMoveKnight(board, move);
+			validMove = checkMoveKnight(board, move);
 		else if  (piece instanceof Rook)
-			return checkMoveRook(board, move);
+			validMove = checkMoveRook(board, move);
 		else if  (piece instanceof Bishop)
-			return checkMoveBishop(board, move);
+			validMove = checkMoveBishop(board, move);
 		else if  (piece instanceof King)
-			return checkMoveKing(board, move);
+			validMove = checkMoveKing(board, move);
 		else if  (piece instanceof Queen)
-			return checkMoveQueen(board, move);
-		return true;
+			validMove = checkMoveQueen(board, move);
+
+		if (validMove){
+			lastMove = move;
+		}
+		return validMove;
 
 	}
-
-
 
 }
