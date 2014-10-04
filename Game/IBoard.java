@@ -7,6 +7,6 @@ public interface IBoard {
     public ArrayList<Piece> getPieces();
     public void makeMove(Move m);
 
-    public Piece getPieceAtPosition(Coordinate coord);
+    public Piece getPieceFromPosition(Coordinate coord);
 
 }

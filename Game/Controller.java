@@ -170,11 +170,11 @@ public class Controller{
         Scanner keyboard = new Scanner(System.in);
 
         if(me.isMaster()){
-            Boolean ret = me.makeMove(new Move(me.board.getPieceAtPosition(new Coordinate(1,7)),new Coordinate(1,6)));
+            Boolean ret = me.makeMove(new Move(me.board.getPieceFromPosition(new Coordinate(1,7)),new Coordinate(1,6)));
             System.out.println("Master Move Response: "+ret);
         }
         else if(me.isSlave()){
-            Boolean ret = me.makeMove(new Move(me.board.getPieceAtPosition(new Coordinate(1,2)),new Coordinate(1,3)));
+            Boolean ret = me.makeMove(new Move(me.board.getPieceFromPosition(new Coordinate(1,2)),new Coordinate(1,3)));
             System.out.println("Slave Move Response: "+ret);
         }
         else{

@@ -29,6 +29,10 @@ public abstract class Piece{
         this.hasMoved = state;
     }
 
+    public boolean hasMoved(){
+        return this.hasMoved();
+    }
+
     public String getColour(){
         return this.colour;
     }
