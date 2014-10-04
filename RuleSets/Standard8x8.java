@@ -48,42 +48,38 @@ public class Standard8x8 implements IRuleSet {
 	/**
 	* Checks if any board provided list of pieces are at the position 'coord'
 	* @return	The reference to the Piece object if found otherwise null
-	* TODO: PUT THIS IN BOARD
+	* 
 	*/
-	private Piece getPieceAtLocation(ArrayList<Piece> pieces, Coordinate coord){
-		for (int i=0;i<pieces.size();i++){
-			Piece piece = pieces.get(i);
-			if (piece.getPosition().equals(coord)){
-				return piece;
-			}
-		}
-		return null;
+	private Piece getPieceAtPosition(Standard8x8Board board, Coordinate coord){
+		return board.getPieceAtPosition(coord);
 	}
 
-	private boolean checkMovePawn(ArrayList<Piece> pieces, Move move){
+	private boolean checkMovePawn(Standard8x8Board board, Move move){
 		ArrayList<Coordinate> validMoves = new ArrayList<Coordinate>();
 		Coordinate cPos = move.getCurrentPosition();
 		String colour = move.getPiece().getColour();
+		ArrayList<Piece> pieces = board.getPieces();
+
 		Coordinate temp_coord = null;
 		if (colour.equals("White")){
 			temp_coord = new Coordinate(cPos.getX()+1, cPos.getY()-1);
-			if (checkOpponents(move.getPiece(), getPieceAtLocation(pieces, temp_coord))) //only valid diagonal with opponent piece there
+			if (checkOpponents(move.getPiece(), getPieceAtPosition(board, temp_coord))) //only valid diagonal with opponent piece there
 				validMoves.add(temp_coord);
 
 			validMoves.add(new Coordinate(cPos.getX()+1, cPos.getY()+0));
 
 			temp_coord = new Coordinate(cPos.getX()+1, cPos.getY()+1);
-			if (checkOpponents(move.getPiece(), getPieceAtLocation(pieces, temp_coord))) //only valid diagonal with opponent piece there
+			if (checkOpponents(move.getPiece(), getPieceAtPosition(board, temp_coord))) //only valid diagonal with opponent piece there
 				validMoves.add(temp_coord);
 		} else {
 			temp_coord = new Coordinate(cPos.getX()-1, cPos.getY()-1);
-			if (checkOpponents(move.getPiece(), getPieceAtLocation(pieces, temp_coord))) //only valid diagonal with opponent piece there
+			if (checkOpponents(move.getPiece(), getPieceAtPosition(board, temp_coord))) //only valid diagonal with opponent piece there
 				validMoves.add(temp_coord);
 
 			validMoves.add(new Coordinate(cPos.getX()+0, cPos.getY()-1));
 
 			temp_coord = new Coordinate(cPos.getX()+1, cPos.getY()-1);
-			if (checkOpponents(move.getPiece(), getPieceAtLocation(pieces, temp_coord))) //only valid diagonal with opponent piece there
+			if (checkOpponents(move.getPiece(), getPieceAtPosition(board, temp_coord))) //only valid diagonal with opponent piece there
 				validMoves.add(temp_coord);
 		}
 
@@ -97,9 +93,11 @@ public class Standard8x8 implements IRuleSet {
 		return false;
 	}
 
-	private boolean checkMoveKnight(ArrayList<Piece> pieces, Move move){
+	private boolean checkMoveKnight(Standard8x8Board board, Move move){
 		ArrayList<Coordinate> validMoves = new ArrayList<Coordinate>();
 		Coordinate cPos = move.getCurrentPosition();
+		ArrayList<Piece> pieces = board.getPieces();
+
 		validMoves.add(new Coordinate(cPos.getX()-2, cPos.getY()+1));
 		validMoves.add(new Coordinate(cPos.getX()-1, cPos.getY()+2));
 		validMoves.add(new Coordinate(cPos.getX()+1, cPos.getY()+2));
@@ -120,9 +118,10 @@ public class Standard8x8 implements IRuleSet {
 		return false;
 	}
 
-	private boolean checkMoveBishop(ArrayList<Piece> pieces, Move move){
+	private boolean checkMoveBishop(Board board, Move move){
 		ArrayList<Coordinate> validMoves = new ArrayList<Coordinate>();
 		Coordinate cPos = move.getCurrentPosition();
+		ArrayList<Piece> pieces = board.getPieces();
 
 		//Top Left
 		for (int i = 1; i <= 7; i++)
@@ -132,7 +131,7 @@ public class Standard8x8 implements IRuleSet {
 			validMoves.add(coord);
 
 			//Checks if we have hit a piece, can't go past it in this direction
-			if (getPieceAtLocation(pieces, coord) != null)
+			if (getPieceAtPosition(board, coord) != null)
 			{
 				break;
 			}
@@ -146,7 +145,7 @@ public class Standard8x8 implements IRuleSet {
 			validMoves.add(coord);
 
 			//Checks if we have hit a piece, can't go past it in this direction
-			if (getPieceAtLocation(pieces, coord) != null)
+			if (getPieceAtPosition(board, coord) != null)
 			{
 				break;
 			}
@@ -160,7 +159,7 @@ public class Standard8x8 implements IRuleSet {
 			validMoves.add(coord);
 
 			//Checks if we have hit a piece, can't go past it in this direction
-			if (getPieceAtLocation(pieces, coord) != null)
+			if (getPieceAtPosition(board, coord) != null)
 			{
 				break;
 			}
@@ -174,7 +173,7 @@ public class Standard8x8 implements IRuleSet {
 			validMoves.add(coord);
 
 			//Checks if we have hit a piece, can't go past it in this direction
-			if (getPieceAtLocation(pieces, coord) != null)
+			if (getPieceAtPosition(board, coord) != null)
 			{
 				break;
 			}
@@ -192,9 +191,10 @@ public class Standard8x8 implements IRuleSet {
 		return false;
 	}
 
-	private boolean checkMoveRook(ArrayList<Piece> pieces, Move move){
+	private boolean checkMoveRook(Standard8x8Board board, Move move){
 		ArrayList<Coordinate> validMoves = new ArrayList<Coordinate>();
 		Coordinate cPos = move.getCurrentPosition();
+		ArrayList<Piece> pieces = board.getPieces();
 
 		//Left
 		for (int i = 1; i <= 7; i++)
@@ -204,7 +204,7 @@ public class Standard8x8 implements IRuleSet {
 			validMoves.add(coord);
 
 			//Checks if we have hit a piece, can't go past it in this direction
-			if (getPieceAtLocation(pieces, coord) != null)
+			if (getPieceAtPosition(board, coord) != null)
 			{
 				break;
 			}
@@ -218,7 +218,7 @@ public class Standard8x8 implements IRuleSet {
 			validMoves.add(coord);
 
 			//Checks if we have hit a piece, can't go past it in this direction
-			if (getPieceAtLocation(pieces, coord) != null)
+			if (getPieceAtPosition(board, coord) != null)
 			{
 				break;
 			}
@@ -232,7 +232,7 @@ public class Standard8x8 implements IRuleSet {
 			validMoves.add(coord);
 
 			//Checks if we have hit a piece, can't go past it in this direction
-			if (getPieceAtLocation(pieces, coord) != null)
+			if (getPieceAtPosition(board, coord) != null)
 			{
 				break;
 			}
@@ -246,7 +246,7 @@ public class Standard8x8 implements IRuleSet {
 			validMoves.add(coord);
 
 			//Checks if we have hit a piece, can't go past it in this direction
-			if (getPieceAtLocation(pieces, coord) != null)
+			if (getPieceAtPosition(board, coord) != null)
 			{
 				break;
 			}
@@ -264,9 +264,11 @@ public class Standard8x8 implements IRuleSet {
 		return false;
 	}
 
-	private boolean checkMoveKing(ArrayList<Piece> pieces, Move move){
+	private boolean checkMoveKing(Standard8x8Board board, Move move){
 		ArrayList<Coordinate> validMoves = new ArrayList<Coordinate>();
 		Coordinate cPos = move.getCurrentPosition();
+		ArrayList<Piece> pieces = board.getPieces();
+
 		validMoves.add(new Coordinate(cPos.getX()-1, cPos.getY()+1));
 		validMoves.add(new Coordinate(cPos.getX()+0, cPos.getY()+1));
 		validMoves.add(new Coordinate(cPos.getX()+1, cPos.getY()+1));
@@ -287,10 +289,10 @@ public class Standard8x8 implements IRuleSet {
 
 	}
 
-	private boolean checkMoveQueen(ArrayList<Piece> pieces, Move move){
+	private boolean checkMoveQueen(Standard8x8Board board, Move move){
 		ArrayList<Coordinate> validMoves = new ArrayList<Coordinate>();
 		Coordinate cPos = move.getCurrentPosition();
-
+		ArrayList<Piece> pieces = board.getPieces();
 
 		//Top Left
 		for (int i = 1; i <= 7; i++)
@@ -300,7 +302,7 @@ public class Standard8x8 implements IRuleSet {
 			validMoves.add(coord);
 
 			//Checks if we have hit a piece, can't go past it in this direction
-			if (getPieceAtLocation(pieces, coord) != null)
+			if (getPieceAtPosition(board, coord) != null)
 			{
 				break;
 			}
@@ -314,7 +316,7 @@ public class Standard8x8 implements IRuleSet {
 			validMoves.add(coord);
 
 			//Checks if we have hit a piece, can't go past it in this direction
-			if (getPieceAtLocation(pieces, coord) != null)
+			if (getPieceAtPosition(board, coord) != null)
 			{
 				break;
 			}
@@ -328,7 +330,7 @@ public class Standard8x8 implements IRuleSet {
 			validMoves.add(coord);
 
 			//Checks if we have hit a piece, can't go past it in this direction
-			if (getPieceAtLocation(pieces, coord) != null)
+			if (getPieceAtPosition(board, coord) != null)
 			{
 				break;
 			}
@@ -342,7 +344,7 @@ public class Standard8x8 implements IRuleSet {
 			validMoves.add(coord);
 
 			//Checks if we have hit a piece, can't go past it in this direction
-			if (getPieceAtLocation(pieces, coord) != null)
+			if (getPieceAtPosition(board, coord) != null)
 			{
 				break;
 			}
@@ -356,7 +358,7 @@ public class Standard8x8 implements IRuleSet {
 			validMoves.add(coord);
 
 			//Checks if we have hit a piece, can't go past it in this direction
-			if (getPieceAtLocation(pieces, coord) != null)
+			if (getPieceAtPosition(board, coord) != null)
 			{
 				break;
 			}
@@ -370,7 +372,7 @@ public class Standard8x8 implements IRuleSet {
 			validMoves.add(coord);
 
 			//Checks if we have hit a piece, can't go past it in this direction
-			if (getPieceAtLocation(pieces, coord) != null)
+			if (getPieceAtPosition(board, coord) != null)
 			{
 				break;
 			}
@@ -384,7 +386,7 @@ public class Standard8x8 implements IRuleSet {
 			validMoves.add(coord);
 
 			//Checks if we have hit a piece, can't go past it in this direction
-			if (getPieceAtLocation(pieces, coord) != null)
+			if (getPieceAtPosition(board, coord) != null)
 			{
 				break;
 			}
@@ -398,7 +400,7 @@ public class Standard8x8 implements IRuleSet {
 			validMoves.add(coord);
 
 			//Checks if we have hit a piece, can't go past it in this direction
-			if (getPieceAtLocation(pieces, coord) != null)
+			if (getPieceAtPosition(board, coord) != null)
 			{
 				break;
 			}
@@ -437,24 +439,24 @@ public class Standard8x8 implements IRuleSet {
 		ArrayList<Piece> pieces = board.getPieces();
 		Piece piece =  move.getPiece(); //players piece he/she wants to move
 		Coordinate nextPostion = move.getNextPosition();
-		Piece capture = getPieceAtLocation(pieces, nextPostion);
+		Piece capture = getPieceAtPosition(board, nextPostion);
 		if (capture != null){
 			if (!checkOpponents(capture, piece)) //if there is collision with the players OWN piece, invalid move!
 				return false;
 		}
 
 		if (piece instanceof Pawn)
-			return checkMovePawn(pieces, move);
+			return checkMovePawn(board, move);
 		else if  (piece instanceof Knight)
-			return checkMoveKnight(pieces, move);
+			return checkMoveKnight(board, move);
 		else if  (piece instanceof Rook)
-			return checkMoveRook(pieces, move);
+			return checkMoveRook(board, move);
 		else if  (piece instanceof Bishop)
-			return checkMoveBishop(pieces, move);
+			return checkMoveBishop(board, move);
 		else if  (piece instanceof King)
-			return checkMoveKing(pieces, move);
+			return checkMoveKing(board, move);
 		else if  (piece instanceof Queen)
-			return checkMoveQueen(pieces, move);
+			return checkMoveQueen(board, move);
 		return true;
 
 	}
