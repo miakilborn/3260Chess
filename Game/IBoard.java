@@ -5,4 +5,5 @@ public interface IBoard {
     //List of pieces
     public void addPiece(Piece p);
     public ArrayList<Piece> getPieces();
+    public void makeMove(Move m);
 }

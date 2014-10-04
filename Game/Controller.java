@@ -2,7 +2,6 @@ package Game;
 import java.util.*;
 import java.net.*;
 import java.io.*;
-import java.lang.reflect.Method;
 import RuleSets.*;
 
 public class Controller{
@@ -120,8 +119,11 @@ public class Controller{
     */
     public Boolean makeMove(Move m){
         if(this.isMaster()){
-            System.out.println("Move:"+m.toString());
-            return true;
+            if(rules.checkMove(this.board,m)){
+                board.makeMove(m);
+                return true;
+            }
+            return false;
         }
         else{
             this.send("makeMove|"+m.toString());
@@ -135,15 +137,15 @@ public class Controller{
     */
     public void shutdown(){
         try{
-            listener.join();
             this.slavePipe.shutdownInput();
             this.slavePipe.shutdownOutput();
+            listener.join();
         }
         catch(IOException e){
             System.err.println("Could not shut down cleanly!");
         }
         catch(InterruptedException e){
-
+            System.err.println("Could not shut down cleanly!");
         };
     }
 
@@ -175,11 +177,9 @@ public class Controller{
     */
     private static class ControllerListener extends Thread{
         Controller c;
-        Method [] methods;
 
         public ControllerListener(Controller c){
             this.c = c;
-            methods = c.getClass().getMethods();
         }
 
         public void run(){ //Thread that watches for commands from the second controller
@@ -192,11 +192,8 @@ public class Controller{
 
                     try{
                         //Call stuff
-                        for (Method m : methods){
-                            if(m.getName().equals(cmd[0])){
-                                Class[] paramTypes = m.getParameterTypes();
-
-                            }
+                        if(cmd[0].equals("makeMove")){
+                            c.makeMove(new Move(cmd[1]));
                         }
                     }
                     catch(Exception e){

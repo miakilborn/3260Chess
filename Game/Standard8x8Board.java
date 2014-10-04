@@ -17,4 +17,8 @@ public class Standard8x8Board implements IBoard{
     public ArrayList<Piece> getPieces(){
         return pieces;
     }
+
+    public void makeMove(Move m){
+        return;
+    }
 }
