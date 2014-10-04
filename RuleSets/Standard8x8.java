@@ -561,22 +561,29 @@ public class Standard8x8 implements IRuleSet {
 		Coordinate nextPostion = move.getNextPosition();
 		Piece capture = getPieceAtPosition(board, nextPostion);
 
-		if (lastMove != null && lastMove.getPiece().getColour().equals(move.getPiece().getColour())) // If same player is trying to move again, invalid move!
+		if (lastMove != null && lastMove.getPiece().getColour().equals(move.getPiece().getColour())){ // If same player is trying to move again, invalid move!
+			System.out.println("Detected not players turn: " + piece.getColour());
 			return false;
+		}
 
 		if (capture != null){
-			if (!checkOpponents(capture, piece)) //if there is collision with the players OWN piece, invalid move!
+			if (!checkOpponents(capture, piece)){ //if there is collision with the players OWN piece, invalid move!
+				System.out.println("Detected collision with own piece: " + piece.getColour());
 				return false;
+			}
 		}
 
 		validMove = checkMoveByPiece(board, move);
-
+		System.out.println("Is it a valid move?: " + validMove);
+		System.out.println("Piece object: " + piece);
 
 		if (validMove){ //Perform the piece move temporarly, check if it makes the player in check who is making the move
 			Move oldSpot = new Move(piece, piece.getPosition());
 			board.makeMove(move);
-			if (isInCheck(board, piece.getColour())) //this move has made player put him/herself in check, invalid move!
+			if (isInCheck(board, piece.getColour())){ //this move has made player put him/herself in check, invalid move!
+				System.out.println("Detected king in check for colour: " + piece.getColour());
 				validMove = false;
+			}
 			board.makeMove(oldSpot);
 		}
 
@@ -584,7 +591,6 @@ public class Standard8x8 implements IRuleSet {
 			lastMove = move;
 		}
 		return validMove;
-
 	}
 
 }
