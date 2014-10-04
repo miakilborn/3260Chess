@@ -35,4 +35,16 @@ public abstract class Piece{
     public String toString(){
         return this.getClass().toString().replace("class Pieces.","")+"("+position.toString()+","+colour+","+isCaptured+")";
     }
+
+    public void setupFromString(String piece,String s){
+        s = s.replaceAll(piece+"\\(|\\)$","");
+        String coordString = s.substring(0,s.lastIndexOf(")")+1);
+        s = s.replace(coordString,"");
+        String[] sp = s.split(",");
+        this.setPosition(new Coordinate(coordString));
+        this.setColour(sp[1]);
+        if(Boolean.getBoolean(sp[2])){
+            this.capture();
+        }
+    }
 }
