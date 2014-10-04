@@ -1,4 +1,4 @@
-public class Standard8x8 implements IRuleSet{
+public class Standard8x8 implements IRuleSet {
 
 	public Standard8x8(){
 
@@ -56,6 +56,94 @@ public class Standard8x8 implements IRuleSet{
 		return null;
 	}
 
+	private boolean checkMovePawn(ArrayList<Piece> pieces, Move move){
+		ArrayList<Coordinate> validMoves = new ArrayList<Coordinate>();
+		Coordinate cPos = move.getCurrentPosition();
+		String colour = move.getPiece().getColour();
+		Coordinate temp_coord = null;
+		if (colour.equals("White")){
+			temp_coord = new Coordinate(cPos.getX()+1, cPos.getY()-1);
+			if (checkOpponents(move.getPiece(), getPieceAtLocation(temp_coord))) //only valid diagonal with opponent piece there
+				validMoves.add(temp_coord);
+
+			validMoves.add(new Coordinate(cPos.getX()+1, cPos.getY()+0));
+
+			temp_coord = new Coordinate(cPos.getX()+1, cPos.getY()+1);
+			if (checkOpponents(move.getPiece(), getPieceAtLocation(temp_coord))) //only valid diagonal with opponent piece there
+				validMoves.add(temp_coord);
+		} else {
+			temp_coord = new Coordinate(cPos.getX()-1, cPos.getY()-1));
+			if (checkOpponents(move.getPiece(), getPieceAtLocation(temp_coord))) //only valid diagonal with opponent piece there
+				validMoves.add(temp_coord);
+
+			validMoves.add(new Coordinate(cPos.getX()+0, cPos.getY()-1));
+
+			temp_coord = new Coordinate(cPos.getX()+1, cPos.getY()-1));
+			if (checkOpponents(move.getPiece(), getPieceAtLocation(temp_coord))) //only valid diagonal with opponent piece there
+				validMoves.add(temp_coord);
+		}
+
+		for (int i=0;i<validMoves.size();i++){
+			Coordinate validMove = validMoves.get(i);
+			if (validMove.getX() < 1 || validMove.getY() < 1) //any moves off the board, skip
+				continue;
+			if (move.getNextPosition().equals(validMove)) //if player's move matches a valid move
+				return true;
+		}
+		return false;
+	}
+
+	private boolean checkMoveKnight(ArrayList<Piece> pieces, Move move){
+		ArrayList<Coordinate> validMoves = new ArrayList<Coordinate>();
+		Coordinate cPos = move.getCurrentPosition();
+		validMoves.add(new Coordinate(cPos.getX()-2, cPos.getY()+1));
+		validMoves.add(new Coordinate(cPos.getX()-1, cPos.getY()+2));
+		validMoves.add(new Coordinate(cPos.getX()+1, cPos.getY()+2));
+		validMoves.add(new Coordinate(cPos.getX()+2, cPos.getY()+1));
+
+		validMoves.add(new Coordinate(cPos.getX()-2, cPos.getY()-1));
+		validMoves.add(new Coordinate(cPos.getX()-1, cPos.getY()-2));
+		validMoves.add(new Coordinate(cPos.getX()+2, cPos.getY()-1));
+		validMoves.add(new Coordinate(cPos.getX()+1, cPos.getY()-2));
+
+		for (int i=0;i<validMoves.size();i++){
+			Coordinate validMove = validMoves.get(i);
+			if (validMove.getX() < 1 || validMove.getY() < 1) //any moves off the board, skip
+				continue;
+			if (move.getNextPosition().equals(validMove)) //if player's move matches a valid move
+				return true;
+		}
+		return false;
+	}
+
+	private boolean checkMoveBishop(ArrayList<Piece> pieces, Move move){
+		ArrayList<Coordinate> validMoves = new ArrayList<Coordinate>();
+		Coordinate cPos = move.getCurrentPosition();
+
+	}
+
+	private boolean checkMoveKing(ArrayList<Piece> pieces, Move move){
+		ArrayList<Coordinate> validMoves = new ArrayList<Coordinate>();
+		Coordinate cPos = move.getCurrentPosition();
+
+	}
+
+	private boolean checkMoveQueen(ArrayList<Piece> pieces, Move move){
+		ArrayList<Coordinate> validMoves = new ArrayList<Coordinate>();
+		Coordinate cPos = move.getCurrentPosition();
+
+	}
+
+	private boolean checkOpponents(Piece piece1, Piece piece2){
+		if (piece1 != null && piece2 != null)
+			if (piece1.getColour().equals(piece2.getColour())) //if piece colours match, same player owns pieces
+				return false;
+			else
+				return true;
+		else
+			return false;
+	}
+
 
 	/**
 	* Verify the provided move is valid to this ruleset
@@ -63,12 +151,24 @@ public class Standard8x8 implements IRuleSet{
 	*			captured piece in the Move object if tile conflict occurs
 	*			
 	*/
-	public void checkMove(Board board, Move move){
+	public boolean checkMove(Board board, Move move){
 		ArrayList<Piece> pieces = board.getPieces();
+		Piece piece =  move.getPiece(); //players piece he/she wants to move
 		Coordinate nextPostion = move.getNextPosition();
 		Piece capture = getPieceAtLocation(pieces, coord);
-		//..
-		
+		if (capture != null){
+			if (!checkOpponents(capture, piece)) //if there is collision with the players OWN piece, invalid move!
+				return false;
+		}
+
+		if (piece instanceof Pawn){
+			if (checkMovePawn(pieces, move)){
+
+			} else
+				return false;
+		}
+		return true;
+
 	}
 
 
