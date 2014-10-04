@@ -32,4 +32,7 @@ public abstract class Piece{
         return this.isCaptured;
     }
 
+    public String toString(){
+        return this.getClass().toString().replace("class Pieces.","")+"("+position.toString()+","+colour+","+isCaptured+")";
+    }
 }

@@ -12,7 +12,6 @@ public class Coordinate{
         if(d.charAt(0)=='C'){
             d = d.replaceAll("C|\\(|\\)","");
             String [] sp = d.split(",");
-            System.out.println("0:"+sp[0]+"\n1:"+sp[1]);
             this.x = Integer.parseInt(sp[0]);
             this.y = Integer.parseInt(sp[1]);
         }
