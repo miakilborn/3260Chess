@@ -52,7 +52,7 @@ public class Move {
 		this.valid = valid;
 	}
 
-	public String tostring(){
+	public String toString(){
 		//Should return a string that you can use in the constructor to rebuild the object.
 		return null;
 	}
