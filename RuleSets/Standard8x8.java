@@ -164,6 +164,10 @@ public class Standard8x8 implements IRuleSet {
 				return true;
 		}
 		return false;
+<<<<<<< HEAD
+
+=======
+>>>>>>> b294ceb74b39d2901720c150fa2d273191753c03
 	}
 
 	private boolean checkMoveKing(ArrayList<Piece> pieces, Move move){
@@ -222,12 +226,18 @@ public class Standard8x8 implements IRuleSet {
 				return false;
 		}
 
-		if (piece instanceof Pawn){
-			if (checkMovePawn(pieces, move)){
-
-			} else
-				return false;
-		}
+		if (piece instanceof Pawn)
+			return checkMovePawn(pieces, move);
+		else if  (piece instanceof Knight)
+			return checkMoveKnight(pieces, move);
+		else if  (piece instanceof Rook)
+			return checkMoveRook(pieces, move);
+		else if  (piece instanceof Bishop)
+			return checkMoveBishop(pieces, move);
+		else if  (piece instanceof King)
+			return checkMoveKing(pieces, move);
+		else if  (piece instanceof Queen)
+			return checkMoveQueen(pieces, move);
 		return true;
 
 	}
