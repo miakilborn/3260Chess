@@ -120,8 +120,6 @@ public class Standard8x8 implements IRuleSet {
 		ArrayList<Coordinate> validMoves = new ArrayList<Coordinate>();
 		Coordinate cPos = move.getCurrentPosition();
 		
-		boolean pieceHit = false;
-		
 		//Top Left
 		for (int i = 1; i <= 7; i++)
 		{
@@ -130,7 +128,7 @@ public class Standard8x8 implements IRuleSet {
 			validMoves.add(coord);
 			
 			//Checks if we have hit a piece, can't go past it in this direction
-			if (getPieceAtLocation(coord) != null)
+			if (getPieceAtLocation(pieces, coord) != null)
 			{
 				break;
 			}
@@ -144,7 +142,7 @@ public class Standard8x8 implements IRuleSet {
 			validMoves.add(coord);
 			
 			//Checks if we have hit a piece, can't go past it in this direction
-			if (getPieceAtLocation(coord) != null)
+			if (getPieceAtLocation(pieces, coord) != null)
 			{
 				break;
 			}
@@ -158,7 +156,7 @@ public class Standard8x8 implements IRuleSet {
 			validMoves.add(coord);
 			
 			//Checks if we have hit a piece, can't go past it in this direction
-			if (getPieceAtLocation(coord) != null)
+			if (getPieceAtLocation(pieces, coord) != null)
 			{
 				break;
 			}
@@ -172,7 +170,79 @@ public class Standard8x8 implements IRuleSet {
 			validMoves.add(coord);
 			
 			//Checks if we have hit a piece, can't go past it in this direction
-			if (getPieceAtLocation(coord) != null)
+			if (getPieceAtLocation(pieces, coord) != null)
+			{
+				break;
+			}
+		}
+		
+		
+		
+		for (int i=0;i<validMoves.size();i++){
+			Coordinate validMove = validMoves.get(i);
+			if (validMove.getX() < 1 || validMove.getY() < 1 || validMove.getX() > 8|| validMove.getY() > 8) //any moves off the board, skip
+				continue;
+			if (move.getNextPosition().equals(validMove)) //if player's move matches a valid move
+				return true;
+		}
+		return false;
+	}
+	
+	private boolean checkMoveRook(ArrayList<Piece> pieces, Move move){
+		ArrayList<Coordinate> validMoves = new ArrayList<Coordinate>();
+		Coordinate cPos = move.getCurrentPosition();
+		
+		//Left
+		for (int i = 1; i <= 7; i++)
+		{
+			Coordinate coord = new Coordinate(cPos.getX() - i, cPos.getY());
+			
+			validMoves.add(coord);
+			
+			//Checks if we have hit a piece, can't go past it in this direction
+			if (getPieceAtLocation(pieces, coord) != null)
+			{
+				break;
+			}
+		}
+		
+		//Right
+		for (int i = 1; i <= 7; i++)
+		{
+			Coordinate coord = new Coordinate(cPos.getX() + i, cPos.getY());
+			
+			validMoves.add(coord);
+			
+			//Checks if we have hit a piece, can't go past it in this direction
+			if (getPieceAtLocation(pieces, coord) != null)
+			{
+				break;
+			}
+		}
+		
+		//Top
+		for (int i = 1; i <= 7; i++)
+		{
+			Coordinate coord = new Coordinate(cPos.getX(), cPos.getY() - i);
+			
+			validMoves.add(coord);
+			
+			//Checks if we have hit a piece, can't go past it in this direction
+			if (getPieceAtLocation(pieces, coord) != null)
+			{
+				break;
+			}
+		}
+		
+		//Bottom
+		for (int i = 1; i <= 7; i++)
+		{
+			Coordinate coord = new Coordinate(cPos.getX(), cPos.getY() + i);
+			
+			validMoves.add(coord);
+			
+			//Checks if we have hit a piece, can't go past it in this direction
+			if (getPieceAtLocation(pieces, coord) != null)
 			{
 				break;
 			}
@@ -216,6 +286,129 @@ public class Standard8x8 implements IRuleSet {
 	private boolean checkMoveQueen(ArrayList<Piece> pieces, Move move){
 		ArrayList<Coordinate> validMoves = new ArrayList<Coordinate>();
 		Coordinate cPos = move.getCurrentPosition();
+		
+		
+		//Top Left
+		for (int i = 1; i <= 7; i++)
+		{
+			Coordinate coord = new Coordinate(cPos.getX() - i, cPos.getY() - i);
+			
+			validMoves.add(coord);
+			
+			//Checks if we have hit a piece, can't go past it in this direction
+			if (getPieceAtLocation(pieces, coord) != null)
+			{
+				break;
+			}
+		}
+		
+		//Top
+		for (int i = 1; i <= 7; i++)
+		{
+			Coordinate coord = new Coordinate(cPos.getX(), cPos.getY() - i);
+			
+			validMoves.add(coord);
+			
+			//Checks if we have hit a piece, can't go past it in this direction
+			if (getPieceAtLocation(pieces, coord) != null)
+			{
+				break;
+			}
+		}
+		
+		//Top Right
+		for (int i = 1; i <= 7; i++)
+		{
+			Coordinate coord = new Coordinate(cPos.getX() + i, cPos.getY() - i);
+			
+			validMoves.add(coord);
+			
+			//Checks if we have hit a piece, can't go past it in this direction
+			if (getPieceAtLocation(pieces, coord) != null)
+			{
+				break;
+			}
+		}
+		
+		//Right
+		for (int i = 1; i <= 7; i++)
+		{
+			Coordinate coord = new Coordinate(cPos.getX() + i, cPos.getY());
+			
+			validMoves.add(coord);
+			
+			//Checks if we have hit a piece, can't go past it in this direction
+			if (getPieceAtLocation(pieces, coord) != null)
+			{
+				break;
+			}
+		}
+		
+		//Bottom Right
+		for (int i = 1; i <= 7; i++)
+		{
+			Coordinate coord = new Coordinate(cPos.getX() + i, cPos.getY() + i);
+			
+			validMoves.add(coord);
+			
+			//Checks if we have hit a piece, can't go past it in this direction
+			if (getPieceAtLocation(pieces, coord) != null)
+			{
+				break;
+			}
+		}
+		
+		//Bottom
+		for (int i = 1; i <= 7; i++)
+		{
+			Coordinate coord = new Coordinate(cPos.getX(), cPos.getY() + i);
+			
+			validMoves.add(coord);
+			
+			//Checks if we have hit a piece, can't go past it in this direction
+			if (getPieceAtLocation(pieces, coord) != null)
+			{
+				break;
+			}
+		}
+		
+		//Bottom Left
+		for (int i = 1; i <= 7; i++)
+		{
+			Coordinate coord = new Coordinate(cPos.getX() - i, cPos.getY() + i);
+			
+			validMoves.add(coord);
+			
+			//Checks if we have hit a piece, can't go past it in this direction
+			if (getPieceAtLocation(pieces, coord) != null)
+			{
+				break;
+			}
+		}
+		
+		//Left
+		for (int i = 1; i <= 7; i++)
+		{
+			Coordinate coord = new Coordinate(cPos.getX() - i, cPos.getY());
+			
+			validMoves.add(coord);
+			
+			//Checks if we have hit a piece, can't go past it in this direction
+			if (getPieceAtLocation(pieces, coord) != null)
+			{
+				break;
+			}
+		}
+		
+		
+		for (int i=0;i<validMoves.size();i++){
+			Coordinate validMove = validMoves.get(i);
+			if (validMove.getX() < 1 || validMove.getY() < 1 || validMove.getX() > 8|| validMove.getY() > 8) //any moves off the board, skip
+				continue;
+			if (move.getNextPosition().equals(validMove)) //if player's move matches a valid move
+				return true;
+		}
+		return false;
 
 	}
 
