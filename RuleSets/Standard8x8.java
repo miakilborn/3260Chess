@@ -439,6 +439,7 @@ public class Standard8x8 implements IRuleSet {
 	/**
 	* Gets the Piece object of the king owned by specified colour
 	* @param	board reference, and player colour (White/Black)
+	* @author 	Tim
 	*/
 	private Piece getKing(IBoard board, String colour){
 		ArrayList<Piece> pieces = board.getPieces();
@@ -454,6 +455,7 @@ public class Standard8x8 implements IRuleSet {
 	/**
 	* Gets the position of the king owned by specified colour
 	* @param	board reference, and player colour (White/Black)
+	* @author 	Tim
 	*/
 	private Coordinate getKingPosition(IBoard board, String colour){
 		Piece king = getKing(board, colour);
@@ -467,6 +469,7 @@ public class Standard8x8 implements IRuleSet {
 	/**
 	* Checks if specified colour is currently in checkmate
 	* @param	board reference, and player colour (White/Black)
+	* @author 	Tim
 	*/
 	public boolean isInCheckMate(IBoard board, String colour){
 		Piece king = getKing(board, colour);
@@ -489,6 +492,7 @@ public class Standard8x8 implements IRuleSet {
 	/**
 	* Checks if specified colour is currently in check
 	* @param	board reference, and player colour (White/Black)
+	* @author 	Tim
 	*/
 	public boolean isInCheck(IBoard board, String colour){
 		ArrayList<Piece> pieces = board.getPieces();
@@ -508,6 +512,7 @@ public class Standard8x8 implements IRuleSet {
 	/**
 	* Checks if two pieces provided are of the opposite colour
 	* @param	two Piece references
+	* @author 	Tim
 	*/
 	private boolean checkOpponents(Piece piece1, Piece piece2){
 		if (piece1 != null && piece2 != null)
@@ -519,6 +524,11 @@ public class Standard8x8 implements IRuleSet {
 			return false;
 	}
 
+
+	/**
+	* Checks which type of piece is being moved, and calls the appropriate method
+	* @author 	Tim
+	*/
 	private boolean checkMoveByPiece(IBoard board, Move move){
 		Piece piece =  move.getPiece(); //players piece he/she wants to move
 		if (piece instanceof Pawn)
