@@ -556,40 +556,41 @@ public class Standard8x8 implements IRuleSet {
 	*/
 	public boolean checkMove(IBoard board, Move move){
 		boolean validMove = true;
+		String message = "";
 		ArrayList<Piece> pieces = board.getPieces();
 		Piece piece =  move.getPiece(); //players piece he/she wants to move
 		Coordinate nextPostion = move.getNextPosition();
 		Piece capture = getPieceAtPosition(board, nextPostion);
 
 		if (lastMove != null && lastMove.getPiece().getColour().equals(move.getPiece().getColour())){ // If same player is trying to move again, invalid move!
-			System.out.println("Detected not players turn: " + piece.getColour());
-			return false;
+			message = "Detected not players turn: " + piece.getColour();
+			validMove = false;
 		}
-
-		if (capture != null){
+		else if (capture != null){
 			if (!checkOpponents(capture, piece)){ //if there is collision with the players OWN piece, invalid move!
-				System.out.println("Detected collision with own piece: " + piece.getColour());
-				return false;
-			}
-		}
-
-		validMove = checkMoveByPiece(board, move);
-		System.out.println("Is it a valid move?: " + validMove);
-		System.out.println("Piece object: " + piece);
-
-		if (validMove){ //Perform the piece move temporarly, check if it makes the player in check who is making the move
-			Move oldSpot = new Move(piece, piece.getPosition());
-			board.makeMove(move);
-			if (isInCheck(board, piece.getColour())){ //this move has made player put him/herself in check, invalid move!
-				System.out.println("Detected king in check for colour: " + piece.getColour());
+				message = "Detected collision with own piece: " + piece.getColour();
 				validMove = false;
 			}
-			board.makeMove(oldSpot);
+		} else if (checkMoveByPiece(board, move)) {
+			if (validMove){
+				Move oldSpot = new Move(piece, piece.getPosition());
+				board.makeMove(move);  //Perform the piece move temporarly, check if it makes the player in check who is making the move
+				if (isInCheck(board, piece.getColour())){ //this move has made player put him/herself in check, invalid move!
+					message = "Detected king in check for colour: " + piece.getColour();
+					validMove = false;
+				}
+				board.makeMove(oldSpot);
+			}
+
+			if (validMove){
+				lastMove = move;
+			}
+		} else {
+			validMove = false;
+			message = "generic invalid move";
 		}
 
-		if (validMove){
-			lastMove = move;
-		}
+		System.out.println("Move result, piece: " + piece + ", valid: " + validMove +", msg: " + message);
 		return validMove;
 	}
 
