@@ -8,6 +8,16 @@ public class Coordinate{
         this.y = y;
     }
 
+    public Coordinate(String d){
+        if(d.charAt(0)=='C'){
+            d = d.replaceAll("C|\\(|\\)","");
+            String [] sp = d.split(",");
+            System.out.println("0:"+sp[0]+"\n1:"+sp[1]);
+            this.x = Integer.parseInt(sp[0]);
+            this.y = Integer.parseInt(sp[1]);
+        }
+    }
+
     public int getX(){
         return x;
     }
@@ -22,5 +32,9 @@ public class Coordinate{
 
     public void setY(int y){
         this.y = y;
+    }
+
+    public String toString(){
+        return "C("+x+","+y+")";
     }
 }
