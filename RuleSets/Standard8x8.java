@@ -55,7 +55,7 @@ public class Standard8x8 implements IRuleSet {
 	private Piece getPieceFromPosition(IBoard board, Coordinate coord){
 		return board.getPieceFromPosition(coord);
 	}
-	
+
 	/**
 	* Checks if a given coordinate is on the board.
 	* @return	true if coordinate is on the board, false if it is not.
@@ -456,7 +456,7 @@ public class Standard8x8 implements IRuleSet {
 
 		for (int i=0;i<validMoves.size();i++){
 			Coordinate validMove = validMoves.get(i);
-			if (OnBoard(validMove) == false<) //any moves off the board, skip
+			if (OnBoard(validMove) == false) //any moves off the board, skip
 				continue;
 			if (move.getNextPosition().equals(validMove)) //if player's move matches a valid move
 				return true;
