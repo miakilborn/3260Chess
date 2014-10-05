@@ -9,6 +9,9 @@ public class Controller{
     public static final Boolean MASTER = true;
     public static final Boolean SLAVE = false;
     public static final int PORT = 5001;
+    private static Boolean OTHER_RDY = false;
+    private static Move current_move = null;
+
 
     private String test;
     private Boolean mode;
@@ -69,6 +72,7 @@ public class Controller{
 
         listener = new ControllerListener(this);
         listener.start();
+        this.send("RDY");
     }
 
 
@@ -76,7 +80,8 @@ public class Controller{
     *  @author bill
     */
     public void send(String term){
-        socketOut.println(term);
+        socketOut.write(term+"\n");
+        socketOut.flush();
     }
 
     /* Read from the socket to see if there is a command or a response there.
@@ -85,12 +90,11 @@ public class Controller{
     public String read(){
         if(slavePipe.isConnected()){
             try{
-                //Thread.sleep(100);
                 return socketIn.readLine();
             }
             catch(IOException e){
                 System.err.println("Got nothing!"+e.toString());
-                return "";
+                System.exit(1);
             }
         }
         else{
@@ -114,15 +118,33 @@ public class Controller{
         return !mode;
     }
 
+    public Boolean updateBoard(){
+        if(null==current_move){
+            return false;
+        }
+        board.makeMove(current_move);
+        current_move = null;
+        return true;
+    }
+
+    public Boolean checkMove(Move m){
+        if(this.rules.checkMove(this.board,m)){
+            this.current_move = m;
+            return true;
+        }
+        return false;
+    }
+
     /* makeMove will be called by the player class and handled by the master controller
     *  @author bill
     *
     */
-    public Boolean makeMove(Move m){
+    public Boolean makeMove(Move m) throws InterruptedException{
+        while(!OTHER_RDY){Thread.sleep(100);};
         if(this.isMaster()){
             if(rules.checkMove(this.board,m)){
+                this.sendMove(m);
                 board.makeMove(m);
-                this.send("makeMove|"+m.toString());
                 return true;
             }
             else{
@@ -130,16 +152,16 @@ public class Controller{
             }
         }
         else{
-            this.send("makeMove|"+m.toString());
-            Boolean ret = Boolean.getBoolean(this.read());
-            if(ret){
-                board.makeMove(m);
-                return true;
-            }
-            else{
-                return false;
-            }
+            current_move = m;
+            this.sendMove(m);
         }
+        return false; //TODO Fix this.
+    }
+
+    public void sendMove(Move m) throws InterruptedException{
+        while(!OTHER_RDY){Thread.sleep(100);};
+        this.send("N_RDY");
+        this.send("MV|"+m.toString());
     }
 
     /* Safely shutdown the socket
@@ -149,9 +171,7 @@ public class Controller{
         try{
             this.slavePipe.shutdownInput();
             this.slavePipe.shutdownOutput();
-            if(this.isMaster()){
-                listener.join();
-            }
+            listener.join();
         }
         catch(IOException e){
             System.err.println("Could not shut down cleanly!");
@@ -171,17 +191,16 @@ public class Controller{
 
         if(me.isMaster()){
             Boolean ret = me.makeMove(new Move(me.board.getPieceFromPosition(new Coordinate(1,7)),new Coordinate(1,6)));
-            System.out.println("Master Move Response: "+ret);
         }
         else if(me.isSlave()){
             Boolean ret = me.makeMove(new Move(me.board.getPieceFromPosition(new Coordinate(1,2)),new Coordinate(1,3)));
-            System.out.println("Slave Move Response: "+ret);
         }
         else{
             System.err.println("An error occurred");
         }
-        me.shutdown();
-        System.exit(0);
+        while(true);
+        //me.shutdown();
+        //System.exit(0);
     }
 
 
@@ -197,26 +216,53 @@ public class Controller{
         }
 
         public void run(){ //Thread that watches for commands from the second controller
-            //TODO: Make this work with any number of arguments... may have to build objects in here dynamically
 
             while(true){
                 try{
                     String get = c.read();
                     String [] cmd = get.split("\\|");
 
-                    try{
-                        //Call stuff
-                        if(cmd[0].equals("makeMove")){
-                            c.makeMove(new Move(cmd[1]));
-                        }
-                    }
-                    catch(Exception e){
-                        System.err.println(e.toString()+"--->"+get);
+                    switch(cmd[0]){
+                        case "RDY":
+                            c.OTHER_RDY = true;
+                            break;
+                        case "N_RDY":
+                            c.OTHER_RDY = false;
+                            break;
+                        case "MV":
+                            if(c.isMaster()){
+                                Boolean ret = c.checkMove(new Move(cmd[1]));
+                                c.send("true");
+                            }
+                            else{
+                                c.current_move = new Move(cmd[1]);
+                                c.updateBoard();
+                                c.send("ACK");
+                            }
+                            break;
+                        case "ACK":
+                            if(c.isMaster()){
+                                if(c.updateBoard()){
+                                    c.send("ACK");
+                                }
+                                c.send("RDY");
+                            }
+                            else{
+                                c.send("RDY");
+                            }
+                            break;
+                        case "true":
+                            c.updateBoard();
+                            c.send("ACK");
+                            break;
+                        case "false":
+                            c.send("ACK");
+                            break;
                     }
                 }
                 catch(NullPointerException e){
                     try{
-                        Thread.sleep(100);
+                        Thread.sleep(10);
                     }
                     catch(InterruptedException ie){
                         //No Messages
