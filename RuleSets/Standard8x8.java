@@ -55,6 +55,20 @@ public class Standard8x8 implements IRuleSet {
 	private Piece getPieceFromPosition(IBoard board, Coordinate coord){
 		return board.getPieceFromPosition(coord);
 	}
+	
+	/**
+	* Checks if a given coordinate is on the board.
+	* @return	true if coordinate is on the board, false if it is not.
+	* @author	Zack
+	*/
+	private boolean OnBoard(Coordinate coord){
+		if (coord.getX() < 1 || coord.getY() < 1 || coord.getX() > 8|| coord.getY() > 8){
+			return false;
+		}
+		else{
+			return true;
+		}
+	}
 
 	/**
 	* @author	Tim
@@ -105,7 +119,7 @@ public class Standard8x8 implements IRuleSet {
 
 		for (int i=0;i<validMoves.size();i++){
 			Coordinate validMove = validMoves.get(i);
-			if (validMove.getX() < 1 || validMove.getY() < 1) //any moves off the board, skip
+			if (OnBoard(validMove) == false) //any moves off the board, skip
 				continue;
 			if (move.getNextPosition().equals(validMove)) //if player's move matches a valid move
 				return true;
@@ -130,7 +144,7 @@ public class Standard8x8 implements IRuleSet {
 
 		for (int i=0;i<validMoves.size();i++){
 			Coordinate validMove = validMoves.get(i);
-			if (validMove.getX() < 1 || validMove.getY() < 1 || validMove.getX() > 8|| validMove.getY() > 8) //any moves off the board, skip
+			if (OnBoard(validMove) == false) //any moves off the board, skip
 				continue;
 			if (move.getNextPosition().equals(validMove)) //if player's move matches a valid move
 				return true;
@@ -203,7 +217,7 @@ public class Standard8x8 implements IRuleSet {
 
 		for (int i=0;i<validMoves.size();i++){
 			Coordinate validMove = validMoves.get(i);
-			if (validMove.getX() < 1 || validMove.getY() < 1 || validMove.getX() > 8|| validMove.getY() > 8) //any moves off the board, skip
+			if (OnBoard(validMove) == false) //any moves off the board, skip
 				continue;
 			if (move.getNextPosition().equals(validMove)) //if player's move matches a valid move
 				return true;
@@ -276,7 +290,7 @@ public class Standard8x8 implements IRuleSet {
 
 		for (int i=0;i<validMoves.size();i++){
 			Coordinate validMove = validMoves.get(i);
-			if (validMove.getX() < 1 || validMove.getY() < 1 || validMove.getX() > 8|| validMove.getY() > 8) //any moves off the board, skip
+			if (OnBoard(validMove) == false) //any moves off the board, skip
 				continue;
 			if (move.getNextPosition().equals(validMove)) //if player's move matches a valid move
 				return true;
@@ -301,7 +315,7 @@ public class Standard8x8 implements IRuleSet {
 
 		for (int i=0;i<validMoves.size();i++){
 			Coordinate logicalMove = validMoves.get(i);
-			if (logicalMove.getX() < 1 || logicalMove.getY() < 1 || logicalMove.getX() > 8|| logicalMove.getY() > 8)
+			if (OnBoard(logicalMove) == false)
 				continue;
 			validMoves.add(logicalMove);
 		}
@@ -442,7 +456,7 @@ public class Standard8x8 implements IRuleSet {
 
 		for (int i=0;i<validMoves.size();i++){
 			Coordinate validMove = validMoves.get(i);
-			if (validMove.getX() < 1 || validMove.getY() < 1 || validMove.getX() > 8|| validMove.getY() > 8) //any moves off the board, skip
+			if (OnBoard(validMove) == false<) //any moves off the board, skip
 				continue;
 			if (move.getNextPosition().equals(validMove)) //if player's move matches a valid move
 				return true;
