@@ -232,7 +232,7 @@ public class Controller{
                         case "MV":
                             if(c.isMaster()){
                                 Boolean ret = c.checkMove(new Move(cmd[1]));
-                                c.send("true");
+                                c.send(ret.toString());
                             }
                             else{
                                 c.current_move = new Move(cmd[1]);
