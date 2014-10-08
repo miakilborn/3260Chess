@@ -26,7 +26,7 @@ public class Move {
 			currentPosition = new Coordinate(c1);
 			nextPosition = new Coordinate(c);
 			if(Boolean.getBoolean(s)){
-				this.captured = new Coordinate(s);
+				this.captured = new Coordinate(c);
 			}
 		}
 		else{
