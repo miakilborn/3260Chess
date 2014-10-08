@@ -538,6 +538,20 @@ public class Standard8x8 implements IRuleSet {
 	}
 
 	/**
+    * Checks if the opponents king is captured
+    * @author Tim
+    */
+    public boolean hasWon(IBoard board, String colour){
+        String opponent = "White";
+        if (colour.equals("White"))
+        	opponent = "Black";
+        if (isInCheck(board, opponent) && isInCheckMate(board, opponent))
+        	return true;
+        else
+        	return false;
+    }
+
+	/**
 	* Checks if two pieces provided are of the opposite colour
 	* @param	two Piece references
 	* @author 	Tim
@@ -590,10 +604,11 @@ public class Standard8x8 implements IRuleSet {
 		Coordinate nextPostion = move.getNextPosition();
 		Piece capture = getPieceFromPosition(board, nextPostion);
 
-		if (lastMove != null && lastMove.getPiece().getColour().equals(move.getPiece().getColour())){ // If same player is trying to move again, invalid move!
+		if ((lastMove != null && lastMove.getPiece().getColour().equals(move.getPiece().getColour())) ||
+				(lastMove == null && move.getPiece().getColour().equals("Black"))){ // If same player is trying to move again, invalid move!
 			message = "Detected not players turn: " + piece.getColour();
 			validMove = false;
-		}
+		} 
 		else if (capture != null){
 			if (!checkOpponents(capture, piece)){ //if there is collision with the players OWN piece, invalid move!
 				message = "Detected collision with own piece: " + piece.getColour();
