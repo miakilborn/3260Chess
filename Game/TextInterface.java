@@ -52,14 +52,26 @@ public class TextInterface implements IInterface {
         }
 
         // Print board to stdout
+
+        System.out.print("     ");
+        for (char c='A';c<='H';c++)
+            System.out.print(c + " ");
+        System.out.println("\n" + "  |------------------ ");
+
+        
         for (int y=1;y<boardStr.length;y++){
+            System.out.print((8-y+1) + " |  ");
             for (int x=1;x<boardStr[y].length;x++){
                 System.out.print(boardStr[x][y] + " ");
-
             }
             System.out.println();
         }
 
+        System.out.print("  |------------------ \n     ");
+        for (char c='A';c<='H';c++)
+            System.out.print(c + " ");
+        
+        System.out.println();
 
     }
 
