@@ -12,4 +12,9 @@ public class Knight extends Piece{
             super.setupFromString("Knight",s);
         }
     }
+
+    @Override
+    public char toChar(){
+        return 'n';
+    }
 }

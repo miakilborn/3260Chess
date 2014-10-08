@@ -12,4 +12,9 @@ public class Rook extends Piece{
             super.setupFromString("Rook",s);
         }
     }
+
+    @Override
+    public char toChar(){
+        return 'r';
+    }
 }

@@ -12,4 +12,9 @@ public class Bishop extends Piece{
             super.setupFromString("Bishop",s);
         }
     }
+
+    @Override
+    public char toChar(){
+        return 'b';
+    }
 }

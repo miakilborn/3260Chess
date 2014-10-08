@@ -45,6 +45,8 @@ public abstract class Piece{
         return this.getClass().toString().replace("class Pieces.","")+"("+position.toString()+","+colour+","+isCaptured+")";
     }
 
+    public abstract char toChar();
+
     public void setupFromString(String piece,String s){
         s = s.replaceAll(piece+"\\(|\\)$","");
         String coordString = s.substring(0,s.lastIndexOf(")")+1);

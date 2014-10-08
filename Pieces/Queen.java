@@ -12,4 +12,9 @@ public class Queen extends Piece{
             super.setupFromString("Queen",s);
         }
     }
+
+    @Override
+    public char toChar(){
+        return 'q';
+    }
 }

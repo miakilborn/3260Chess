@@ -12,4 +12,9 @@ public class Pawn extends Piece{
             super.setupFromString("Pawn",s);
         }
     }
+
+    @Override
+    public char toChar(){
+        return 'p';
+    }
 }

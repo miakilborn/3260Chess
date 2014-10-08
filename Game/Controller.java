@@ -185,22 +185,27 @@ public class Controller{
     * This is just for testing... the actual main will be in player.
     *
     */
-    public static void main(String []args) throws InterruptedException{
-        Controller me = new Controller();
-        Scanner keyboard = new Scanner(System.in);
+    // public static void main(String []args) throws InterruptedException{
+    //     Controller me = new Controller();
+    //     Scanner keyboard = new Scanner(System.in);
 
-        if(me.isMaster()){
-            Boolean ret = me.makeMove(new Move(me.board.getPieceFromPosition(new Coordinate(1,7)),new Coordinate(1,6)));
-        }
-        else if(me.isSlave()){
-            Boolean ret = me.makeMove(new Move(me.board.getPieceFromPosition(new Coordinate(1,2)),new Coordinate(1,3)));
-        }
-        else{
-            System.err.println("An error occurred");
-        }
-        while(true);
-        //me.shutdown();
-        //System.exit(0);
+    //     if(me.isMaster()){
+    //         Boolean ret = me.makeMove(new Move(me.board.getPieceFromPosition(new Coordinate(1,7)),new Coordinate(1,6)));
+    //     }
+    //     else if(me.isSlave()){
+    //         Boolean ret = me.makeMove(new Move(me.board.getPieceFromPosition(new Coordinate(1,2)),new Coordinate(1,3)));
+    //     }
+    //     else{
+    //         System.err.println("An error occurred");
+    //     }
+    //     while(true);
+    //     //me.shutdown();
+    //     //System.exit(0);
+    // }
+
+
+    public IBoard getBoard(){
+        return this.board;
     }
 
 
