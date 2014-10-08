@@ -22,6 +22,7 @@ public class Controller{
     private ControllerListener listener;
     private IRuleSet rules;
     private IBoard board;
+    private Player p;
 
 
     /* Default constructor
@@ -66,13 +67,17 @@ public class Controller{
             System.exit(1);
         }
 
+        p = new Player(this);
+
         board = new Standard8x8Board();
         rules = new Standard8x8();
         rules.setupBoard(board);
 
         listener = new ControllerListener(this);
         listener.start();
+
         this.send("RDY");
+        p.game();
     }
 
 
@@ -124,6 +129,7 @@ public class Controller{
         }
         board.makeMove(current_move);
         current_move = null;
+        p.update();
         return true;
     }
 
@@ -154,6 +160,7 @@ public class Controller{
         else{
             current_move = m;
             this.sendMove(m);
+            Thread.sleep(100);
             return Boolean.getBoolean(this.read());
         }
     }
@@ -185,23 +192,9 @@ public class Controller{
     * This is just for testing... the actual main will be in player.
     *
     */
-    // public static void main(String []args) throws InterruptedException{
-    //     Controller me = new Controller();
-    //     Scanner keyboard = new Scanner(System.in);
-
-    //     if(me.isMaster()){
-    //         Boolean ret = me.makeMove(new Move(me.board.getPieceFromPosition(new Coordinate(1,7)),new Coordinate(1,6)));
-    //     }
-    //     else if(me.isSlave()){
-    //         Boolean ret = me.makeMove(new Move(me.board.getPieceFromPosition(new Coordinate(1,2)),new Coordinate(1,3)));
-    //     }
-    //     else{
-    //         System.err.println("An error occurred");
-    //     }
-    //     while(true);
-    //     //me.shutdown();
-    //     //System.exit(0);
-    // }
+    public static void main(String []args) throws InterruptedException{
+        Controller me = new Controller();
+    }
 
 
     public IBoard getBoard(){

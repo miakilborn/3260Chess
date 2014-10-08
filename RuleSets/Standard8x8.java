@@ -615,7 +615,7 @@ public class Standard8x8 implements IRuleSet {
 				(lastMove == null && piece.getColour().equals("Black"))){ // If same player is trying to move again, invalid move!
 			message = "Detected not players turn: " + piece.getColour();
 			validMove = false;
-		} 
+		}
 		else if (capture != null){
 			if (!checkOpponents(capture, piece)){ //if there is collision with the players OWN piece, invalid move!
 				message = "Detected collision with own piece: " + piece.getColour();
@@ -640,7 +640,7 @@ public class Standard8x8 implements IRuleSet {
 			message = "generic invalid move";
 		}
 
-		System.out.println("Move result, move: " + move + ", valid: " + validMove + (validMove ? "" :  ", msg: " + message));
+		//System.out.println("Move result, move: " + move + ", valid: " + validMove + (validMove ? "" :  ", msg: " + message));
 		return validMove;
 	}
 
