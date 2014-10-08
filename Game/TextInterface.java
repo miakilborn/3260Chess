@@ -38,6 +38,10 @@ public class TextInterface implements IInterface {
         ArrayList<Piece> pieces = board.getPieces();
         char[][] boardStr = new char[8+1][8+1];
 
+        for (int x=0;x<8+1;x++)
+            for (int y=0;y<8+1;y++)
+                boardStr[x][y] = ' ';
+
         for (int i=0;i<pieces.size();i++){
             Piece piece = pieces.get(i);
             String pieceStr = piece.toString();
