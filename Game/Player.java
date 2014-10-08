@@ -8,14 +8,24 @@ public class Player {
     private static String colour;
     private int score;
 
+    private IInterface ui;
+    private Controller controller;
+
+    /**
+     * Construct player with the players game name, and colour
+     *
+     */
+    public Player(Controller controller){
+        this.controller = controller;
+        ui = new TextInterface();
+    }
+
     /**
     * Main class, runs the program
     *
     *
     */
-    public static void main(String[] args){
-        Controller controller = new Controller();
-        IInterface ui = new TextInterface();
+    public void game(){
 
         //init
         if(controller.isMaster()){
@@ -61,17 +71,17 @@ public class Player {
                 e.printStackTrace();
             }
 
-            over = true;
+            //over = true;
         }
     }
 
+
     /**
-     * Construct player with the players game name, and colour
-     *
-     */
-    public Player(String name, String colour){
-        this.name = name;
-        this.colour = colour;
+    *
+    *
+    */
+    public void update(){
+            ui.displayBoard(controller.getBoard());
     }
 
     /**
