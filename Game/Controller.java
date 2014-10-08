@@ -154,8 +154,8 @@ public class Controller{
         else{
             current_move = m;
             this.sendMove(m);
+            return Boolean.getBoolean(this.read());
         }
-        return false; //TODO Fix this.
     }
 
     public void sendMove(Move m) throws InterruptedException{
@@ -226,6 +226,7 @@ public class Controller{
                 try{
                     String get = c.read();
                     String [] cmd = get.split("\\|");
+                    System.err.println(cmd[0]);
 
                     switch(cmd[0]){
                         case "RDY":
