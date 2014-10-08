@@ -4,84 +4,20 @@ import Game.*;
 import Pieces.*;
 
 public class Player {
-    private static String name;
-    private static String colour;
+    private String name;
+    private String colour;
+    private String whatCase;
     private int score;
 
-    private IInterface ui;
+ 
     private Controller controller;
 
     /**
      * Construct player with the players game name, and colour
      *
      */
-    public Player(Controller controller){
-        this.controller = controller;
-        ui = new TextInterface();
-    }
-
-    /**
-    * Main class, runs the program
-    *
-    *
-    */
-    public void game(){
-
-        //init
-        if(controller.isMaster()){
-            colour = "White";
-        } else {
-            colour = "Black";
-        }
-
-        ui.setPlayerColour(colour);
-        name = ui.getUsername();
-
-        //enter gameplay loop
-        boolean over = false;
-        while(!over){
-
-            //display board
-            ui.displayBoard(controller.getBoard());
-
-
-            //wait for turn
-
-
-            //get move
-            Move move = ui.getMove(controller.getBoard());
-
-            while(move == null){
-                ui.displayMessage("Unable to perform move.");
-                move = ui.getMove(controller.getBoard());
-            }
-
-            //validate move
-            boolean result = false;
-            try{
-                result = controller.makeMove(move);
-                if(result) {
-                    ui.displayMessage("Valid move!");
-                    ui.displayBoard(controller.getBoard());
-                } else {
-                    ui.displayMessage("Unable to perform move.");
-                }
-            }
-            catch(InterruptedException e){
-                e.printStackTrace();
-            }
-
-            //over = true;
-        }
-    }
-
-
-    /**
-    *
-    *
-    */
-    public void update(){
-        ui.displayBoard(controller.getBoard());
+    public Player(String colour){
+        this.colour = colour;
     }
 
     /**
@@ -90,6 +26,14 @@ public class Player {
      */
     public String getPlayerName(){
         return name;
+    }
+
+    public String getName(){
+        return name;
+    }
+
+    public void setName(String name){
+        this.name = name;
     }
 
     /**

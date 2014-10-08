@@ -2,7 +2,7 @@ JC = javac
 JCF = 
 JRE = java
 JREF = -Djava.library.path="${PWD}"
-javaSOURCE = Game/IInterface.java Game/TextInterface.java Game/Coordinate.java Game/Move.java Game/Player.java Game/IBoard.java Game/Standard8x8Board.java Game/Controller.java Pieces/Piece.java Pieces/Knight.java Pieces/Bishop.java Pieces/King.java Pieces/Pawn.java Pieces/Queen.java Pieces/Rook.java RuleSets/IRuleSet.java RuleSets/Standard8x8.java
+javaSOURCE = Game/IInterface.java RuleSets/IRuleSet.java Game/TextInterface.java Game/Coordinate.java Game/Move.java Game/Player.java Game/IBoard.java Game/Standard8x8Board.java Game/Controller.java Pieces/Piece.java Pieces/Knight.java Pieces/Bishop.java Pieces/King.java Pieces/Pawn.java Pieces/Queen.java Pieces/Rook.java RuleSets/Standard8x8.java
 javaCLASS = ${javaSOURCE:.java=.class}
 javaMAINCLASS = Game.Controller
 
