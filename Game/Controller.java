@@ -69,6 +69,7 @@ public class Controller{
         }
 
         try{
+            slavePipe.setKeepAlive(true);
             slavePipe.setTcpNoDelay(true);
         }
         catch(SocketException so){
@@ -171,8 +172,7 @@ public class Controller{
         else{
             current_move = m;
             this.sendMove(m);
-            Thread.sleep(100);
-            return Boolean.getBoolean(this.read());
+            return true;
         }
     }
 
@@ -205,6 +205,9 @@ public class Controller{
     */
     public static void main(String []args) throws InterruptedException{
         Controller me = new Controller();
+        while(true){
+            me.p.game();
+        }
     }
 
 
@@ -269,12 +272,14 @@ public class Controller{
                             break;
                         case "true":
                             c.updateBoard();
+                            c.p.update();
                             System.err.println(role+" should send ACK");
                             c.send("ACK");
                             break;
                         case "false":
                             System.err.println(role+" should send ACK");
                             c.send("ACK");
+                            c.send("RDY");
                             break;
                     }
                 }

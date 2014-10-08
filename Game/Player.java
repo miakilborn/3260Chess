@@ -18,6 +18,13 @@ public class Player {
     public Player(Controller controller){
         this.controller = controller;
         ui = new TextInterface();
+        if(controller.isMaster()){
+            colour = "White";
+        } else {
+            colour = "Black";
+        }
+        ui.setPlayerColour(colour);
+        name = ui.getUsername();
     }
 
     /**
@@ -26,53 +33,37 @@ public class Player {
     *
     */
     public void game(){
+        //display board
+        ui.displayBoard(controller.getBoard());
 
-        //init
-        if(controller.isMaster()){
-            colour = "White";
-        } else {
-            colour = "Black";
+
+        //wait for turn
+
+
+        //get move
+        Move move = ui.getMove(controller.getBoard());
+
+        while(move == null){
+            ui.displayMessage("Unable to perform move.");
+            move = ui.getMove(controller.getBoard());
         }
 
-        ui.setPlayerColour(colour);
-        name = ui.getUsername();
-
-        //enter gameplay loop
-        boolean over = false;
-        while(!over){
-
-            //display board
-            ui.displayBoard(controller.getBoard());
-
-
-            //wait for turn
-
-
-            //get move
-            Move move = ui.getMove(controller.getBoard());
-
-            while(move == null){
+        //validate move
+        boolean result = false;
+        try{
+            result = controller.makeMove(move);
+            if(result && controller.isMaster()) {
+                ui.displayMessage("Valid move!");
+                ui.displayBoard(controller.getBoard());
+            } else {
                 ui.displayMessage("Unable to perform move.");
-                move = ui.getMove(controller.getBoard());
             }
-
-            //validate move
-            boolean result = false;
-            try{
-                result = controller.makeMove(move);
-                if(result) {
-                    ui.displayMessage("Valid move!");
-                    ui.displayBoard(controller.getBoard());
-                } else {
-                    ui.displayMessage("Unable to perform move.");
-                }
-            }
-            catch(InterruptedException e){
-                e.printStackTrace();
-            }
-
-            //over = true;
         }
+        catch(InterruptedException e){
+            e.printStackTrace();
+        }
+
+        //over = true;
     }
 
 
@@ -82,6 +73,7 @@ public class Player {
     */
     public void update(){
         ui.displayBoard(controller.getBoard());
+        //ui.getMove();
     }
 
     /**
