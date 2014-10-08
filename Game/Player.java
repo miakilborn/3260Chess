@@ -34,6 +34,10 @@ public class Player {
             //display board
             ui.displayBoard(controller.getBoard().toString());
 
+
+            //wait for turn
+
+            
             //get move
             Move move = ui.getMove(controller.getBoard());
 

@@ -30,7 +30,7 @@ public class Controller{
     public Controller(){
         masterPipe = null;
         slavePipe = new Socket();
-        InetSocketAddress address = new InetSocketAddress("127.0.0.1",PORT);
+        InetSocketAddress address = new InetSocketAddress("127.0.0.1", PORT);
 
         //Set up connection
         try{

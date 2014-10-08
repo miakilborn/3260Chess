@@ -75,21 +75,21 @@ public class Standard8x8 implements IRuleSet {
 	*/
 	private boolean checkMovePawn(IBoard board, Move move){
 		ArrayList<Coordinate> validMoves = new ArrayList<Coordinate>();
-		Piece piece = move.getPiece();
+		Piece piece = board.getPieceFromPosition(move.getCurrentPosition());
 		Coordinate cPos = move.getCurrentPosition();
-		String colour = move.getPiece().getColour();
+		String colour = piece.getColour();
 		ArrayList<Piece> pieces = board.getPieces();
 
 		Coordinate temp_coord = null;
 		if (colour.equals("White")){
 			temp_coord = new Coordinate(cPos.getX()+1, cPos.getY()+1);
-			if (checkOpponents(move.getPiece(), getPieceFromPosition(board, temp_coord))) //only valid diagonal with opponent piece there
+			if (checkOpponents(piece, getPieceFromPosition(board, temp_coord))) //only valid diagonal with opponent piece there
 				validMoves.add(temp_coord);
 
 			validMoves.add(new Coordinate(cPos.getX()+0, cPos.getY()+1));
 
 			temp_coord = new Coordinate(cPos.getX()-1, cPos.getY()+1);
-			if (checkOpponents(move.getPiece(), getPieceFromPosition(board, temp_coord))) //only valid diagonal with opponent piece there
+			if (checkOpponents(piece, getPieceFromPosition(board, temp_coord))) //only valid diagonal with opponent piece there
 				validMoves.add(temp_coord);
 
 			if (!piece.hasMoved()){
@@ -100,13 +100,13 @@ public class Standard8x8 implements IRuleSet {
 			}
 		} else {
 			temp_coord = new Coordinate(cPos.getX()-1, cPos.getY()-1);
-			if (checkOpponents(move.getPiece(), getPieceFromPosition(board, temp_coord))) //only valid diagonal with opponent piece there
+			if (checkOpponents(piece, getPieceFromPosition(board, temp_coord))) //only valid diagonal with opponent piece there
 				validMoves.add(temp_coord);
 
 			validMoves.add(new Coordinate(cPos.getX()+0, cPos.getY()-1));
 
 			temp_coord = new Coordinate(cPos.getX()+1, cPos.getY()-1);
-			if (checkOpponents(move.getPiece(), getPieceFromPosition(board, temp_coord))) //only valid diagonal with opponent piece there
+			if (checkOpponents(piece, getPieceFromPosition(board, temp_coord))) //only valid diagonal with opponent piece there
 				validMoves.add(temp_coord);
 
 			if (!piece.hasMoved()){
@@ -529,7 +529,7 @@ public class Standard8x8 implements IRuleSet {
 		for (int i=0;i<pieces.size();i++){
 			Piece piece = pieces.get(i);
 			if (!piece.getColour().equals(colour)){
-				Move move = new Move(piece, kingCoords);
+				Move move = new Move(piece.getPosition(), kingCoords);
 				if (checkMoveByPiece(board, move))
 					return true;
 			}
@@ -572,7 +572,7 @@ public class Standard8x8 implements IRuleSet {
 	* @author 	Tim
 	*/
 	private boolean checkMoveByPiece(IBoard board, Move move){
-		Piece piece =  move.getPiece(); //players piece he/she wants to move
+		Piece piece =  board.getPieceFromPosition(move.getCurrentPosition()); //players piece he/she wants to move
 		if (piece instanceof Pawn)
 			return checkMovePawn(board, move);
 		else if  (piece instanceof Knight)
@@ -590,6 +590,13 @@ public class Standard8x8 implements IRuleSet {
 	}
 
 
+	// public String getTurn(){
+	// 	if (lastMove.equals("White"))
+	// 		return "Black";
+	// 	else
+	// 		return "White"
+	// }
+
 	/**
 	* Verify the provided move is valid to this ruleset
 	* @return	Sets the valid flag in Move object, and updates the
@@ -600,12 +607,12 @@ public class Standard8x8 implements IRuleSet {
 		boolean validMove = true;
 		String message = "";
 		ArrayList<Piece> pieces = board.getPieces();
-		Piece piece =  move.getPiece(); //players piece he/she wants to move
+		Piece piece =  board.getPieceFromPosition(move.getCurrentPosition()); //players piece he/she wants to move
 		Coordinate nextPostion = move.getNextPosition();
 		Piece capture = getPieceFromPosition(board, nextPostion);
 
-		if ((lastMove != null && lastMove.getPiece().getColour().equals(move.getPiece().getColour())) ||
-				(lastMove == null && move.getPiece().getColour().equals("Black"))){ // If same player is trying to move again, invalid move!
+		if ((lastMove != null && board.getPieceFromPosition(lastMove.getNextPosition()).getColour().equals(piece.getColour())) ||
+				(lastMove == null && piece.getColour().equals("Black"))){ // If same player is trying to move again, invalid move!
 			message = "Detected not players turn: " + piece.getColour();
 			validMove = false;
 		} 

@@ -48,16 +48,8 @@ public class TextInterface implements IInterface {
         String oldPosition = "C"+tokenizer.nextElement();
         String newPosition = "C"+tokenizer.nextElement();
 
-        Piece currPiece = board.getPieceFromPosition(new Coordinate(oldPosition));
-
-        if(currPiece.getColour().equals(colour)){
-            Move move = new Move(currPiece, new Coordinate(newPosition));
-            return move;
-        } 
-        else {
-            System.out.println("The selected piece does not belong to you.");
-            return null;
-        }
+        Move move = new Move(new Coordinate(oldPosition), new Coordinate(newPosition));
+        return move;
 	}
 
 	public void setPlayerColour(String colour){

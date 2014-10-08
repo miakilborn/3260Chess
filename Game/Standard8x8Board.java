@@ -23,7 +23,7 @@ public class Standard8x8Board implements IBoard {
     * @param    Move command
     */
     public void makeMove(Move m){
-        Piece piece = m.getPiece();
+        Piece piece = this.getPieceFromPosition(m.getCurrentPosition());
         piece.setPosition(m.getNextPosition());
         piece.setHasMoved(true);
     }
