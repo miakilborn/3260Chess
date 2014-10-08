@@ -81,7 +81,7 @@ public class Player {
     *
     */
     public void update(){
-            ui.displayBoard(controller.getBoard());
+        ui.displayBoard(controller.getBoard());
     }
 
     /**
