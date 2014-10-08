@@ -59,8 +59,8 @@ public class TextInterface implements IInterface {
         System.out.println("\n" + "  |------------------ ");
 
         
-        for (int y=1;y<boardStr.length;y++){
-            System.out.print((8-y+1) + " |  ");
+        for (int y=boardStr.length-1;y>=1;y--){
+            System.out.print(y + " |  ");
             for (int x=1;x<boardStr[y].length;x++){
                 System.out.print(boardStr[x][y] + " ");
             }
