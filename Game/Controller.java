@@ -219,7 +219,7 @@ public class Controller{
                 try{
                     String get = c.read();
                     String [] cmd = get.split("\\|");
-                    System.err.println(cmd[0]);
+                    System.err.println("STREAM: "+cmd[0]);
 
                     switch(cmd[0]){
                         case "RDY":
