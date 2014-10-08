@@ -9,7 +9,7 @@ public class Player {
     private int score;
 
     /**
-    * Main class, runs the program 
+    * Main class, runs the program
     *
     *
     */
@@ -37,7 +37,7 @@ public class Player {
 
             //wait for turn
 
-            
+
             //get move
             Move move = ui.getMove(controller.getBoard());
 
@@ -45,7 +45,7 @@ public class Player {
                 ui.displayMessage("Unable to perform move.");
                 move = ui.getMove(controller.getBoard());
             }
-            
+
             //validate move
             boolean result = false;
             try{

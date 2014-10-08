@@ -38,23 +38,31 @@ public class Standard8x8Board implements IBoard {
         return null;
     }
 
+    public String toString(){
+        String ret = "";
+        for(Piece p : pieces){
+            ret += p.toString()+"\n";
+        }
+        return ret;
+    }
+
     /*
-    * Function returns a string representation of the board
+    * Function returns a formatted string representation of the board
     *
     *
     */
-    public String toString(){
+    public String toFormattedString(){
         char[][] board = new char[10][19];
         int x, y;
         String strBoard = "";
         char[] numsAcross = {' ', ' ', '1', ' ', '2', ' ', '3', ' ', '4', ' ', '5', ' ', '6', ' ', '7', ' ', '8', ' ', ' '};
         char[] numsDown = {' ', '1', '2', '3', '4', '5', '6', '7', '8', ' '};
-        
+
         //initialize
         for(int i = 0; i < 10; i++){
             if((i == 0) || (i == 9)){
                 board[i] = numsAcross;
-            } 
+            }
             else {
                 for(int j = 0; j < 19; j++){
                     //odd cols are dashes
@@ -73,14 +81,14 @@ public class Standard8x8Board implements IBoard {
         for(Piece p : pieces){
             x = p.getPosition().getX();
             x = x + x;
-            
+
             y = p.getPosition().getY();
             if(p.getColour().equals("White")){
                 board[y][x] = Character.toUpperCase(p.toChar());
             } else {
                 board[y][x] = p.toChar();
             }
-            
+
         }
 
         for(int i = 0; i < 10; i++){
