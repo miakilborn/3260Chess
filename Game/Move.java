@@ -14,17 +14,15 @@ public class Move {
 	}
 
 	public Move(String s){
-		//EXAMPLE: M(Rook(C(0,0),black,false),C(0,1))
+		//EXAMPLE: M(C(0,0),C(0,1))
 		System.out.println("Str: " + s);
 		if(s.charAt(0)=='M'){
 			s = s.replaceAll("M\\(|\\)$","");
 			System.out.println("Str: " + s);
 			String p = s.substring(0,s.lastIndexOf("),")+1);
 			s = s.replace(p+",","");
-			switch(p.substring(0,p.indexOf("("))){
-				
-			}
-			currentPosition = new Coordinate(s);
+
+			currentPosition = new Coordinate(p);
 			nextPosition = new Coordinate(s);
 		}
 		else{
