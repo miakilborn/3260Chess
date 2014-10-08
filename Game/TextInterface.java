@@ -8,7 +8,7 @@ import java.util.StringTokenizer;
 
 public class TextInterface implements IInterface {
 	private String moveString;
-	private final String inputPattern = "\\([1-8],[1-8]\\)-\\([1-8],[1-8]\\)";
+	private final String inputPattern = "([A-Ha-h][1-8])\\-([A-Ha-h][1-8])";
 	private String name;
 	private String colour;
 	private String whatCase;
@@ -28,7 +28,7 @@ public class TextInterface implements IInterface {
         System.out.flush();
 
         System.out.println("Welcome to Chess, " + name + ". You are " + colour + ", which is displayed as " + whatCase + " case.");
-        System.out.println("Moves are formatted as \"(sourceX,sourceY)-(destinationX,destinationY)\" ex \"(2,2)-(4,4)\"");
+        System.out.println("Moves are formatted as \"XY-XY\" ex \"B2-B4\"");
 
         printBoard(board);
 	}
@@ -70,12 +70,12 @@ public class TextInterface implements IInterface {
 
         System.out.println("Verifying...");
 
-        //parse input into a Move class instance
-        StringTokenizer tokenizer = new StringTokenizer(moveString, "-");
-        String oldPosition = "C"+tokenizer.nextElement();
-        String newPosition = "C"+tokenizer.nextElement();
+        int x1 = (int)moveString.toUpperCase().charAt(0)-65;
+        int y1 = (int)moveString.toUpperCase().charAt(1)-65;
+        int x2 = (int)moveString.toUpperCase().charAt(3)-65;
+        int y2 = (int)moveString.toUpperCase().charAt(4)-65;
 
-        Move move = new Move(new Coordinate(oldPosition), new Coordinate(newPosition));
+        Move move = new Move(new Coordinate(x1,y1), new Coordinate(x2,y2));
         return move;
 	}
 
