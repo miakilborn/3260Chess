@@ -6,28 +6,34 @@ public class Move {
 	private final Coordinate currentPosition;
 	private final Coordinate nextPosition;
 
-	private Piece captured;
+	private Coordinate captured = null;
 
 	public Move(Coordinate currentPosition, Coordinate nextPosition){
 		this.currentPosition = currentPosition;
 		this.nextPosition = nextPosition;
+		this.captured=null;
 	}
 
 	public Move(String s){
-		//EXAMPLE: M(C(0,0),C(0,1))
-		if(s.charAt(0)=='M'){
+		if(s.charAt(0) == 'M'){
 			s = s.replaceAll("M\\(|\\)$","");
-			String p = s.substring(0,s.lastIndexOf("),")+1);
-			s = s.replace(p+",","");
+			String c = s.substring(0,s.lastIndexOf("),")+1);
+			s = s.replace(c+",","");
 
-			currentPosition = new Coordinate(p);
-			nextPosition = new Coordinate(s);
+			String c1 = c.substring(0,c.lastIndexOf("),")+1);
+			c = c.replace(c1+",","");
+
+			currentPosition = new Coordinate(c1);
+			nextPosition = new Coordinate(c);
+			if(Boolean.getBoolean(s)){
+				this.captured = new Coordinate(s);
+			}
 		}
 		else{
 			currentPosition = null;
 			nextPosition = null;
+			captured = null;
 		}
-
 	}
 
 	public boolean isValid(){
@@ -42,11 +48,11 @@ public class Move {
 		return nextPosition;
 	}
 
-	public Piece getPieceCaptured(){
+	public Coordinate getPieceCaptured(){
 		return captured;
 	}
 
-	public void setPieceCaptured(Piece piece){
+	public void setPieceCaptured(Coordinate piece){
 		captured = piece;
 	}
 
@@ -56,6 +62,6 @@ public class Move {
 
 	public String toString(){
 		//Should return a string that you can use in the constructor to rebuild the object.
-		return ("M("+currentPosition.toString()+","+nextPosition.toString()+")");
+		return ("M("+currentPosition.toString()+","+nextPosition.toString()+","+(captured==null?"false":"true")+")");
 	}
 }
