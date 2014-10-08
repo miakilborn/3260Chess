@@ -15,7 +15,7 @@ $(javaCLASS): %.class:%.java
 	
 run:
 	@ echo "Starting Chess Program..."
-	@ $(JRE) $(JREF) $(javaMAINCLASS) 2>>log.txt
+	@ $(JRE) $(JREF) $(javaMAINCLASS)
 	
 clean:
 	@ echo "Cleaning Up..."

@@ -1,6 +1,8 @@
 package Game;
 import Game.*;
 import Pieces.*;
+
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
@@ -18,7 +20,7 @@ public class TextInterface implements IInterface {
         return name;
 	}
 
-	public void displayBoard(String boardStr){
+	public void displayBoard(IBoard board){
         //clear the screen
         final String ANSI_CLS = "\u001b[2J";
         final String ANSI_HOME = "\u001b[H";
@@ -28,8 +30,33 @@ public class TextInterface implements IInterface {
         System.out.println("Welcome to Chess, " + name + ". You are " + colour + ", which is displayed as " + whatCase + " case.");
         System.out.println("Moves are formatted as \"(sourceX,sourceY)-(destinationX,destinationY)\" ex \"(2,2)-(4,4)\"");
 
-        System.out.print(boardStr);
+        printBoard(board);
 	}
+
+    public void printBoard(IBoard board){
+       // Pawn(C(1,3), White, false)
+        ArrayList<Piece> pieces = board.getPieces();
+        char[][] boardStr = new char[8+1][8+1];
+
+        for (int i=0;i<pieces.size();i++){
+            Piece piece = pieces.get(i);
+            String pieceStr = piece.toString();
+            String coordStr = pieceStr.substring(pieceStr.lastIndexOf("C("),pieceStr.lastIndexOf("),")+1);
+            Coordinate coord = new Coordinate(coordStr);
+
+            boardStr[coord.getX()][coord.getY()] = Character.toUpperCase(piece.toChar());
+
+        }
+
+        // Print board to stdout
+        for (int y=1;y<boardStr.length;y++){
+            for (int x=1;x<boardStr[y].length;x++)
+                System.out.print(boardStr[x][y]);
+            System.out.println();
+        }
+
+
+    }
 
 	public Move getMove(IBoard board){
         System.out.print("Your move: ");

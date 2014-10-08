@@ -32,7 +32,7 @@ public class Player {
         while(!over){
 
             //display board
-            ui.displayBoard(controller.getBoard().toString());
+            ui.displayBoard(controller.getBoard());
 
 
             //wait for turn
@@ -52,7 +52,7 @@ public class Player {
                 result = controller.makeMove(move);
                 if(result) {
                     ui.displayMessage("Valid move!");
-                    ui.displayBoard(controller.getBoard().toString());
+                    ui.displayBoard(controller.getBoard());
                 } else {
                     ui.displayMessage("Unable to perform move.");
                 }
