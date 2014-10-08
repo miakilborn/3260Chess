@@ -538,6 +538,20 @@ public class Standard8x8 implements IRuleSet {
 	}
 
 	/**
+    * Checks if the opponents king is captured
+    * @author Tim
+    */
+    public boolean hasWon(IBoard board, String colour){
+        String opponent = "White";
+        if (colour.equals("White"))
+        	opponent = "Black";
+        if (isInCheck(board, opponent) && isInCheckMate(board, opponent))
+        	return true;
+        else
+        	return false;
+    }
+
+	/**
 	* Checks if two pieces provided are of the opposite colour
 	* @param	two Piece references
 	* @author 	Tim
