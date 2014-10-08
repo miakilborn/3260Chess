@@ -10,7 +10,7 @@ public abstract class Piece{
 
     public void capture(){
         this.isCaptured = true;
-        this.position = null;
+        this.position = new Coordinate(0,0);
     }
 
     public void setPosition(Coordinate position) {
