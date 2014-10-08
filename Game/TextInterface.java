@@ -62,7 +62,7 @@ public class TextInterface implements IInterface {
             System.out.print(c + " ");
         System.out.println("\n" + "  |------------------ ");
 
-        
+
         for (int y=boardStr.length-1;y>=1;y--){
             System.out.print(y + " |  ");
             for (int x=1;x<boardStr[y].length;x++){
@@ -74,7 +74,7 @@ public class TextInterface implements IInterface {
         System.out.print("  |------------------ \n     ");
         for (char c='A';c<='H';c++)
             System.out.print(c + " ");
-        
+
         System.out.println();
 
     }
@@ -97,7 +97,7 @@ public class TextInterface implements IInterface {
         int y2 = (int)moveString.toUpperCase().charAt(4)-48;
 
         Move move = new Move(new Coordinate(x1,y1), new Coordinate(x2,y2));
-		System.err.println(move.toString());
+		//System.err.println(move.toString());
         return move;
 	}
 

@@ -39,6 +39,7 @@ public class Controller{
             mode = MASTER;
             System.out.println("You are player 1, waiting for player 2 to start the game...");
             slavePipe = masterPipe.accept();
+            masterPipe.close();
         }
         catch(IOException e){
             //Address already in use. Connect to it.
@@ -59,12 +60,19 @@ public class Controller{
 
         //Set up stream
         try{
-            socketOut = new PrintWriter(slavePipe.getOutputStream(), true);
+            socketOut = new PrintWriter(slavePipe.getOutputStream());
             socketIn = new BufferedReader(new InputStreamReader(slavePipe.getInputStream()));
         }
         catch(IOException ioe){
             System.err.println("Could not set up stream: "+ioe.toString());
             System.exit(1);
+        }
+
+        try{
+            slavePipe.setTcpNoDelay(true);
+        }
+        catch(SocketException so){
+            System.err.println("Socket tcpnodelay failed");
         }
 
         p = new Player(this);
@@ -87,6 +95,9 @@ public class Controller{
     public void send(String term){
         socketOut.write(term+"\n");
         socketOut.flush();
+        if(socketOut.checkError()){
+            System.err.println("SHIIIIIIIT");
+        }
     }
 
     /* Read from the socket to see if there is a command or a response there.
@@ -146,7 +157,7 @@ public class Controller{
     *
     */
     public Boolean makeMove(Move m) throws InterruptedException{
-        while(!OTHER_RDY){Thread.sleep(100);};
+        while(!OTHER_RDY){Thread.sleep(100);System.err.println((this.isMaster()?"Master":"Slave") + " makeMove");};
         if(this.isMaster()){
             if(rules.checkMove(this.board,m)){
                 this.sendMove(m);
@@ -166,7 +177,7 @@ public class Controller{
     }
 
     public void sendMove(Move m) throws InterruptedException{
-        while(!OTHER_RDY){Thread.sleep(100);};
+        while(!OTHER_RDY){Thread.sleep(100);System.err.println("sendMove");};
         this.send("N_RDY");
         this.send("MV|"+m.toString());
     }
@@ -219,7 +230,9 @@ public class Controller{
                 try{
                     String get = c.read();
                     String [] cmd = get.split("\\|");
-                    System.err.println("STREAM: "+cmd[0]);
+                    String role = c.isMaster()?"Master":"Slave";
+
+                    System.err.println(role+" got: "+cmd[0]);
 
                     switch(cmd[0]){
                         case "RDY":
@@ -236,31 +249,38 @@ public class Controller{
                             else{
                                 c.current_move = new Move(cmd[1]);
                                 c.updateBoard();
+                                System.err.println(role+" should send ACK");
                                 c.send("ACK");
                             }
                             break;
                         case "ACK":
                             if(c.isMaster()){
                                 if(c.updateBoard()){
+                                    System.err.println(role+" should send ACK");
                                     c.send("ACK");
                                 }
+                                System.err.println(role+" should send RDY");
                                 c.send("RDY");
                             }
                             else{
+                                System.err.println(role+" should send RDY");
                                 c.send("RDY");
                             }
                             break;
                         case "true":
                             c.updateBoard();
+                            System.err.println(role+" should send ACK");
                             c.send("ACK");
                             break;
                         case "false":
+                            System.err.println(role+" should send ACK");
                             c.send("ACK");
                             break;
                     }
                 }
                 catch(NullPointerException e){
                     try{
+                        System.err.println("exception in read thread");
                         Thread.sleep(10);
                     }
                     catch(InterruptedException ie){
