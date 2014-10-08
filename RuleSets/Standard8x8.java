@@ -615,7 +615,9 @@ public class Standard8x8 implements IRuleSet {
 		Piece piece =  board.getPieceFromPosition(move.getCurrentPosition()); //players piece he/she wants to move
 		Coordinate nextPostion = move.getNextPosition();
 		Piece capture = getPieceFromPosition(board, nextPostion);
-		move.setPieceCaptured(nextPostion);
+
+		if (capture != null)
+			move.setPieceCaptured(nextPostion);
 
 		if ((lastMove != null && board.getPieceFromPosition(lastMove.getNextPosition()).getColour().equals(piece.getColour())) ||
 				(lastMove == null && piece.getColour().equals("Black"))){ // If same player is trying to move again, invalid move!
