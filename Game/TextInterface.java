@@ -43,10 +43,10 @@ public class TextInterface implements IInterface {
 
         System.out.println("Verifying...");
 
-        int x1 = (int)moveString.charAt(0)-64;
-        int y1 = (int)moveString.charAt(1)-64;
-        int x2 = (int)moveString.charAt(3)-64;
-        int y2 = (int)moveString.charAt(4)-64;
+        int x1 = (int)moveString.toUpperCase().charAt(0)-65;
+        int y1 = (int)moveString.toUpperCase().charAt(1)-65;
+        int x2 = (int)moveString.toUpperCase().charAt(3)-65;
+        int y2 = (int)moveString.toUpperCase().charAt(4)-65;
 
         Move move = new Move(new Coordinate(x1,y1), new Coordinate(x2,y2));
         return move;
