@@ -44,14 +44,19 @@ public class TextInterface implements IInterface {
             String coordStr = pieceStr.substring(pieceStr.lastIndexOf("C("),pieceStr.lastIndexOf("),")+1);
             Coordinate coord = new Coordinate(coordStr);
 
-            boardStr[coord.getX()][coord.getY()] = Character.toUpperCase(piece.toChar());
+            if (piece.getColour().equals("White"))
+                boardStr[coord.getX()][coord.getY()] = Character.toUpperCase(piece.toChar());
+            else
+                boardStr[coord.getX()][coord.getY()] = Character.toLowerCase(piece.toChar());
 
         }
 
         // Print board to stdout
         for (int y=1;y<boardStr.length;y++){
-            for (int x=1;x<boardStr[y].length;x++)
-                System.out.print(boardStr[x][y]);
+            for (int x=1;x<boardStr[y].length;x++){
+                System.out.print(boardStr[x][y] + " ");
+
+            }
             System.out.println();
         }
 
