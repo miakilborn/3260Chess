@@ -23,6 +23,8 @@ public class Move {
 			String c1 = c.substring(0,c.lastIndexOf("),")+1);
 			c = c.replace(c1+",","");
 
+			System.err.println("c1: "+c1+" | c: "+c+" | s: "+s);
+
 			currentPosition = new Coordinate(c1);
 			nextPosition = new Coordinate(c);
 			if(Boolean.getBoolean(s)){
