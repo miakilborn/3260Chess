@@ -624,12 +624,15 @@ public class Standard8x8 implements IRuleSet {
 			message = "Detected not players turn: " + piece.getColour();
 			validMove = false;
 		}
-		else if (capture != null){
+		
+		if (capture != null){
 			if (!checkOpponents(capture, piece)){ //if there is collision with the players OWN piece, invalid move!
 				message = "Detected collision with own piece: " + piece.getColour();
 				validMove = false;
 			}
-		} else if (checkMoveByPiece(board, move)) {
+		} 
+
+		if (checkMoveByPiece(board, move)) {
 			if (validMove){
 				Coordinate oldSpot = piece.getPosition();
 				piece.setPosition(move.getNextPosition());  //Perform the piece move temporarly, check if it makes the player in check who is making the move
