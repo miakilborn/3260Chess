@@ -45,6 +45,7 @@ public class Player {
 
         while(move == null){
             ui.displayMessage("Unable to perform move.");
+            System.out.print("Your move: ");
             move = ui.getMove(controller.getBoard());
         }
 
@@ -53,10 +54,10 @@ public class Player {
         try{
             result = controller.makeMove(move);
             if(result && controller.isMaster()) {
-                ui.displayMessage("Valid move!");
+                ui.displayMessage("Made move");
                 ui.displayBoard(controller.getBoard());
             } else {
-                ui.displayMessage("Unable to perform move.");
+                ui.displayMessage("Move was not made");
             }
         }
         catch(InterruptedException e){

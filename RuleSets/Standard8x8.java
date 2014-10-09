@@ -311,16 +311,16 @@ public class Standard8x8 implements IRuleSet {
 		logicalMoves.add(new Coordinate(cPos.getX()-1, cPos.getY()+1));
 		logicalMoves.add(new Coordinate(cPos.getX()+0, cPos.getY()+1));
 		logicalMoves.add(new Coordinate(cPos.getX()+1, cPos.getY()+1));
-		logicalMoves.add(new Coordinate(cPos.getX()-1, cPos.getY()+0));
 		logicalMoves.add(new Coordinate(cPos.getX()+1, cPos.getY()+0));
-		logicalMoves.add(new Coordinate(cPos.getX()-1, cPos.getY()-1));
-		logicalMoves.add(new Coordinate(cPos.getX()+0, cPos.getY()-1));
 		logicalMoves.add(new Coordinate(cPos.getX()+1, cPos.getY()-1));
+		logicalMoves.add(new Coordinate(cPos.getX()+0, cPos.getY()-1));
+		logicalMoves.add(new Coordinate(cPos.getX()-1, cPos.getY()-1));
+		logicalMoves.add(new Coordinate(cPos.getX()-1, cPos.getY()+0));
 
-		for (int i=0;i<validMoves.size();i++){
-			Coordinate logicalMove = validMoves.get(i);
-			if (OnBoard(logicalMove) == false)
+		for (Coordinate logicalMove : logicalMoves){
+			if(OnBoard(logicalMove) == false){
 				continue;
+			}
 			validMoves.add(logicalMove);
 		}
 		return validMoves;
@@ -331,6 +331,7 @@ public class Standard8x8 implements IRuleSet {
 		ArrayList<Piece> pieces = board.getPieces();
 
 		ArrayList<Coordinate> validMoves = getValidMovesKing(cPos);
+		System.out.println(validMoves.size());
 
 		for (int i=0;i<validMoves.size();i++){
 			Coordinate validMove = validMoves.get(i);
