@@ -77,10 +77,13 @@ public class TextInterface implements IInterface {
 
         System.out.println();
 
+        // System.out.println(message);
+
+        System.out.print("Your move: ");
+
     }
 
 	public Move getMove(IBoard board){
-        System.out.print("Your move: ");
         moveString = keyboard.nextLine();
 
         while(!moveString.matches(inputPattern)){
