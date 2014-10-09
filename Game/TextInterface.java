@@ -95,14 +95,15 @@ public class TextInterface implements IInterface {
         int y2 = (int)moveString.toUpperCase().charAt(4)-48;
 
         Piece p = board.getPieceFromPosition(new Coordinate(x1,y1));
+        Move move = null;
+        if (p != null){
+            move = new Move(new Coordinate(x1,y1), new Coordinate(x2,y2));
 
-        Move move = new Move(new Coordinate(x1,y1), new Coordinate(x2,y2));
-
-        if(!p.getColour().equals(this.colour)){
-            System.out.println("Error: That's not your piece.");
-            move = null;
+            if(!p.getColour().equals(this.colour)){
+                System.out.println("Error: That's not your piece.");
+                move = null;
+            }
         }
-
         return move;
 	}
 

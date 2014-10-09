@@ -86,7 +86,9 @@ public class Standard8x8 implements IRuleSet {
 			if (checkOpponents(piece, getPieceFromPosition(board, temp_coord))) //only valid diagonal with opponent piece there
 				validMoves.add(temp_coord);
 
-			validMoves.add(new Coordinate(cPos.getX()+0, cPos.getY()+1));
+			temp_coord = new Coordinate(cPos.getX()+0, cPos.getY()+1);
+			if (!checkOpponents(piece, getPieceFromPosition(board, temp_coord))) //only valid diagonal with opponent piece there
+				validMoves.add(temp_coord);
 
 			temp_coord = new Coordinate(cPos.getX()-1, cPos.getY()+1);
 			if (checkOpponents(piece, getPieceFromPosition(board, temp_coord))) //only valid diagonal with opponent piece there
@@ -103,7 +105,9 @@ public class Standard8x8 implements IRuleSet {
 			if (checkOpponents(piece, getPieceFromPosition(board, temp_coord))) //only valid diagonal with opponent piece there
 				validMoves.add(temp_coord);
 
-			validMoves.add(new Coordinate(cPos.getX()+0, cPos.getY()-1));
+			temp_coord = new Coordinate(cPos.getX()+0, cPos.getY()-1);
+			if (!checkOpponents(piece, getPieceFromPosition(board, temp_coord))) //only valid diagonal with opponent piece there
+				validMoves.add(temp_coord);
 
 			temp_coord = new Coordinate(cPos.getX()+1, cPos.getY()-1);
 			if (checkOpponents(piece, getPieceFromPosition(board, temp_coord))) //only valid diagonal with opponent piece there
