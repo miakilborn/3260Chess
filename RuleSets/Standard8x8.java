@@ -639,11 +639,23 @@ public class Standard8x8 implements IRuleSet {
 		if (checkMoveByPiece(board, move)) {
 			if (validMove){
 				Coordinate oldSpot = piece.getPosition();
+				Coordinate oldSpot_capture = null;
 				piece.setPosition(move.getNextPosition());  //Perform the piece move temporarly, check if it makes the player in check who is making the move
+				
+				if (capture != null){
+					oldSpot_capture = capture.getPosition();
+					capture.setPosition(new Coordinate(0,0));
+				}
+
+
 				if (isInCheck(board, piece.getColour())){ //this move has made player put him/herself in check, invalid move!
 					message = "Detected king in check for colour: " + piece.getColour();
 					validMove = false;
 				}
+
+				if (capture != null)
+					capture.setPosition(oldSpot_capture);
+				
 				piece.setPosition(oldSpot);
 			}
 
