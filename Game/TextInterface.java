@@ -96,6 +96,11 @@ public class TextInterface implements IInterface {
         int y2 = (int)moveString.toUpperCase().charAt(4)-48;
 
         Piece p = board.getPieceFromPosition(new Coordinate(x1,y1));
+        
+        if(p==null){
+            System.out.println("No piece there.");
+            return null;
+        }
 
         Move move = new Move(new Coordinate(x1,y1), new Coordinate(x2,y2));
 

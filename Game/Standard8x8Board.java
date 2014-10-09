@@ -24,13 +24,17 @@ public class Standard8x8Board implements IBoard {
     */
     public void makeMove(Move m){
         Piece piece = this.getPieceFromPosition(m.getCurrentPosition());
+        // if(this.getPieceFromPosition(m.getNextPosition()) != null){
+        //     //its a capture
+        //     this.pieces.remove(this.getPieceFromPosition(m.getNextPosition()));
+        // }
+        
         piece.setPosition(m.getNextPosition());
         piece.setHasMoved(true);
     }
 
     public Piece getPieceFromPosition(Coordinate coord){
-        for (int i=0;i<pieces.size();i++){
-            Piece piece = pieces.get(i);
+        for (Piece piece : pieces){
             if (piece.getPosition().equals(coord)){
                 return piece;
             }

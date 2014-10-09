@@ -46,6 +46,13 @@ public class Controller{
             isValid = rules.checkMove(board,currMove);
             while(!isValid){
                 ui.displayMessage("Invalid move. Try again.");
+                currMove = ui.getMove(board, white.getColour(), white.getName());
+
+                while(currMove == null){
+                    currMove = ui.getMove(board, white.getColour(), white.getName());
+                }
+
+                isValid = rules.checkMove(board,currMove);
             }
             board.makeMove(currMove);
 
@@ -69,6 +76,12 @@ public class Controller{
             isValid = rules.checkMove(board,currMove);
             while(!isValid){
                 ui.displayMessage("Invalid move. Try again.");
+                currMove = ui.getMove(board, white.getColour(), white.getName());
+                while(currMove == null){
+                    currMove = ui.getMove(board, white.getColour(), white.getName());
+                }
+
+                isValid = rules.checkMove(board,currMove);
             }
             board.makeMove(currMove);
 

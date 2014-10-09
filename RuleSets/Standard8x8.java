@@ -504,6 +504,11 @@ public class Standard8x8 implements IRuleSet {
 		Piece king = getKing(board, colour);
 		Coordinate kingCoords = king.getPosition();
 		ArrayList<Coordinate> validMoves = getValidMovesKing(kingCoords);
+
+
+		if (!isInCheck(board, colour))
+			return false;
+
 		for (int i=0;i<validMoves.size();i++){
 			Coordinate validMove = validMoves.get(i);
 			Coordinate oldSpot = king.getPosition();
@@ -611,17 +616,23 @@ public class Standard8x8 implements IRuleSet {
 		Coordinate nextPostion = move.getNextPosition();
 		Piece capture = getPieceFromPosition(board, nextPostion);
 
+		if (capture != null)
+			move.setPieceCaptured(nextPostion);
+
 		if ((lastMove != null && board.getPieceFromPosition(lastMove.getNextPosition()).getColour().equals(piece.getColour())) ||
 				(lastMove == null && piece.getColour().equals("Black"))){ // If same player is trying to move again, invalid move!
 			message = "Detected not players turn: " + piece.getColour();
 			validMove = false;
 		}
-		else if (capture != null){
+		
+		if (capture != null){
 			if (!checkOpponents(capture, piece)){ //if there is collision with the players OWN piece, invalid move!
 				message = "Detected collision with own piece: " + piece.getColour();
 				validMove = false;
 			}
-		} else if (checkMoveByPiece(board, move)) {
+		} 
+
+		if (checkMoveByPiece(board, move)) {
 			if (validMove){
 				Coordinate oldSpot = piece.getPosition();
 				piece.setPosition(move.getNextPosition());  //Perform the piece move temporarly, check if it makes the player in check who is making the move
