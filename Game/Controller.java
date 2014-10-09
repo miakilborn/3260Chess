@@ -47,6 +47,7 @@ public class Controller{
             while(!isValid){
                 ui.displayMessage("Invalid move. Try again.");
             }
+            board.makeMove(currMove);
 
             //refresh the board
             ui.displayBoard(board);
@@ -69,6 +70,7 @@ public class Controller{
             while(!isValid){
                 ui.displayMessage("Invalid move. Try again.");
             }
+            board.makeMove(currMove);
 
             //refresh the board
             ui.displayBoard(board);
