@@ -25,9 +25,10 @@ public class Standard8x8Board implements IBoard {
     public void makeMove(Move m){
         Piece piece = this.getPieceFromPosition(m.getCurrentPosition());
         Piece cap = null;
-        if(board.getPieceFromPosition(m.getNextPosition())!=null){
+        if(this.getPieceFromPosition(m.getNextPosition())!=null){
             cap = this.getPieceFromPosition(m.getNextPosition());
             //cap = this.getPieceFromPosition(board.getPieceFromPosition(m.getNextPosition()));
+            System.err.println("REMOVING: "+cap.toString());
             this.pieces.remove(cap);
         }
         piece.setPosition(m.getNextPosition());
