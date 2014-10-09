@@ -5,6 +5,13 @@ Chess game for CIS*3260 Software Design 4
 
 Assumes there is only 2 players.
 
+GROUP MEMBERS
+=============
+Tim Engel
+William Vandenberk
+Mia Kilborn
+Zachary Licastro
+
 
 SYSTEM REQUIREMENTS
 ===================
