@@ -27,7 +27,6 @@ public class Standard8x8Board implements IBoard {
         Piece cap = null;
         if(this.getPieceFromPosition(m.getNextPosition())!=null){
             cap = this.getPieceFromPosition(m.getNextPosition());
-            //cap = this.getPieceFromPosition(board.getPieceFromPosition(m.getNextPosition()));
             System.err.println("REMOVING: "+cap.toString());
             this.pieces.remove(cap);
         }

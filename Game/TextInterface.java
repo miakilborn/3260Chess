@@ -7,20 +7,20 @@ import java.util.Scanner;
 import java.util.StringTokenizer;
 
 public class TextInterface implements IInterface {
-	private String moveString;
-	private final String inputPattern = "([A-Ha-h][1-8])\\-([A-Ha-h][1-8])";
-	private String name;
-	private String colour;
-	private String whatCase;
-	Scanner keyboard = new Scanner(System.in);
+    private String moveString;
+    private final String inputPattern = "([A-Ha-h][1-8])\\-([A-Ha-h][1-8])";
+    private String name;
+    private String colour;
+    private String whatCase;
+    Scanner keyboard = new Scanner(System.in);
 
-	public String getUsername(){
+    public String getUsername(){
         System.out.print("Name: ");
         name = keyboard.nextLine();
         return name;
-	}
+    }
 
-	public void displayBoard(IBoard board){
+    public void displayBoard(IBoard board){
         //clear the screen
         final String ANSI_CLS = "\u001b[2J";
         final String ANSI_HOME = "\u001b[H";
@@ -31,9 +31,9 @@ public class TextInterface implements IInterface {
         System.out.println("Moves are formatted as \"XY-XY\" ex \"B2-B4\"");
 
         printBoard(board);
-	}
+    }
 
-    public void printBoard(IBoard board){
+    private void printBoard(IBoard board){
        // Pawn(C(1,3), White, false)
         ArrayList<Piece> pieces = board.getPieces();
         char[][] boardStr = new char[8+1][8+1];
@@ -76,14 +76,9 @@ public class TextInterface implements IInterface {
             System.out.print(c + " ");
 
         System.out.println();
-
-        // System.out.println(message);
-
-        System.out.print("Your move: ");
-
     }
 
-	public Move getMove(IBoard board){
+    public Move getMove(IBoard board){
         moveString = keyboard.nextLine();
 
         while(!moveString.matches(inputPattern)){
@@ -103,24 +98,25 @@ public class TextInterface implements IInterface {
             move = new Move(new Coordinate(x1,y1), new Coordinate(x2,y2));
 
             if(!p.getColour().equals(this.colour)){
-                System.out.println("Error: That's not your piece.");
+                System.out.println("That's not your piece, try again");
                 move = null;
             }
         }
         return move;
-	}
+    }
 
-	public void setPlayerColour(String colour){
-		this.colour = colour;
-		if(colour.equals("White")){
-			this.whatCase = "upper";
-		} else {
-			this.whatCase = "lower";
-		}
-	}
+    public void setPlayerColour(String colour){
+            this.colour = colour;
+            if(colour.equals("White")){
+                    this.whatCase = "upper";
+            } else {
+                    this.whatCase = "lower";
+            }
+    }
 
-	public void displayMessage(String msg){
-		System.out.println(msg);
-	}
+    public void displayMessage(String msg){
+            System.out.println(msg);
+            System.err.println(msg);
+    }
 
 }

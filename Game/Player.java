@@ -34,47 +34,40 @@ public class Player {
     */
     public void game(){
         //display board
-        ui.displayBoard(controller.getBoard());
-
-
-        //wait for turn
-
-
+        
         //get move
         Move move = ui.getMove(controller.getBoard());
 
-        while(move == null){
-            ui.displayMessage("Unable to perform move.");
-            System.out.print("Your move: ");
-            move = ui.getMove(controller.getBoard());
-        }
+//        while(move == null){
+//            ui.displayMessage("Unable to perform move.");
+//            System.out.print("Your move: ");
+//            move = ui.getMove(controller.getBoard());
+//        }
 
-        //validate move
-        boolean result = false;
+        //attempt to perform the move
         try{
-            result = controller.makeMove(move);
-            if(result && controller.isMaster()) {
-                ui.displayMessage("Made move");
-                ui.displayBoard(controller.getBoard());
-            } else {
-                ui.displayMessage("Move was not made");
+            if (move != null){
+                controller.makeMove(move);
             }
         }
         catch(InterruptedException e){
             e.printStackTrace();
         }
-
-        //over = true;
     }
 
-
+    public void printResult(Result result){
+        if (result != null){
+            System.out.println(result.getMessage());
+        }
+    }
     /**
     *
     *
     */
-    public void update(){
+    public void updateDisplay(){
         ui.displayBoard(controller.getBoard());
-        //ui.getMove();
+        printResult(controller.getResult());
+        System.out.print("Your move: ");
     }
 
     /**

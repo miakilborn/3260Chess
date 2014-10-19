@@ -6,6 +6,6 @@ public interface IRuleSet {
 
 	public void setupBoard(IBoard board);
 	public boolean hasWon(IBoard board, String colour);
-	public boolean checkMove(IBoard board, Move move);
+	public Result checkMove(IBoard board, Move move);
 
 }

@@ -331,7 +331,6 @@ public class Standard8x8 implements IRuleSet {
 		ArrayList<Piece> pieces = board.getPieces();
 
 		ArrayList<Coordinate> validMoves = getValidMovesKing(cPos);
-		System.out.println(validMoves.size());
 
 		for (int i=0;i<validMoves.size();i++){
 			Coordinate validMove = validMoves.get(i);
@@ -613,7 +612,7 @@ public class Standard8x8 implements IRuleSet {
 	*			captured piece in the Move object if tile conflict occurs
 	* @author	Tim
 	*/
-	public boolean checkMove(IBoard board, Move move){
+	public Result checkMove(IBoard board, Move move){
 		boolean validMove = true;
 		String message = "";
 		ArrayList<Piece> pieces = board.getPieces();
@@ -626,13 +625,13 @@ public class Standard8x8 implements IRuleSet {
 
 		if ((lastMove != null && board.getPieceFromPosition(lastMove.getNextPosition()).getColour().equals(piece.getColour())) ||
 				(lastMove == null && piece.getColour().equals("Black"))){ // If same player is trying to move again, invalid move!
-			message = "Detected not players turn: " + piece.getColour();
+			message = "It is not your turn to move";
 			validMove = false;
 		}
 		
 		if (capture != null){
 			if (!checkOpponents(capture, piece)){ //if there is collision with the players OWN piece, invalid move!
-				message = "Detected collision with own piece: " + piece.getColour();
+				message = "You may not attempt to capture your own piece!";
 				validMove = false;
 			}
 		} 
@@ -650,7 +649,7 @@ public class Standard8x8 implements IRuleSet {
 
 
 				if (isInCheck(board, piece.getColour())){ //this move has made player put him/herself in check, invalid move!
-					message = "Detected king in check for colour: " + piece.getColour();
+					message = "You are in check, protect the king!";
 					validMove = false;
 				}
 
@@ -665,11 +664,11 @@ public class Standard8x8 implements IRuleSet {
 			}
 		} else {
 			validMove = false;
-			message = "generic invalid move";
+			message = "Generic invalid move";
 		}
 
 		//System.out.println("Move result, move: " + move + ", valid: " + validMove + (validMove ? "" :  ", msg: " + message));
-		return validMove;
+		return new Result(validMove, message);
 	}
 
 }

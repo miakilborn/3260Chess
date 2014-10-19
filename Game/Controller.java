@@ -4,6 +4,8 @@ import java.net.*;
 import java.io.*;
 import RuleSets.*;
 import Pieces.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Controller{
     public static final Boolean MASTER = true;
@@ -11,6 +13,7 @@ public class Controller{
     public static final int PORT = 5001;
     private static Boolean OTHER_RDY = false;
     private static Move current_move = null;
+    private Result result = null; //Result from latest move
 
 
     private String test;
@@ -85,8 +88,13 @@ public class Controller{
         listener = new ControllerListener(this);
         listener.start();
 
-        this.send("RDY");
-        p.game();
+        this.send("RDY");        
+    }
+    
+    public void start(){
+        while(true){
+            p.game();
+        }
     }
 
 
@@ -136,50 +144,51 @@ public class Controller{
     }
 
     public Boolean updateBoard(){
-        if(null==current_move){
-            return false;
+        if(current_move != null){
+            board.makeMove(current_move);
+            current_move = null;
         }
-        board.makeMove(current_move);
-        current_move = null;
-        p.update();
+        p.updateDisplay();
         return true;
     }
 
-    public Boolean checkMove(Move m){
-        if(this.rules.checkMove(this.board,m)){
+    public Result checkMove(Move m){
+        Result result = this.rules.checkMove(this.board,m);
+        this.result = result;
+        if(result.getBoolean()){
             this.current_move = m;
-            return true;
         }
-        return false;
+        return result;
     }
 
     /* makeMove will be called by the player class and handled by the master controller
     *  @author bill
     *
     */
-    public Boolean makeMove(Move m) throws InterruptedException{
+    public void makeMove(Move m) throws InterruptedException{
         while(!OTHER_RDY){Thread.sleep(100);System.err.println((this.isMaster()?"Master":"Slave") + " makeMove");};
         if(this.isMaster()){
-            if(rules.checkMove(this.board,m)){
+            Result result = rules.checkMove(this.board,m);
+            System.out.println("Resulant: " + result.getBoolean());
+            if(result.getBoolean()){
                 this.sendMove(m);
                 board.makeMove(m);
-                return true;
             }
-            else{
-                return false;
-            }
+            this.result = result;
+            updateBoard();
         }
         else{
             current_move = m;
             this.sendMove(m);
-            return true;
         }
     }
 
     public void sendMove(Move m) throws InterruptedException{
         while(!OTHER_RDY){Thread.sleep(100);System.err.println("sendMove");};
-        this.send("N_RDY");
-        this.send("MV|"+m.toString());
+        if (m != null){
+            this.send("N_RDY");
+            this.send("MV|"+m.toString());
+        }
     }
 
     /* Safely shutdown the socket
@@ -203,16 +212,30 @@ public class Controller{
     * This is just for testing... the actual main will be in player.
     *
     */
-    public static void main(String []args) throws InterruptedException{
-        Controller me = new Controller();
-        while(true){
-            me.p.game();
-        }
+    public static void main(String []args) throws InterruptedException, FileNotFoundException{
+        File file = new File("log.txt");
+        FileOutputStream fos = new FileOutputStream(file);
+        PrintStream ps = new PrintStream(fos);
+        System.setErr(ps);
+        
+        Controller c = new Controller();
+        c.updateBoard();
+        c.start();
     }
 
 
     public IBoard getBoard(){
         return this.board;
+    }
+    
+    
+    public Result getResult(){
+        Result result = null;
+        if (this.result != null){
+            result = new Result(this.result.getBoolean(), this.result.getMessage());
+        }
+        this.result = null;
+        return result;
     }
 
 
@@ -236,7 +259,6 @@ public class Controller{
                     String role = c.isMaster()?"Master":"Slave";
 
                     System.err.println(role+" got: "+cmd[0]);
-
                     switch(cmd[0]){
                         case "RDY":
                             c.OTHER_RDY = true;
@@ -246,38 +268,37 @@ public class Controller{
                             break;
                         case "MV":
                             if(c.isMaster()){
-                                Boolean ret = c.checkMove(new Move(cmd[1]));
+                                Move m = new Move(cmd[1]);
+                                Result ret = c.checkMove(m);
+                                if (ret.getBoolean()){
+                                    c.current_move = m;
+                                    c.updateBoard();
+                                }
                                 c.send(ret.toString());
                             }
                             else{
                                 c.current_move = new Move(cmd[1]);
                                 c.updateBoard();
-                                System.err.println(role+" should send ACK");
                                 c.send("ACK");
                             }
                             break;
                         case "ACK":
                             if(c.isMaster()){
-                                if(c.updateBoard()){
-                                    System.err.println(role+" should send ACK");
-                                    c.send("ACK");
-                                }
-                                System.err.println(role+" should send RDY");
+                                c.send("ACK");
                                 c.send("RDY");
                             }
                             else{
-                                System.err.println(role+" should send RDY");
                                 c.send("RDY");
                             }
                             break;
                         case "true":
                             c.updateBoard();
-                            c.p.update();
-                            System.err.println(role+" should send ACK");
                             c.send("ACK");
                             break;
                         case "false":
-                            System.err.println(role+" should send ACK");
+                            c.result = new Result(false, cmd[1]);
+                            c.current_move = null;
+                            c.updateBoard();
                             c.send("ACK");
                             c.send("RDY");
                             break;
