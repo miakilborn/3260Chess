@@ -38,12 +38,6 @@ public class Player {
         //get move
         Move move = ui.getMove(controller.getBoard());
 
-//        while(move == null){
-//            ui.displayMessage("Unable to perform move.");
-//            System.out.print("Your move: ");
-//            move = ui.getMove(controller.getBoard());
-//        }
-
         //attempt to perform the move
         try{
             if (move != null){
@@ -53,6 +47,11 @@ public class Player {
         catch(InterruptedException e){
             e.printStackTrace();
         }
+    }
+
+    public void getRules(){
+        //return type to be determined
+        ui.getRules();
     }
 
     public void printResult(Result result){

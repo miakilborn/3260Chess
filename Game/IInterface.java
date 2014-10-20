@@ -12,4 +12,5 @@ public interface IInterface {
 	public void setPlayerColour(String colour);
 	public String getUsername();
 	public void displayMessage(String msg);
+    public void getRules();
 }

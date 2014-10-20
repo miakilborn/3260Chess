@@ -152,6 +152,17 @@ public class Controller{
         return true;
     }
 
+    /**
+     * Gets the desired optional rules from the master player
+     * Note that the slave will see the board before the master has selected rules.
+     * @author Mia
+     */
+    private void getRules(){
+        if(this.isMaster()) {
+            p.getRules();
+        }
+    }
+
     public Result checkMove(Move m){
         Result result = this.rules.checkMove(this.board,m, this.additionalRules);
         this.result = result;
@@ -227,10 +238,10 @@ public class Controller{
         System.setErr(ps);
         
         Controller c = new Controller();
+        c.getRules();
         c.updateBoard();
         c.start();
     }
-
 
     public IBoard getBoard(){
         return this.board;

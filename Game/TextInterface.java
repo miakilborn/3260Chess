@@ -103,7 +103,8 @@ public class TextInterface implements IInterface {
             move = new Move(new Coordinate(x1,y1), new Coordinate(x2,y2));
 
             if(!p.getColour().equals(this.colour)){
-                System.out.println("That's not your piece, try again");
+                System.out.println("The selected piece does not belong to you. Please try again.");
+                System.err.println("The selected piece does not belong to you. Please try again.");
                 move = null;
             }
         }
@@ -124,4 +125,44 @@ public class TextInterface implements IInterface {
             System.err.println(msg);
     }
 
+    public void getRules(){
+        String option;
+
+        System.out.println("Hello, " + name + ". You are the master for this session, please select your rules.");
+        System.out.print("Promotion (Y/N): ");
+        option = keyboard.nextLine();
+        if((option.charAt(0) == 'Y') || (option.charAt(0) =='y')){
+
+        }
+
+        System.out.print("Castling (Y/N): ");
+        option = keyboard.nextLine();
+        if((option.charAt(0) == 'Y') || (option.charAt(0) =='y')){
+
+        }
+
+        System.out.print("En Passent (Y/N): ");
+        option = keyboard.nextLine();
+        if((option.charAt(0) == 'Y') || (option.charAt(0) =='y')){
+
+        }
+
+        System.out.print("Draw by agreement (Y/N): ");
+        option = keyboard.nextLine();
+        if((option.charAt(0) == 'Y') || (option.charAt(0) =='y')){
+
+        }
+
+        System.out.print("Stalemate (Y/N): ");
+        option = keyboard.nextLine();
+        if((option.charAt(0) == 'Y') || (option.charAt(0) =='y')){
+
+        }
+
+        System.out.print("50 move rule (Y/N): ");
+        option = keyboard.nextLine();
+        if((option.charAt(0) == 'Y') || (option.charAt(0) =='y')){
+
+        }
+    }
 }
