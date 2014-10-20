@@ -81,6 +81,11 @@ public class TextInterface implements IInterface {
     public Move getMove(IBoard board){
         moveString = keyboard.nextLine();
 
+        if((moveString.equals("Draw")) ||(moveString.equals("draw")) || (moveString.equals("DRAW"))){
+            Move move = new Move("Draw");
+            return move;
+        }
+
         while(!moveString.matches(inputPattern)){
             System.out.println("Incorrect format of input. See guidelines at top of window.");
             System.out.print("Your move: ");
