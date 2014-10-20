@@ -5,6 +5,16 @@ import Pieces.*;
 import java.util.Scanner;
 public class FiftyMoveRule implements IRule {
 
+    /*
+        Each move, a counter must be increased if a capture did not occur
+        and a pawn was not moved.
+        
+        If either did occur, the counter must be reset
+        
+        If the counter reaches 50, a result with gameover set to true and appropriate
+        message is returned, and he game ends.
+    */
+
     public FiftyMoveRule(){
 
     }
@@ -13,42 +23,13 @@ public class FiftyMoveRule implements IRule {
 
     
     public boolean checkAndMakeMove(IBoard board, IRuleSet rules, Move move){
-        Piece newPiece = null;
-        if (checkMove(board, rules, move).isValid()){
-            Piece piece = board.getPieceFromPosition(move.getCurrentPosition());
-            Piece cap = board.getPieceFromPosition(move.getNextPosition());
-            if(cap != null){
-                System.err.println("REMOVING: "+cap.toString());
-                board.removePiece(cap);
-            }
-            
-            newPiece = promptPromotion(piece.getColour());
-            newPiece.setPosition(move.getNextPosition());
-            board.removePiece(piece);
-            board.addPiece(newPiece);
-            return true;
-        }
+        
         return false;
     }
 
     public Result checkMove(IBoard board, IRuleSet rules, Move move){
-        Piece piece = board.getPieceFromPosition(move.getCurrentPosition());
         
-        //Verify is a pawn
-        if (!(piece instanceof Pawn)){
-            return new Result(false, "Piece is not a pawn");
-        }
         
-        //Verify movement position is a promotional position
-        if (!checkPosition(piece.getColour(), move.getNextPosition())){
-            return new Result(false, "Not a promotional position");
-        }
-        
-        //Check if move is a valid move
-        if (rules.checkMovePawn(board, move)){
-            return new Result(true);
-        } else {
-            return new Result(false, "Generic invalid move");
-        }
+        return new Result(false, true, "Game Over due to 50 Moves rule.");
     }
 }
