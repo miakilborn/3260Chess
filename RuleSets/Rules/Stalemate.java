@@ -3,7 +3,7 @@ import Game.*;
 import RuleSets.*;
 import Pieces.*;
 import java.util.Scanner;
-public class StaleMate implements IRule {
+public class Stalemate implements IRule {
 
     public Stalemate(){
 
