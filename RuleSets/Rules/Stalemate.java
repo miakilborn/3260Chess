@@ -30,6 +30,6 @@ public class Stalemate implements IRule {
 
     public Result checkMove(IBoard board, IRuleSet rules, Move move){
         
-        return new Result(false, "Stalemate")
+        return new Result(false, "Stalemate");
     }
 }
