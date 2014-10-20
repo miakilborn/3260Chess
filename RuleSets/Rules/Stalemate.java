@@ -4,51 +4,32 @@ import RuleSets.*;
 import Pieces.*;
 import java.util.Scanner;
 public class Stalemate implements IRule {
+    
+    /* 
+    
+        After moving a piece, other player is checked to see if they are in stalemate.
+        
+        Board must cycle through all the players pieces, finding all valid moves,
+        then for each move, check each of their opponents pieces and see if one of the opponents
+        pieces would have the king in check.
+        
+        If for all possible moves by the player, the result would be them being in check,
+        the game is in Stalemate.
+    
+    */
 
     public Stalemate(){
 
     }
-    
-    
 
     
     public boolean checkAndMakeMove(IBoard board, IRuleSet rules, Move move){
-        Piece newPiece = null;
-        if (checkMove(board, rules, move).isValid()){
-            Piece piece = board.getPieceFromPosition(move.getCurrentPosition());
-            Piece cap = board.getPieceFromPosition(move.getNextPosition());
-            if(cap != null){
-                System.err.println("REMOVING: "+cap.toString());
-                board.removePiece(cap);
-            }
-            
-            newPiece = promptPromotion(piece.getColour());
-            newPiece.setPosition(move.getNextPosition());
-            board.removePiece(piece);
-            board.addPiece(newPiece);
-            return true;
-        }
-        return false;
+        
+        return true;
     }
 
     public Result checkMove(IBoard board, IRuleSet rules, Move move){
-        Piece piece = board.getPieceFromPosition(move.getCurrentPosition());
         
-        //Verify is a pawn
-        if (!(piece instanceof Pawn)){
-            return new Result(false, "Piece is not a pawn");
-        }
-        
-        //Verify movement position is a promotional position
-        if (!checkPosition(piece.getColour(), move.getNextPosition())){
-            return new Result(false, "Not a promotional position");
-        }
-        
-        //Check if move is a valid move
-        if (rules.checkMovePawn(board, move)){
-            return new Result(true);
-        } else {
-            return new Result(false, "Generic invalid move");
-        }
+        return new Result(false, "Stalemate")
     }
 }
