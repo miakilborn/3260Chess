@@ -155,7 +155,7 @@ public class Controller{
     public Result checkMove(Move m){
         Result result = this.rules.checkMove(this.board,m, this.additionalRules);
         this.result = result;
-        if(result.getBoolean()){
+        if(result.isValid()){
             this.current_move = m;
         }
         return result;
@@ -169,8 +169,8 @@ public class Controller{
         while(!OTHER_RDY){Thread.sleep(100);System.err.println((this.isMaster()?"Master":"Slave") + " makeMove");};
         if(this.isMaster()){
             Result result = rules.checkMove(this.board,m,additionalRules);
-            System.out.println("Resulant: " + result.getBoolean());
-            if(result.getBoolean()){
+            System.out.println("Resulant: " + result.isValid());
+            if(result.isValid()){
                 rules.makeMove(board, m, additionalRules);
                 this.sendBoard(board);
             }
@@ -240,7 +240,7 @@ public class Controller{
     public Result getResult(){
         Result result = null;
         if (this.result != null){
-            result = new Result(this.result.getBoolean(), this.result.getMessage());
+            result = new Result(this.result.isValid(), this.result.getMessage());
         }
         this.result = null;
         return result;
@@ -278,7 +278,7 @@ public class Controller{
                             if(c.isMaster()){
                                 Move m = new Move(cmd[1]);
                                 Result ret = c.checkMove(m);
-                                if (ret.getBoolean()){
+                                if (ret.isValid()){
                                     c.current_move = m;
                                     c.updateBoard();
                                 }

@@ -63,7 +63,7 @@ public class Promotion implements IRule {
     
     public boolean checkAndMakeMove(IBoard board, IRuleSet rules, Move move){
         Piece newPiece = null;
-        if (checkMove(board, rules, move).getBoolean()){
+        if (checkMove(board, rules, move).isValid()){
             Piece piece = board.getPieceFromPosition(move.getCurrentPosition());
             Piece cap = board.getPieceFromPosition(move.getNextPosition());
             if(cap != null){

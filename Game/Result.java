@@ -1,28 +1,42 @@
 package Game;
 public class Result{
-	final private Boolean result;
+	final private Boolean valid;
+   	final private Boolean gameOver;
 	final private String message;
 
 
 	public Result(){
-		this.result = true;
+		this.valid = true;
+        this.gameOver = false;
 		this.message = "";
 	}
 
-	public Result(Boolean result){
-		this.result = result;
+	public Result(Boolean valid){
+		this.valid = valid;
+        this.gameOver = false;
 		this.message = "";
 	}
 
 
-	public Result(Boolean result, String message){
-		this.result = result;
+	public Result(Boolean valid, String message){
+		this.valid = valid;
+        this.gameOver = false;
 		this.message = message;
 	}
+    
+    public Result(Boolean valid, Boolean gameOver, String message){
+        this.valid = valid;
+        this.gameOver = gameOver;
+        this.message = message;
+    }
 
-	public Boolean getBoolean(){
-		return result;
+	public Boolean isValid(){
+		return valid;
 	}
+    
+    public Boolean isGameOver(){
+        return gameOver;
+    }
 
 	public String getMessage(){
 		return message;
@@ -30,7 +44,7 @@ public class Result{
 
 	@Override
 	public String toString(){
-		return getBoolean().toString() + "|" + getMessage();
+		return isValid().toString() + "|" + isGameOver().toString() + "|" + getMessage();
 	}
 
 }

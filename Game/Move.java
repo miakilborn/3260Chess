@@ -1,10 +1,12 @@
 package Game;
 import Pieces.*;
 import Game.*;
+
 public class Move {
-	private boolean valid;
+	private boolean valid = false;
 	private final Coordinate currentPosition;
 	private final Coordinate nextPosition;
+    private boolean isDraw = false;
 
 	private Coordinate captured = null;
 
@@ -15,7 +17,12 @@ public class Move {
 	}
 
 	public Move(String s){
-		if(s.charAt(0) == 'M'){
+        if(s.equals("Draw")){
+            isDraw = true;
+            this.currentPosition = null;
+            this.nextPosition = null;
+        }
+        else if(s.charAt(0) == 'M'){
 			s = s.replaceAll("M\\(|\\)$","");
 			String c = s.substring(0,s.lastIndexOf("),")+1);
 			s = s.replace(c+",","");
@@ -36,6 +43,10 @@ public class Move {
 		}
 	}
 
+    public boolean isDraw(){
+        return isDraw;
+    }
+    
 	public boolean isValid(){
 		return valid;
 	}
