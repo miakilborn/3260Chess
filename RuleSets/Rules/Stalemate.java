@@ -3,63 +3,14 @@ import Game.*;
 import RuleSets.*;
 import Pieces.*;
 import java.util.Scanner;
-public class Promotion implements IRule {
+public class StaleMate implements IRule {
 
-    public Promotion(){
+    public Stalemate(){
 
     }
     
     
-    /*
-        Checks that the position the piece wishes to move is a
-        promotional tile
-    */
-    private boolean checkPosition(String colour, Coordinate nextPosition){
-        if (colour.equals("White")){
-            if (nextPosition.getY() != 8){
-                return false;
-            }
-        } else if (colour.equals("Black")){
-            if (nextPosition.getY() != 1){
-                return false;
-            }
-        }
-        return true;
-    }
-    
-    /**
-     * Obtain the piece that the player wants to promote to
-     * @param colour
-     * @return a new Piece object
-     */
-    private Piece promptPromotion(String colour){
-        Piece piece = null;
-        Scanner keyboard = new Scanner(System.in);
-        System.out.println("What would you like to be promoted to? Options [q,n,r,b]");
-        while (piece == null){
-            System.out.print("$> ");
-            String pieceStr = keyboard.nextLine();
-            char p = pieceStr.toLowerCase().charAt(0);
-            switch(p){
-                case 'q':
-                    piece = new Queen(colour, new Coordinate(-1,-1));
-                    break;
-                case 'n':
-                    piece = new Knight(colour, new Coordinate(-1,-1));
-                    break;
-                case 'r':
-                    piece = new Rook(colour, new Coordinate(-1,-1));
-                    break;
-                case 'b':
-                    piece = new Bishop(colour, new Coordinate(-1,-1));
-                    break;
-                default:
-                    System.out.println("Invalid choice, try again");
-                    break;
-            }
-        }
-        return piece;
-    }
+
     
     public boolean checkAndMakeMove(IBoard board, IRuleSet rules, Move move){
         Piece newPiece = null;
