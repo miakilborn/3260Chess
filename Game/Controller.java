@@ -156,8 +156,6 @@ public class Controller{
      * @author Mia
      */
     private void getRules(){
-        additionalRules.add(new Promotion());
-
         if(this.isMaster()) {
             additionalRules = new ArrayList<IRule>();
             ArrayList<IRule> rules = p.getRules();
@@ -168,7 +166,6 @@ public class Controller{
             for(IRule rule : rules){
                 additionalRules.add(rule);
             }
-
         }
     }
 
@@ -287,60 +284,53 @@ public class Controller{
                     String role = c.isMaster()?"Master":"Slave";
 
                     System.err.println(role+" got: "+cmd[0]);
-                    switch(cmd[0]){
-                        case "RDY":
-                            c.OTHER_RDY = true;
-                            break;
-                        case "N_RDY":
-                            c.OTHER_RDY = false;
-                            break;
-                        case "MV":
-                            if(c.isMaster()){
-                                Move m = new Move(cmd[1]);
-                                Result ret = c.checkMove(m);
-                                if (ret.isValid()){
-                                    c.current_move = m;
-                                    c.updateBoard();
-                                }
-                                c.send(ret.toString());
-                            }
-                            else{
-                                c.current_move = new Move(cmd[1]);
+
+                    if(cmd[0].equals("RDY")) {
+                        c.OTHER_RDY = true;
+                    } else if(cmd[0].equals("N_RDY")) {
+                        c.OTHER_RDY = false;
+                    } else if(cmd[0].equals("MV")) {
+                        if (c.isMaster()) {
+                            Move m = new Move(cmd[1]);
+                            Result ret = c.checkMove(m);
+                            if (ret.isValid()) {
+                                c.current_move = m;
                                 c.updateBoard();
-                                c.send("ACK");
                             }
-                            break;
-                        case "BD":
-                            if(!c.isMaster() && cmd.length > 1){
-                                String boardStr = "";
-                                for (int i=1;i<cmd.length;i++){
-                                    boardStr += cmd[i] + "|";
-                                }
-                                c.board = new Standard8x8Board(boardStr);
-                                c.updateBoard();
-                                c.send("ACK");
-                            }
-                        case "ACK":
-                            if(c.isMaster()){
-                                c.send("ACK");
-                                c.send("RDY");
-                            }
-                            else{
-                                c.send("RDY");
-                            }
-                            break;
-                        case "true":
+                            c.send(ret.toString());
+                        } else {
+                            c.current_move = new Move(cmd[1]);
                             c.updateBoard();
                             c.send("ACK");
-                            break;
-                        case "false":
-                            c.result = new Result(false, cmd[1]);
-                            c.current_move = null;
+                        }
+                    } else if(cmd[0].equals("BD")) {
+                        if (!c.isMaster() && cmd.length > 1) {
+                            String boardStr = "";
+                            for (int i = 1; i < cmd.length; i++) {
+                                boardStr += cmd[i] + "|";
+                            }
+                            c.board = new Standard8x8Board(boardStr);
                             c.updateBoard();
+                            c.send("ACK");
+                        }
+                    } else if(cmd[0].equals("ACK")) {
+                        if (c.isMaster()) {
                             c.send("ACK");
                             c.send("RDY");
-                            break;
+                        } else {
+                            c.send("RDY");
+                        }
+                    } else if(cmd[0].equals("true")) {
+                        c.updateBoard();
+                        c.send("ACK");
+                    } else if(cmd[0].equals("false")) {
+                        c.result = new Result(false, cmd[1]);
+                        c.current_move = null;
+                        c.updateBoard();
+                        c.send("ACK");
+                        c.send("RDY");
                     }
+
                 }
                 catch(NullPointerException e){
                     try{
