@@ -17,6 +17,8 @@ public class Castling implements IRule {
             Piece piece2 = board.getPieceFromPosition(piece2Pos);
             piece1.setPosition(piece1Pos_new);
             piece2.setPosition(piece2Pos_new);
+            piece1.setHasMoved(true);
+            piece2.setHasMoved(true);
             return true;
         }
         return false;
