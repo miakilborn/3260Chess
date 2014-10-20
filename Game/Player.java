@@ -47,7 +47,7 @@ public class Player {
         //attempt to perform the move
         try{
             if (move != null){
-                controller.makeMove(move);
+                controller.makeMove(move, null);
             }
         }
         catch(InterruptedException e){

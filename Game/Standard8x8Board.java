@@ -9,29 +9,40 @@ public class Standard8x8Board implements IBoard {
     public Standard8x8Board(){
         pieces = new ArrayList<Piece>();
     }
+    
+    public Standard8x8Board(String boardStr){
+        pieces = new ArrayList<Piece>();
+        System.err.println(boardStr);
+        while (boardStr.length() > 1){
+            String pieceStr = boardStr.substring(boardStr.indexOf("|(")+2, boardStr.indexOf(")|"));
+            if (pieceStr.contains("Queen")){
+                pieces.add(new Queen(pieceStr));
+            } else if (pieceStr.contains("King")){
+                pieces.add(new King(pieceStr));
+            } else if (pieceStr.contains("Bishop")){
+                pieces.add(new Bishop(pieceStr));
+            } else if (pieceStr.contains("Knight")){
+                pieces.add(new Knight(pieceStr));
+            } else if (pieceStr.contains("Rook")){
+                pieces.add(new Rook(pieceStr));
+            } else if (pieceStr.contains("Pawn")){
+                pieces.add(new Pawn(pieceStr));
+            }
+            System.err.println(pieceStr);
+            boardStr = boardStr.substring(boardStr.indexOf(")|")+1, boardStr.length());
+        }
+    }
 
-    public void addPiece(Piece p){
-        pieces.add(p);
+    public boolean addPiece(Piece p){
+        return pieces.add(p);
+    }
+    
+    public void removePiece(Piece p){
+        pieces.remove(p);
     }
 
     public ArrayList<Piece> getPieces(){
         return pieces;
-    }
-
-    /**
-    * Perform a piece move, no checks happen with this method!
-    * @param    Move command
-    */
-    public void makeMove(Move m){
-        Piece piece = this.getPieceFromPosition(m.getCurrentPosition());
-        Piece cap = null;
-        if(this.getPieceFromPosition(m.getNextPosition())!=null){
-            cap = this.getPieceFromPosition(m.getNextPosition());
-            System.err.println("REMOVING: "+cap.toString());
-            this.pieces.remove(cap);
-        }
-        piece.setPosition(m.getNextPosition());
-        piece.setHasMoved(true);
     }
 
     public Piece getPieceFromPosition(Coordinate coord){
@@ -45,9 +56,9 @@ public class Standard8x8Board implements IBoard {
     }
 
     public String toString(){
-        String ret = "";
+        String ret = this.getClass().getName() + "|";
         for(Piece p : pieces){
-            ret += p.toString()+"\n";
+            ret += "("+p.toString()+")|";
         }
         return ret;
     }

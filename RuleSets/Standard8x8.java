@@ -1,7 +1,8 @@
 package RuleSets;
-import java.util.*;
 import Game.*;
 import Pieces.*;
+import RuleSets.Rules.IRule;
+import java.util.*;
 public class Standard8x8 implements IRuleSet {
 
 	private Move lastMove = null;
@@ -73,7 +74,7 @@ public class Standard8x8 implements IRuleSet {
 	/**
 	* @author	Tim
 	*/
-	private boolean checkMovePawn(IBoard board, Move move){
+	public boolean checkMovePawn(IBoard board, Move move){
 		ArrayList<Coordinate> validMoves = new ArrayList<Coordinate>();
 		Piece piece = board.getPieceFromPosition(move.getCurrentPosition());
 		Coordinate cPos = move.getCurrentPosition();
@@ -131,10 +132,9 @@ public class Standard8x8 implements IRuleSet {
 		return false;
 	}
 
-	private boolean checkMoveKnight(IBoard board, Move move){
+	public boolean checkMoveKnight(IBoard board, Move move){
 		ArrayList<Coordinate> validMoves = new ArrayList<Coordinate>();
 		Coordinate cPos = move.getCurrentPosition();
-		ArrayList<Piece> pieces = board.getPieces();
 
 		validMoves.add(new Coordinate(cPos.getX()-2, cPos.getY()+1));
 		validMoves.add(new Coordinate(cPos.getX()-1, cPos.getY()+2));
@@ -156,10 +156,9 @@ public class Standard8x8 implements IRuleSet {
 		return false;
 	}
 
-	private boolean checkMoveBishop(IBoard board, Move move){
+	public boolean checkMoveBishop(IBoard board, Move move){
 		ArrayList<Coordinate> validMoves = new ArrayList<Coordinate>();
 		Coordinate cPos = move.getCurrentPosition();
-		ArrayList<Piece> pieces = board.getPieces();
 
 		//Top Left
 		for (int i = 1; i <= 7; i++)
@@ -229,7 +228,7 @@ public class Standard8x8 implements IRuleSet {
 		return false;
 	}
 
-	private boolean checkMoveRook(IBoard board, Move move){
+	public boolean checkMoveRook(IBoard board, Move move){
 		ArrayList<Coordinate> validMoves = new ArrayList<Coordinate>();
 		Coordinate cPos = move.getCurrentPosition();
 		ArrayList<Piece> pieces = board.getPieces();
@@ -326,7 +325,7 @@ public class Standard8x8 implements IRuleSet {
 		return validMoves;
 	}
 
-	private boolean checkMoveKing(IBoard board, Move move){
+	public boolean checkMoveKing(IBoard board, Move move){
 		Coordinate cPos = move.getCurrentPosition();
 		ArrayList<Piece> pieces = board.getPieces();
 
@@ -340,7 +339,7 @@ public class Standard8x8 implements IRuleSet {
 		return false;
 	}
 
-	private boolean checkMoveQueen(IBoard board, Move move){
+	public boolean checkMoveQueen(IBoard board, Move move){
 		ArrayList<Coordinate> validMoves = new ArrayList<Coordinate>();
 		Coordinate cPos = move.getCurrentPosition();
 		ArrayList<Piece> pieces = board.getPieces();
@@ -599,12 +598,26 @@ public class Standard8x8 implements IRuleSet {
 	}
 
 
-	// public String getTurn(){
-	// 	if (lastMove.equals("White"))
-	// 		return "Black";
-	// 	else
-	// 		return "White"
-	// }
+	public boolean makeMove(IBoard board, Move move, ArrayList<IRule> additionalRules){
+            if (additionalRules != null){
+                for (int i=0;i<additionalRules.size();i++){
+                    IRule rule = additionalRules.get(i);
+                    if (rule.checkAndMakeMove(board, this, move)){
+                        return true;
+                    }
+                }
+            }
+            //default move system (fallback)
+            Piece piece = board.getPieceFromPosition(move.getCurrentPosition());
+            Piece cap = board.getPieceFromPosition(move.getNextPosition());
+            if(cap != null){
+                System.err.println("REMOVING: "+cap.toString());
+                board.removePiece(cap);
+            }
+            piece.setPosition(move.getNextPosition());
+            piece.setHasMoved(true);
+            return true;
+        }
 
 	/**
 	* Verify the provided move is valid to this ruleset
@@ -612,10 +625,10 @@ public class Standard8x8 implements IRuleSet {
 	*			captured piece in the Move object if tile conflict occurs
 	* @author	Tim
 	*/
-	public Result checkMove(IBoard board, Move move){
+	public Result checkMove(IBoard board, Move move, ArrayList<IRule> additionalRules){
 		boolean validMove = true;
+                boolean overrideValid = false; //Override flag if "additional rule" verified move is good
 		String message = "";
-		ArrayList<Piece> pieces = board.getPieces();
 		Piece piece =  board.getPieceFromPosition(move.getCurrentPosition()); //players piece he/she wants to move
 		Coordinate nextPostion = move.getNextPosition();
 		Piece capture = getPieceFromPosition(board, nextPostion);
@@ -635,37 +648,41 @@ public class Standard8x8 implements IRuleSet {
 				validMove = false;
 			}
 		} 
+                
+                if (additionalRules != null && additionalRules.size() > 0){ //check additional rules
+                    
+                }
+                
+                if (!overrideValid && !checkMoveByPiece(board, move)){
+                    validMove = false;
+                    message = "Generic invalid move";
+                }
+                
+                if (validMove){ //check for check (perform move tempoarily)
+                        Coordinate oldSpot = piece.getPosition();
+                        Coordinate oldSpot_capture = null;
+                        piece.setPosition(move.getNextPosition());  //Perform the piece move temporarly, check if it makes the player in check who is making the move
 
-		if (checkMoveByPiece(board, move)) {
-			if (validMove){
-				Coordinate oldSpot = piece.getPosition();
-				Coordinate oldSpot_capture = null;
-				piece.setPosition(move.getNextPosition());  //Perform the piece move temporarly, check if it makes the player in check who is making the move
-				
-				if (capture != null){
-					oldSpot_capture = capture.getPosition();
-					capture.setPosition(new Coordinate(0,0));
-				}
+                        if (capture != null){
+                                oldSpot_capture = capture.getPosition();
+                                capture.setPosition(new Coordinate(0,0));
+                        }
 
 
-				if (isInCheck(board, piece.getColour())){ //this move has made player put him/herself in check, invalid move!
-					message = "You are in check, protect the king!";
-					validMove = false;
-				}
+                        if (isInCheck(board, piece.getColour())){ //this move has made player put him/herself in check, invalid move!
+                                message = "You are in check, protect the king!";
+                                validMove = false;
+                        }
 
-				if (capture != null)
-					capture.setPosition(oldSpot_capture);
-				
-				piece.setPosition(oldSpot);
-			}
+                        if (capture != null)
+                                capture.setPosition(oldSpot_capture);
 
-			if (validMove){
-				lastMove = move;
-			}
-		} else {
-			validMove = false;
-			message = "Generic invalid move";
-		}
+                        piece.setPosition(oldSpot);
+                }
+
+                if (validMove){ //if still valid, its a good move
+                        lastMove = move;
+                }
 
 		//System.out.println("Move result, move: " + move + ", valid: " + validMove + (validMove ? "" :  ", msg: " + message));
 		return new Result(validMove, message);

@@ -1,11 +1,9 @@
 package Game;
-import java.util.*;
-import java.net.*;
-import java.io.*;
 import RuleSets.*;
-import Pieces.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import RuleSets.Rules.*;
+import java.io.*;
+import java.net.*;
+import java.util.*;
 
 public class Controller{
     public static final Boolean MASTER = true;
@@ -15,8 +13,6 @@ public class Controller{
     private static Move current_move = null;
     private Result result = null; //Result from latest move
 
-
-    private String test;
     private Boolean mode;
     private PrintWriter socketOut;
     private BufferedReader socketIn;
@@ -24,6 +20,7 @@ public class Controller{
     private Socket slavePipe;
     private ControllerListener listener;
     private IRuleSet rules;
+    private ArrayList<IRule> additionalRules;
     private IBoard board;
     private Player p;
 
@@ -92,6 +89,9 @@ public class Controller{
     }
     
     public void start(){
+        additionalRules = new ArrayList<IRule>();
+        additionalRules.add(new Promotion());
+        
         while(true){
             p.game();
         }
@@ -145,7 +145,7 @@ public class Controller{
 
     public Boolean updateBoard(){
         if(current_move != null){
-            board.makeMove(current_move);
+            rules.makeMove(board, current_move, additionalRules);
             current_move = null;
         }
         p.updateDisplay();
@@ -153,7 +153,7 @@ public class Controller{
     }
 
     public Result checkMove(Move m){
-        Result result = this.rules.checkMove(this.board,m);
+        Result result = this.rules.checkMove(this.board,m, this.additionalRules);
         this.result = result;
         if(result.getBoolean()){
             this.current_move = m;
@@ -165,14 +165,14 @@ public class Controller{
     *  @author bill
     *
     */
-    public void makeMove(Move m) throws InterruptedException{
+    public void makeMove(Move m, ArrayList<IRule> addtionalRules) throws InterruptedException{
         while(!OTHER_RDY){Thread.sleep(100);System.err.println((this.isMaster()?"Master":"Slave") + " makeMove");};
         if(this.isMaster()){
-            Result result = rules.checkMove(this.board,m);
+            Result result = rules.checkMove(this.board,m,additionalRules);
             System.out.println("Resulant: " + result.getBoolean());
             if(result.getBoolean()){
-                this.sendMove(m);
-                board.makeMove(m);
+                rules.makeMove(board, m, additionalRules);
+                this.sendBoard(board);
             }
             this.result = result;
             updateBoard();
@@ -180,6 +180,14 @@ public class Controller{
         else{
             current_move = m;
             this.sendMove(m);
+        }
+    }
+    
+    public void sendBoard(IBoard board)throws InterruptedException{
+        while(!OTHER_RDY){Thread.sleep(100);System.err.println("sendBoard");};
+        if (board != null){
+            this.send("N_RDY");
+            this.send("BD|"+board.toString());
         }
     }
 
@@ -282,6 +290,16 @@ public class Controller{
                                 c.send("ACK");
                             }
                             break;
+                        case "BD":
+                            if(!c.isMaster() && cmd.length > 1){
+                                String boardStr = "";
+                                for (int i=1;i<cmd.length;i++){
+                                    boardStr += cmd[i] + "|";
+                                }
+                                c.board = new Standard8x8Board(boardStr);
+                                c.updateBoard();
+                                c.send("ACK");
+                            }
                         case "ACK":
                             if(c.isMaster()){
                                 c.send("ACK");
@@ -306,6 +324,7 @@ public class Controller{
                 }
                 catch(NullPointerException e){
                     try{
+                        e.printStackTrace();
                         System.err.println("exception in read thread");
                         Thread.sleep(10);
                     }
