@@ -37,6 +37,8 @@ Instructions to Run:
 
 Terminal 1 should indicate that it is player 1, terminal 2 should indicate that it is player 2. At this stage, both terminals should prompt for a name.
 
+Terminal 1 defines the rules for the game. Terminal 2 plays by the rules given by terminal 1.
+
 Instructions to Play
 - Each player (in each terminal window) is assigned a colour, and respective case to represent pieces on the board
 - To make a move enter the coordinates of the current position of the piece, followed by the destination coordinates of the piece
