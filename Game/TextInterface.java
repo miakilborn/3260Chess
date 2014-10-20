@@ -1,6 +1,7 @@
 package Game;
 import Game.*;
 import Pieces.*;
+import RuleSets.Rules.*;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -125,44 +126,64 @@ public class TextInterface implements IInterface {
             System.err.println(msg);
     }
 
-    public void getRules(){
+    public ArrayList<IRule> getRules(){
         String option;
+        ArrayList<IRule> rules = new ArrayList<IRule>();
+        Boolean none = true;
 
         System.out.println("Hello, " + name + ". You are the master for this session, please select your rules.");
         System.out.print("Promotion (Y/N): ");
         option = keyboard.nextLine();
         if((option.charAt(0) == 'Y') || (option.charAt(0) =='y')){
-
+            Promotion p = new Promotion();
+            rules.add(p);
+            none = false;
         }
 
         System.out.print("Castling (Y/N): ");
         option = keyboard.nextLine();
         if((option.charAt(0) == 'Y') || (option.charAt(0) =='y')){
-
+            Castling c = new Castling();
+            rules.add(c);
+            none = false;
         }
 
         System.out.print("En Passent (Y/N): ");
         option = keyboard.nextLine();
         if((option.charAt(0) == 'Y') || (option.charAt(0) =='y')){
-
+            EnPassent e = new EnPassent();
+            rules.add(e);
+            none = false;
         }
 
         System.out.print("Draw by agreement (Y/N): ");
         option = keyboard.nextLine();
         if((option.charAt(0) == 'Y') || (option.charAt(0) =='y')){
-
+            DrawByAgreement d = new DrawByAgreement();
+            rules.add(d);
+            none = false;
         }
 
         System.out.print("Stalemate (Y/N): ");
         option = keyboard.nextLine();
         if((option.charAt(0) == 'Y') || (option.charAt(0) =='y')){
-
+            Stalemate s = new Stalemate();
+            rules.add(s);
+            none = false;
         }
 
         System.out.print("50 move rule (Y/N): ");
         option = keyboard.nextLine();
         if((option.charAt(0) == 'Y') || (option.charAt(0) =='y')){
-
+            FiftyMoveRule f = new FiftyMoveRule();
+            rules.add(f);
+            none = false;
         }
+
+        if(none){
+            return null;
+        }
+
+        return rules;
     }
 }

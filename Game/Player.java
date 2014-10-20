@@ -2,6 +2,9 @@ package Game;
 
 import Game.*;
 import Pieces.*;
+import RuleSets.Rules.IRule;
+
+import java.util.ArrayList;
 
 public class Player {
     private static String name;
@@ -49,9 +52,9 @@ public class Player {
         }
     }
 
-    public void getRules(){
+    public ArrayList<IRule> getRules(){
         //return type to be determined
-        ui.getRules();
+        return ui.getRules();
     }
 
     public void printResult(Result result){

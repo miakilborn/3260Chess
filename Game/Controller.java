@@ -89,9 +89,7 @@ public class Controller{
     }
     
     public void start(){
-        additionalRules = new ArrayList<IRule>();
-        additionalRules.add(new Promotion());
-        
+
         while(true){
             p.game();
         }
@@ -158,8 +156,19 @@ public class Controller{
      * @author Mia
      */
     private void getRules(){
+        additionalRules.add(new Promotion());
+
         if(this.isMaster()) {
-            p.getRules();
+            additionalRules = new ArrayList<IRule>();
+            ArrayList<IRule> rules = p.getRules();
+            if(rules == null){
+                return;
+            }
+
+            for(IRule rule : rules){
+                additionalRules.add(rule);
+            }
+
         }
     }
 

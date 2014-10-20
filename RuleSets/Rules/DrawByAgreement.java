@@ -8,10 +8,10 @@ public class DrawByAgreement implements IRule {
     public DrawByAgreement(){
 
     }
-    
-    
 
-    
+
+
+
     public boolean checkAndMakeMove(IBoard board, IRuleSet rules, Move move){
         Piece newPiece = null;
         if (checkMove(board, rules, move).isValid()){

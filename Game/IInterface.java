@@ -1,5 +1,9 @@
 package Game;
 import Game.Move;
+import RuleSets.Rules.IRule;
+
+import java.util.ArrayList;
+
 /*
 getMove
 eventBoard
@@ -12,5 +16,5 @@ public interface IInterface {
 	public void setPlayerColour(String colour);
 	public String getUsername();
 	public void displayMessage(String msg);
-    public void getRules();
+    public ArrayList<IRule> getRules();
 }
