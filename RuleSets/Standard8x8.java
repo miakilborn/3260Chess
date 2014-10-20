@@ -22,11 +22,11 @@ public class Standard8x8 implements IRuleSet {
 		colour = "White";
 		pieces.add(new Rook(colour, new Coordinate(1,1)));
 		pieces.add(new Rook(colour, new Coordinate(8,1)));
-		pieces.add(new Knight(colour, new Coordinate(2,1)));
-		pieces.add(new Knight(colour, new Coordinate(7,1)));
-		pieces.add(new Bishop(colour, new Coordinate(3,1)));
-		pieces.add(new Bishop(colour, new Coordinate(6,1)));
-		pieces.add(new Queen(colour, new Coordinate(4,1)));
+//		pieces.add(new Knight(colour, new Coordinate(2,1)));
+//		pieces.add(new Knight(colour, new Coordinate(7,1)));
+//		pieces.add(new Bishop(colour, new Coordinate(3,1)));
+//		pieces.add(new Bishop(colour, new Coordinate(6,1)));
+//		pieces.add(new Queen(colour, new Coordinate(4,1)));
 		pieces.add(new King(colour, new Coordinate(5,1)));
 		for (int p=1;p<=8;p++)
 			pieces.add(new Pawn(colour, new Coordinate(p,2)));
@@ -34,11 +34,11 @@ public class Standard8x8 implements IRuleSet {
 		colour = "Black";
 		pieces.add(new Rook(colour, new Coordinate(1,8)));
 		pieces.add(new Rook(colour, new Coordinate(8,8)));
-		pieces.add(new Knight(colour, new Coordinate(2,8)));
-		pieces.add(new Knight(colour, new Coordinate(7,8)));
-		pieces.add(new Bishop(colour, new Coordinate(3,8)));
-		pieces.add(new Bishop(colour, new Coordinate(6,8)));
-		pieces.add(new Queen(colour, new Coordinate(4,8)));
+//		pieces.add(new Knight(colour, new Coordinate(2,8)));
+//		pieces.add(new Knight(colour, new Coordinate(7,8)));
+//		pieces.add(new Bishop(colour, new Coordinate(3,8)));
+//		pieces.add(new Bishop(colour, new Coordinate(6,8)));
+//		pieces.add(new Queen(colour, new Coordinate(4,8)));
 		pieces.add(new King(colour, new Coordinate(5,8)));
 		for (int p=1;p<=8;p++)
 			pieces.add(new Pawn(colour, new Coordinate(p,7)));
@@ -544,6 +544,36 @@ public class Standard8x8 implements IRuleSet {
 		}
 		return false;
 	}
+        
+        /**
+         * Performs the move temporarily to verify if the move puts player in check
+         * @param board
+         * @param colour
+         * @author Tim
+         * @return 
+         */
+        
+        public boolean isGoingToBeInCheck(IBoard board, String colour, Move move){
+            Piece piece = board.getPieceFromPosition(move.getCurrentPosition());
+            Piece capture = board.getPieceFromPosition(move.getNextPosition());
+            piece.setPosition(move.getNextPosition());  //Perform the piece move temporarly, check if it makes the player in check who is making the move
+
+            boolean isCheck = false;
+            if (capture != null){
+                capture.setPosition(new Coordinate(0,0));
+            }
+
+
+            if (isInCheck(board, piece.getColour())){ //this move has made player put him/herself in check, invalid move!
+                isCheck = true;
+            }
+
+            if (capture != null)
+                capture.setPosition(move.getNextPosition());
+            piece.setPosition(move.getCurrentPosition());
+            
+            return isCheck;
+        }
 
 	/**
     * Checks if the opponents king is captured
@@ -620,15 +650,12 @@ public class Standard8x8 implements IRuleSet {
         }
 
 	/**
-	* Verify the provided move is valid to this ruleset
+	* Verify the provided move is valid to this RuleSet
 	* @return	Sets the valid flag in Move object, and updates the
 	*			captured piece in the Move object if tile conflict occurs
 	* @author	Tim
 	*/
 	public Result checkMove(IBoard board, Move move, ArrayList<IRule> additionalRules){
-		boolean validMove = true;
-                boolean overrideValid = false; //Override flag if "additional rule" verified move is good
-		String message = "";
 		Piece piece =  board.getPieceFromPosition(move.getCurrentPosition()); //players piece he/she wants to move
 		Coordinate nextPostion = move.getNextPosition();
 		Piece capture = getPieceFromPosition(board, nextPostion);
@@ -638,54 +665,38 @@ public class Standard8x8 implements IRuleSet {
 
 		if ((lastMove != null && board.getPieceFromPosition(lastMove.getNextPosition()).getColour().equals(piece.getColour())) ||
 				(lastMove == null && piece.getColour().equals("Black"))){ // If same player is trying to move again, invalid move!
-			message = "It is not your turn to move";
-			validMove = false;
+                    return new Result(false, "It is not your turn");
 		}
-		
-		if (capture != null){
-			if (!checkOpponents(capture, piece)){ //if there is collision with the players OWN piece, invalid move!
-				message = "You may not attempt to capture your own piece!";
-				validMove = false;
-			}
+                
+                if (additionalRules != null){ //check additional rules
+                    for (int i=0;i<additionalRules.size();i++){
+                        IRule rule = additionalRules.get(i);
+                        Result result = rule.checkMove(board, this, move);
+                        if (result != null && result.isValid()){
+                            lastMove = move;
+                            return result;
+                        }
+                    }
+                }
+                
+                if (capture != null){
+                    if (!checkOpponents(capture, piece)){ //if there is collision with the players OWN piece, invalid move!
+                        return new Result(false, "You may not attempt to capture your own piece!");
+                    }
 		} 
                 
-                if (additionalRules != null && additionalRules.size() > 0){ //check additional rules
-                    
+                if (!checkMoveByPiece(board, move)){
+                    return new Result(false, "Generic invalid move");
                 }
                 
-                if (!overrideValid && !checkMoveByPiece(board, move)){
-                    validMove = false;
-                    message = "Generic invalid move";
-                }
-                
-                if (validMove){ //check for check (perform move tempoarily)
-                        Coordinate oldSpot = piece.getPosition();
-                        Coordinate oldSpot_capture = null;
-                        piece.setPosition(move.getNextPosition());  //Perform the piece move temporarly, check if it makes the player in check who is making the move
-
-                        if (capture != null){
-                                oldSpot_capture = capture.getPosition();
-                                capture.setPosition(new Coordinate(0,0));
-                        }
-
-
-                        if (isInCheck(board, piece.getColour())){ //this move has made player put him/herself in check, invalid move!
-                                message = "You are in check, protect the king!";
-                                validMove = false;
-                        }
-
-                        if (capture != null)
-                                capture.setPosition(oldSpot_capture);
-
-                        piece.setPosition(oldSpot);
+                // Check for king in check (by temporarly performing the move)
+                if (isGoingToBeInCheck(board, piece.getColour(), move)){
+                    return new Result(false, "This move puts you in check");
                 }
 
-                if (validMove){ //if still valid, its a good move
-                        lastMove = move;
-                }
-
-		//System.out.println("Move result, move: " + move + ", valid: " + validMove + (validMove ? "" :  ", msg: " + message));
-		return new Result(validMove, message);
+                // If still valid, its a good move
+                lastMove = move;
+		return new Result(true, "Valid move");
 	}
 
 }

@@ -25,6 +25,11 @@ public class Castling implements IRule {
         Piece piece1 = board.getPieceFromPosition(move.getCurrentPosition());
         Piece piece2 = board.getPieceFromPosition(move.getNextPosition());
         
+        //Check that both positions have a piece
+        if (piece1 == null || piece2 == null){
+            return new Result(false, "Castling requires a Rook and a King");
+        }
+        
         //Check if player owns both pieces
         if (!piece1.getColour().equals(piece2.getColour())){
             return new Result(false, "Piece ownership mismatch");
