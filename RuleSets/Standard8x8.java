@@ -18,7 +18,7 @@ public class Standard8x8 implements IRuleSet {
 	public void setupBoard(IBoard board){
 		ArrayList<Piece> pieces = new ArrayList<Piece>();
 		String colour = "";
-		
+
 		colour = "White";
 		pieces.add(new Rook(colour, new Coordinate(1,1)));
 		pieces.add(new Rook(colour, new Coordinate(8,1)));
@@ -130,6 +130,13 @@ public class Standard8x8 implements IRuleSet {
 				return true;
 		}
 		return false;
+	}
+
+	/**
+	* @author	Bill
+	*/
+	public Move getLastMove(){
+		return lastMove;
 	}
 
 	public boolean checkMoveKnight(IBoard board, Move move){
@@ -544,15 +551,15 @@ public class Standard8x8 implements IRuleSet {
 		}
 		return false;
 	}
-        
+
         /**
          * Performs the move temporarily to verify if the move puts player in check
          * @param board
          * @param colour
          * @author Tim
-         * @return 
+         * @return
          */
-        
+
         public boolean isGoingToBeInCheck(IBoard board, String colour, Move move){
             Piece piece = board.getPieceFromPosition(move.getCurrentPosition());
             Piece capture = board.getPieceFromPosition(move.getNextPosition());
@@ -571,7 +578,7 @@ public class Standard8x8 implements IRuleSet {
             if (capture != null)
                 capture.setPosition(move.getNextPosition());
             piece.setPosition(move.getCurrentPosition());
-            
+
             return isCheck;
         }
 
@@ -672,31 +679,31 @@ public class Standard8x8 implements IRuleSet {
 				(lastMove == null && piece.getColour().equals("Black"))){ // If same player is trying to move again, invalid move!
                     return new Result(false, "It is not your turn");
 		}
-                
+
                 if (additionalRules != null){ //check additional rules
                     for (int i=0;i<additionalRules.size();i++){
                         IRule rule = additionalRules.get(i);
                         Result result = rule.checkMove(board, this, move);
                         if (result != null && result.isValid()){
                             ruleResult = result;
-                        } 
+                        }
                     }
                 }
-                
+
                 //If a rule was applied, we ignore this RuleSet and just return here
                 if (ruleResult != null)
                     return ruleResult;
-                
+
                 if (capture != null){
                     if (!checkOpponents(capture, piece)){ //if there is collision with the players OWN piece, invalid move!
                         return new Result(false, "You may not attempt to capture your own piece!");
                     }
-		} 
-                
+		}
+
                 if (!checkMoveByPiece(board, move)){
                     return new Result(false, "Generic invalid move");
                 }
-                
+
                 // Check for king in check (by temporarly performing the move)
                 if (isGoingToBeInCheck(board, piece.getColour(), move)){
                     return new Result(false, "This move puts you in check");
