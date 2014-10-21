@@ -7,20 +7,20 @@ public class Result{
 
 	public Result(){
 		this.valid = true;
-        this.gameOver = false;
+                this.gameOver = false;
 		this.message = "";
 	}
 
 	public Result(Boolean valid){
 		this.valid = valid;
-        this.gameOver = false;
+                this.gameOver = false;
 		this.message = "";
 	}
 
 
 	public Result(Boolean valid, String message){
 		this.valid = valid;
-        this.gameOver = false;
+                this.gameOver = false;
 		this.message = message;
 	}
     

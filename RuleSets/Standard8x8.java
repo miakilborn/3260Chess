@@ -641,7 +641,6 @@ public class Standard8x8 implements IRuleSet {
                     IRule rule = additionalRules.get(i);
                     Result result = rule.checkAndMakeMove(board, this, move);
                     if (result.isValid()){
-                        System.err.println("Works: " + result.getMessage());
                         lastMove = move;
                         return result;
                     } else
@@ -693,7 +692,6 @@ public class Standard8x8 implements IRuleSet {
 
                 //If a rule was applied, we ignore this RuleSet and just return here
                 if (ruleResult != null){
-                    lastMove = move;
                     return ruleResult;
                 }
 
