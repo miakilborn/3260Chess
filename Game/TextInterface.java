@@ -84,9 +84,8 @@ public class TextInterface implements IInterface {
 
     public Move getMove(){
         moveString = keyboard.nextLine();
-
         if((moveString.equals("Draw")) ||(moveString.equals("draw")) || (moveString.equals("DRAW"))){
-            Move move = new Move("Draw");
+            Move move = new Move("Draw"+","+colour);
             return move;
         }
 
@@ -104,7 +103,7 @@ public class TextInterface implements IInterface {
         Piece p = board.getPieceFromPosition(new Coordinate(x1,y1));
         Move move = null;
         if (p != null){
-            move = new Move(new Coordinate(x1,y1), new Coordinate(x2,y2));
+            move = new Move(p.getColour(), new Coordinate(x1,y1), new Coordinate(x2,y2));
 
             if(!p.getColour().equals(this.colour)){
                 System.out.println("The selected piece does not belong to you. Please try again.");

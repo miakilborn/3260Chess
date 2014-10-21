@@ -544,7 +544,7 @@ public class Standard8x8 implements IRuleSet {
 		for (int i=0;i<pieces.size();i++){
 			Piece piece = pieces.get(i);
 			if (!piece.getColour().equals(colour)){
-				Move move = new Move(piece.getPosition(), kingCoords);
+				Move move = new Move(colour, piece.getPosition(), kingCoords);
 				if (checkMoveByPiece(board, move))
 					return true;
 			}
@@ -674,9 +674,8 @@ public class Standard8x8 implements IRuleSet {
 		if (capture != null)
 			move.setPieceCaptured(nextPostion);
 
-		if ((lastMove != null && board.getPieceFromPosition(lastMove.getNextPosition()) != null && piece != null && 
-                        board.getPieceFromPosition(lastMove.getNextPosition()).getColour().equals(piece.getColour())) ||
-				(lastMove == null && piece != null && piece.getColour().equals("Black"))){ // If same player is trying to move again, invalid move!
+		if ((lastMove != null && lastMove.getColour().equals(move.getColour()))||
+                        lastMove == null && move.getColour().equals("Black")){ // If same player is trying to move again, invalid move!
                     return new Result(false, "It is not your turn");
 		}
 
