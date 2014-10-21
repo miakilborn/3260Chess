@@ -634,8 +634,11 @@ public class Standard8x8 implements IRuleSet {
                     IRule rule = additionalRules.get(i);
                     Result result = rule.checkAndMakeMove(board, this, move);
                     if (result.isValid()){
+                        System.err.println("Works: " + result.getMessage());
+                        lastMove = move;
                         return result;
-                    }
+                    } else
+                        System.err.println("Not applicable: " + result.getMessage());
                 }
             }
             //default move system (fallback)
@@ -645,6 +648,7 @@ public class Standard8x8 implements IRuleSet {
                 System.err.println("REMOVING: "+cap.toString());
                 board.removePiece(cap);
             }
+            lastMove = move;
             piece.setPosition(move.getNextPosition());
             piece.setHasMoved(true);
             return new Result(true);
@@ -674,12 +678,8 @@ public class Standard8x8 implements IRuleSet {
                         IRule rule = additionalRules.get(i);
                         Result result = rule.checkMove(board, this, move);
                         if (result != null && result.isValid()){
-                            lastMove = move;
-                            System.err.println("RESULTTETT: " + result.isValid().toString() + " > " + result.getMessage());
                             return result;
                         } 
-                        if (result != null)
-                            System.err.println("RESULTTETT: " + result.isValid().toString() + " > " + result.getMessage());
                     }
                 }
                 
