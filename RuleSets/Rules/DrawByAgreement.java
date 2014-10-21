@@ -18,8 +18,7 @@ public class DrawByAgreement implements IRule {
     }
 
     public Result checkMove(IBoard board, IRuleSet rules, Move move){
-        move.setDrawMove();
-        if (move.isDraw() && rules.getLastMove().isDraw())
+        if (move.isDraw() && rules.getLastMove() != null && rules.getLastMove().isDraw())
         {
             return new Result(true, true, "Draw");
         }

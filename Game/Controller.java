@@ -147,7 +147,9 @@ public class Controller{
             return true;
         }
         if(current_move != null){
-            rules.makeMove(board, current_move, additionalRules);
+            Result result = rules.makeMove(board, current_move, additionalRules);
+            if (result.isGameOver())
+                p.printEndGame(result);
             current_move = null;
         }
         p.updateDisplay();
@@ -198,6 +200,8 @@ public class Controller{
             System.err.println("Resulant: " + result.isValid() + " > " + result.getMessage());
             if(result.isValid()){
                 this.result = rules.makeMove(board, m, additionalRules);
+                if (this.result.isGameOver())
+                    p.printEndGame(result);
                 this.sendBoard(board);
             }
             updateBoard();

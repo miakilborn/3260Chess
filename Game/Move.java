@@ -47,10 +47,6 @@ public class Move {
         return isDraw;
     }
     
-    public void setDrawMove(){
-        this.isDraw = true;
-    }
-    
     public boolean isValid(){
             return valid;
     }
