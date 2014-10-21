@@ -30,6 +30,10 @@ public class Player {
         name = ui.getUsername();
     }
 
+    public void printEndGame(Result result){
+        this.ui.displayGameOver(result.getMessage());
+    }
+
     /**
     * Main class, runs the program
     *
