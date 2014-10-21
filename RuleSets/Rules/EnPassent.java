@@ -21,15 +21,15 @@ public class EnPassent implements IRule {
         }
 
         //if last move was double jump pawn
-        if(abs(lastNextP.getY()-lastCurrent.getY())!=2){
+        if(Math.abs(lastNextP.getY()-lastCurrent.getY())!=2){
             return new Result(false);
         }
 
         //if desired move is on an angle
-        if(abs(current.getY()-newP.getY())==1 && abs(current.getX()-newP.getX())==1){
+        if(Math.abs(current.getY()-newP.getY())==1 && Math.abs(current.getX()-newP.getX())==1){
             //if desired move puts pawn behind other pawn
-            if(abs(current.getY()-lastNextP.getY())==1){
-                return new Result(false);
+            if(Math.abs(current.getY()-lastNextP.getY())==1){
+                return new Result(true);
             }
         }
 
