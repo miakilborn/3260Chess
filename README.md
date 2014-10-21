@@ -51,6 +51,5 @@ LIMITATIONS
 - When game is ended by draw by agreement, the game doesn't actually end, but is confirmed that both players did agree on a draw
 - 50 move rule is not implemented
 - Stalemate will not notify of end of game, and doesn't work all the time
-- 
-
+- Generally end-game messages are passed, but need to trigger the end game action...
 
