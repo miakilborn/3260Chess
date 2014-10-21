@@ -24,7 +24,7 @@ public class FiftyMoveRule implements IRule {
         //If Pawn is being moved
         if (board.getPieceFromPosition(move.getCurrentPosition()) instanceof Pawn)
         {
-            if (rules.checkMovePawn(board, move)))
+            if (rules.checkMovePawn(board, move))
             {
                 movesSinceEvent = 0;
             }
