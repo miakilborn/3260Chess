@@ -34,16 +34,22 @@ public class EnPassent implements IRule {
     }
 
     public Result checkMove(IBoard board, IRuleSet rules, Move move){
-        Coordinate current = move.getCurrentPosition();
-        Coordinate newP = move.getNextPosition();
-        Piece myPiece = board.getPieceFromPosition(current);
         Move lastMove = rules.getLastMove();
         if(lastMove==null){
             return new Result(false);
         }
+        Coordinate current = move.getCurrentPosition();
+        Coordinate newP = move.getNextPosition();
         Coordinate lastNextP = lastMove.getNextPosition();
         Coordinate lastCurrent = lastMove.getCurrentPosition();
+        if(current==null || newP==null || lastNextP == null || lastCurrent==null){
+            return new Result(false);
+        }
+        Piece myPiece = board.getPieceFromPosition(current);
         Piece theirPiece = board.getPieceFromPosition(lastNextP);
+        if(myPiece==null || theirPiece==null){
+            return new Result(false);
+        }
 
         if(!(myPiece instanceof Pawn) || !(theirPiece instanceof Pawn)){
             return new Result(false);
