@@ -141,15 +141,20 @@ public class Controller{
     }
 
     public Boolean updateBoard(){
+        if (result != null){
+            if (result.isGameOver()){
+                p.printEndGame(result);
+                return true;
+            }
+        }
+        
         if(this.isSlave()){
             p.updateDisplay();
             current_move = null;
             return true;
         }
         if(current_move != null){
-            Result result = rules.makeMove(board, current_move, additionalRules);
-            if (result.isGameOver())
-                p.printEndGame(result);
+            result = rules.makeMove(board, current_move, additionalRules);
             current_move = null;
         }
         p.updateDisplay();
@@ -200,8 +205,6 @@ public class Controller{
             System.err.println("Resulant: " + result.isValid() + " > " + result.getMessage());
             if(result.isValid()){
                 this.result = rules.makeMove(board, m, additionalRules);
-                if (this.result.isGameOver())
-                    p.printEndGame(result);
                 this.sendBoard(board);
             }
             updateBoard();
@@ -305,7 +308,7 @@ public class Controller{
                             Move m = new Move(cmd[1]);
                             Result ret = c.checkMove(m);
                             if (ret.isValid()) {
-                                c.result  = null;
+                                //c.result  = null;
                                 c.current_move = m;
                                 c.updateBoard();
                             }
@@ -313,10 +316,6 @@ public class Controller{
                             c.send("BD|"+c.board.toString());
                             c.send("N_RDY");
                             c.send(ret.toString());
-                        } else {
-                            c.current_move = new Move(cmd[1]);
-                            c.updateBoard();
-                            c.send("ACK");
                         }
                     } else if(cmd[0].equals("BD")) {
                         if (!c.isMaster() && cmd.length > 1) {
@@ -336,11 +335,11 @@ public class Controller{
                             c.send("RDY");
                         }
                     } else if(cmd[0].equals("true")) {
-                        c.result = new Result(false, cmd[2]);
+                        c.result = new Result(false, Boolean.getBoolean(cmd[1]), cmd[2]);
                         c.updateBoard();
                         c.send("ACK");
                     } else if(cmd[0].equals("false")) {
-                        c.result = new Result(false, cmd[2]);
+                        c.result = new Result(false, Boolean.getBoolean(cmd[1]), cmd[2]);
                         c.updateBoard();
                         c.current_move = null;
                         c.send("ACK");

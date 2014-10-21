@@ -641,7 +641,6 @@ public class Standard8x8 implements IRuleSet {
                     IRule rule = additionalRules.get(i);
                     Result result = rule.checkAndMakeMove(board, this, move);
                     if (result.isValid()){
-                        System.err.println("Works: " + result.getMessage());
                         lastMove = move;
                         return result;
                     } else
@@ -675,7 +674,8 @@ public class Standard8x8 implements IRuleSet {
 		if (capture != null)
 			move.setPieceCaptured(nextPostion);
 
-		if ((lastMove != null && board.getPieceFromPosition(lastMove.getNextPosition()) != null && board.getPieceFromPosition(lastMove.getNextPosition()).getColour().equals(piece.getColour())) ||
+		if ((lastMove != null && board.getPieceFromPosition(lastMove.getNextPosition()) != null && piece != null && 
+                        board.getPieceFromPosition(lastMove.getNextPosition()).getColour().equals(piece.getColour())) ||
 				(lastMove == null && piece != null && piece.getColour().equals("Black"))){ // If same player is trying to move again, invalid move!
                     return new Result(false, "It is not your turn");
 		}
@@ -692,7 +692,6 @@ public class Standard8x8 implements IRuleSet {
 
                 //If a rule was applied, we ignore this RuleSet and just return here
                 if (ruleResult != null){
-                    lastMove = move;
                     return ruleResult;
                 }
 
