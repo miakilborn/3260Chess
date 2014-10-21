@@ -331,9 +331,12 @@ public class Controller{
                             c.send("RDY");
                         }
                     } else if(cmd[0].equals("true")) {
+                        c.result = new Result(false, cmd[2]);
+                        c.updateBoard();
                         c.send("ACK");
                     } else if(cmd[0].equals("false")) {
                         c.result = new Result(false, cmd[2]);
+                        c.updateBoard();
                         c.current_move = null;
                         c.send("ACK");
                         c.send("RDY");
