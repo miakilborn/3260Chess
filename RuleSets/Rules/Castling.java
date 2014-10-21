@@ -7,21 +7,19 @@ public class Castling implements IRule {
     public Castling(){
 
     }
-    public boolean checkAndMakeMove(IBoard board, IRuleSet rules, Move move){
-        if (checkMove(board, rules, move).isValid()){
+    public Result checkAndMakeMove(IBoard board, IRuleSet rules, Move move){
+        Result result = checkMove(board, rules, move);
+        if (result.isValid()){
             Coordinate piece1Pos = move.getCurrentPosition();
             Coordinate piece2Pos = move.getNextPosition();
-            Coordinate piece1Pos_new = new Coordinate(piece2Pos.getX(), piece2Pos.getY());
-            Coordinate piece2Pos_new = new Coordinate(piece1Pos.getX(), piece1Pos.getY());
             Piece piece1 = board.getPieceFromPosition(piece1Pos);
             Piece piece2 = board.getPieceFromPosition(piece2Pos);
-            piece1.setPosition(piece1Pos_new);
-            piece2.setPosition(piece2Pos_new);
+            piece1.setPosition(piece2Pos);
+            piece2.setPosition(piece1Pos);
             piece1.setHasMoved(true);
             piece2.setHasMoved(true);
-            return true;
-        }
-        return false;
+        } 
+        return result;
     }
     public Result checkMove(IBoard board, IRuleSet rules, Move move){
         Piece piece1 = board.getPieceFromPosition(move.getCurrentPosition());

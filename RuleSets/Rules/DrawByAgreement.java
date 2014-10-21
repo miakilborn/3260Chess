@@ -21,9 +21,8 @@ public class DrawByAgreement implements IRule {
 
 
 
-    public boolean checkAndMakeMove(IBoard board, IRuleSet rules, Move move){
-        
-        return true;
+    public Result checkAndMakeMove(IBoard board, IRuleSet rules, Move move){
+        return new Result(false);
     }
 
     public Result checkMove(IBoard board, IRuleSet rules, Move move){

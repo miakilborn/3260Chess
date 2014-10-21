@@ -7,10 +7,10 @@ public class EnPassent implements IRule {
     public EnPassent(){
 
     }
-    public boolean checkAndMakeMove(IBoard board, IRuleSet rules, Move move){
-        return false;
+    public Result checkAndMakeMove(IBoard board, IRuleSet rules, Move move){
+        return new Result(false);
     }
     public Result checkMove(IBoard board, IRuleSet rules, Move move){
-        return null;
+        return new Result(false);
     }
 }

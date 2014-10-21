@@ -12,7 +12,6 @@ public class Standard8x8Board implements IBoard {
     
     public Standard8x8Board(String boardStr){
         pieces = new ArrayList<Piece>();
-        System.err.println(boardStr);
         while (boardStr.length() > 1){
             String pieceStr = boardStr.substring(boardStr.indexOf("|(")+2, boardStr.indexOf(")|"));
             if (pieceStr.contains("Queen")){
@@ -28,7 +27,6 @@ public class Standard8x8Board implements IBoard {
             } else if (pieceStr.contains("Pawn")){
                 pieces.add(new Pawn(pieceStr));
             }
-            System.err.println(pieceStr);
             boardStr = boardStr.substring(boardStr.indexOf(")|")+1, boardStr.length());
         }
     }

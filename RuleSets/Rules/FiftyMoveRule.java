@@ -22,9 +22,9 @@ public class FiftyMoveRule implements IRule {
     
 
     
-    public boolean checkAndMakeMove(IBoard board, IRuleSet rules, Move move){
+    public Result checkAndMakeMove(IBoard board, IRuleSet rules, Move move){
         
-        return false;
+        return new Result(false);
     }
 
     public Result checkMove(IBoard board, IRuleSet rules, Move move){

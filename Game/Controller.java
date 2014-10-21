@@ -143,7 +143,7 @@ public class Controller{
 
     public Boolean updateBoard(){
         if(current_move != null){
-            rules.makeMove(board, current_move, additionalRules);
+            this.result = rules.makeMove(board, current_move, additionalRules);
             current_move = null;
         }
         p.updateDisplay();
@@ -185,13 +185,12 @@ public class Controller{
     public void makeMove(Move m, ArrayList<IRule> addtionalRules) throws InterruptedException{
         while(!OTHER_RDY){Thread.sleep(100);System.err.println((this.isMaster()?"Master":"Slave") + " makeMove");};
         if(this.isMaster()){
-            Result result = rules.checkMove(this.board,m,additionalRules);
-            System.out.println("Resulant: " + result.isValid());
+            this.result = rules.checkMove(this.board,m,additionalRules);
+            System.err.println("Resulant: " + result.isValid() + " > " + result.getMessage());
             if(result.isValid()){
-                rules.makeMove(board, m, additionalRules);
+                this.result = rules.makeMove(board, m, additionalRules);
                 this.sendBoard(board);
             }
-            this.result = result;
             updateBoard();
         }
         else{

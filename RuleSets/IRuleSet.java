@@ -15,7 +15,7 @@ public interface IRuleSet {
 	public void setupBoard(IBoard board);
 	public boolean hasWon(IBoard board, String colour);
         
-        public boolean makeMove(IBoard board, Move move, ArrayList<IRule> additionalRules);
+        public Result makeMove(IBoard board, Move move, ArrayList<IRule> additionalRules);
 	public Result checkMove(IBoard board, Move move, ArrayList<IRule> additionalRules);
 
 }

@@ -628,12 +628,13 @@ public class Standard8x8 implements IRuleSet {
 	}
 
 
-	public boolean makeMove(IBoard board, Move move, ArrayList<IRule> additionalRules){
+	public Result makeMove(IBoard board, Move move, ArrayList<IRule> additionalRules){
             if (additionalRules != null){
                 for (int i=0;i<additionalRules.size();i++){
                     IRule rule = additionalRules.get(i);
-                    if (rule.checkAndMakeMove(board, this, move)){
-                        return true;
+                    Result result = rule.checkAndMakeMove(board, this, move);
+                    if (result.isValid()){
+                        return result;
                     }
                 }
             }
@@ -646,7 +647,7 @@ public class Standard8x8 implements IRuleSet {
             }
             piece.setPosition(move.getNextPosition());
             piece.setHasMoved(true);
-            return true;
+            return new Result(true);
         }
 
 	/**
@@ -674,8 +675,11 @@ public class Standard8x8 implements IRuleSet {
                         Result result = rule.checkMove(board, this, move);
                         if (result != null && result.isValid()){
                             lastMove = move;
+                            System.err.println("RESULTTETT: " + result.isValid().toString() + " > " + result.getMessage());
                             return result;
-                        }
+                        } 
+                        if (result != null)
+                            System.err.println("RESULTTETT: " + result.isValid().toString() + " > " + result.getMessage());
                     }
                 }
                 

@@ -61,13 +61,14 @@ public class Promotion implements IRule {
         return piece;
     }
     
-    public boolean checkAndMakeMove(IBoard board, IRuleSet rules, Move move){
+    public Result checkAndMakeMove(IBoard board, IRuleSet rules, Move move){
         Piece newPiece = null;
-        if (checkMove(board, rules, move).isValid()){
+        Result result = checkMove(board, rules, move);
+        if (result.isValid()){
             Piece piece = board.getPieceFromPosition(move.getCurrentPosition());
             Piece cap = board.getPieceFromPosition(move.getNextPosition());
             if(cap != null){
-                System.err.println("REMOVING: "+cap.toString());
+                System.err.println("Promote remove: "+cap.toString());
                 board.removePiece(cap);
             }
             
@@ -75,9 +76,10 @@ public class Promotion implements IRule {
             newPiece.setPosition(move.getNextPosition());
             board.removePiece(piece);
             board.addPiece(newPiece);
-            return true;
+            return new Result(true, "Unit promoted!");
         }
-        return false;
+        
+        return result;
     }
 
     public Result checkMove(IBoard board, IRuleSet rules, Move move){

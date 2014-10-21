@@ -23,9 +23,9 @@ public class Stalemate implements IRule {
     }
 
     
-    public boolean checkAndMakeMove(IBoard board, IRuleSet rules, Move move){
+    public Result checkAndMakeMove(IBoard board, IRuleSet rules, Move move){
         
-        return true;
+        return new Result(false);
     }
 
     public Result checkMove(IBoard board, IRuleSet rules, Move move){
