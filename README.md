@@ -42,12 +42,15 @@ Terminal 1 defines the rules for the game. Terminal 2 plays by the rules given b
 Instructions to Play
 - Each player (in each terminal window) is assigned a colour, and respective case to represent pieces on the board
 - To make a move enter the coordinates of the current position of the piece, followed by the destination coordinates of the piece
+- If the extended rules have enabled draw by agreement, type draw instead of a normal move. The other user needs to also type draw in order for the game to end
 
 
 LIMITATIONS
 ===========
-- Most error messages per move are written above the board - to see them, you must scroll up
-- Error messages are very vauge
-- There is no indication of who's turn it is
-- There is no indication of when the game is over, neither player will be able to make a move
+- Both windows will always prompt user for their move, even when it is not their turn. But if it isn't their turn, they're notified
+- When game is ended by draw by agreement, the game doesn't actually end, but is confirmed that both players did agree on a draw
+- 50 move rule is not implemented
+- Stalemate will not notify of end of game, and doesn't work all the time
+- 
+
 
