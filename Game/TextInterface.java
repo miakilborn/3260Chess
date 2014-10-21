@@ -110,6 +110,9 @@ public class TextInterface implements IInterface {
                 System.err.println("The selected piece does not belong to you. Please try again.");
                 move = null;
             }
+        } else {
+            System.out.println("Please select a piece.");
+            System.out.print("Your move: ");
         }
         return move;
     }

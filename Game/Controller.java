@@ -88,6 +88,7 @@ public class Controller{
     }
     
     public void start(){
+        this.p.printResult(this.result);
         this.updateBoard();
         while(true){
             p.game();
@@ -193,7 +194,6 @@ public class Controller{
         }
 
         if(this.isMaster()){
-            System.out.println("I am the master making a move on the board");
             this.result = rules.checkMove(this.board,m,additionalRules);
             System.err.println("Resulant: " + result.isValid() + " > " + result.getMessage());
             if(result.isValid()){
@@ -203,7 +203,6 @@ public class Controller{
             updateBoard();
         }
         else{
-            System.out.println("Slave sending move");
             current_move = m;
             this.sendMove(m);
         }
@@ -334,7 +333,7 @@ public class Controller{
                     } else if(cmd[0].equals("true")) {
                         c.send("ACK");
                     } else if(cmd[0].equals("false")) {
-                        c.result = new Result(false, cmd[1]);
+                        c.result = new Result(false, cmd[2]);
                         c.current_move = null;
                         c.send("ACK");
                         c.send("RDY");
