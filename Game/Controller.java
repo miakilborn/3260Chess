@@ -183,8 +183,13 @@ public class Controller{
     *
     */
     public void makeMove(Move m, ArrayList<IRule> addtionalRules) throws InterruptedException{
-        while(!OTHER_RDY){Thread.sleep(100);System.err.println((this.isMaster()?"Master":"Slave") + " makeMove");};
+        while(!OTHER_RDY){
+            Thread.sleep(100);
+            System.err.println((this.isMaster()?"Master":"Slave") + " makeMove");
+        }
+
         if(this.isMaster()){
+            System.out.println("I am the master making a move on the board");
             this.result = rules.checkMove(this.board,m,additionalRules);
             System.err.println("Resulant: " + result.isValid() + " > " + result.getMessage());
             if(result.isValid()){
@@ -194,6 +199,7 @@ public class Controller{
             updateBoard();
         }
         else{
+            System.out.println("Slave sending move");
             current_move = m;
             this.sendMove(m);
         }
@@ -296,7 +302,10 @@ public class Controller{
                                 c.current_move = m;
                                 c.updateBoard();
                             }
+                            c.send("N_RDY");
+                            c.send("BD|"+c.board.toString());
                             c.send(ret.toString());
+                            c.send("RDY");
                         } else {
                             c.current_move = new Move(cmd[1]);
                             c.updateBoard();
@@ -309,6 +318,7 @@ public class Controller{
                                 boardStr += cmd[i] + "|";
                             }
                             c.board = new Standard8x8Board(boardStr);
+                            c.current_move = null;
                             c.updateBoard();
                             c.send("ACK");
                         }
@@ -320,12 +330,10 @@ public class Controller{
                             c.send("RDY");
                         }
                     } else if(cmd[0].equals("true")) {
-                        c.updateBoard();
                         c.send("ACK");
                     } else if(cmd[0].equals("false")) {
                         c.result = new Result(false, cmd[1]);
                         c.current_move = null;
-                        c.updateBoard();
                         c.send("ACK");
                         c.send("RDY");
                     }
