@@ -147,7 +147,7 @@ public class Controller{
             return true;
         }
         if(current_move != null){
-            this.result = rules.makeMove(board, current_move, additionalRules);
+            rules.makeMove(board, current_move, additionalRules);
             current_move = null;
         }
         p.updateDisplay();
@@ -301,6 +301,7 @@ public class Controller{
                             Move m = new Move(cmd[1]);
                             Result ret = c.checkMove(m);
                             if (ret.isValid()) {
+                                c.result  = null;
                                 c.current_move = m;
                                 c.updateBoard();
                             }
