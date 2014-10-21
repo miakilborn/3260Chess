@@ -31,6 +31,7 @@ public class TextInterface implements IInterface {
 
         System.out.println("Welcome to Chess, " + name + ". You are " + colour + ", which is displayed as " + whatCase + " case.");
         System.out.println("Moves are formatted as \"XY-XY\" ex \"B2-B4\"");
+        System.out.println("To request a draw by agreement (if enabled) enter 'Draw' ");
 
         this.board = board;
         printBoard();
