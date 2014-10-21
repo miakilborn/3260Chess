@@ -24,7 +24,6 @@ public class Controller{
     private IBoard board;
     private Player p;
 
-
     /* Default constructor
     *  @author bill
     */
@@ -89,12 +88,11 @@ public class Controller{
     }
     
     public void start(){
-
+        this.updateBoard();
         while(true){
             p.game();
         }
     }
-
 
     /* Send a command or a response over the socket
     *  @author bill
@@ -142,6 +140,11 @@ public class Controller{
     }
 
     public Boolean updateBoard(){
+        if(this.isSlave()){
+            p.updateDisplay();
+            current_move = null;
+            return true;
+        }
         if(current_move != null){
             this.result = rules.makeMove(board, current_move, additionalRules);
             current_move = null;
@@ -184,6 +187,7 @@ public class Controller{
     */
     public void makeMove(Move m, ArrayList<IRule> addtionalRules) throws InterruptedException{
         while(!OTHER_RDY){
+            System.out.println("Other isn't ready");
             Thread.sleep(100);
             System.err.println((this.isMaster()?"Master":"Slave") + " makeMove");
         }
@@ -281,7 +285,6 @@ public class Controller{
         }
 
         public void run(){ //Thread that watches for commands from the second controller
-
             while(true){
                 try{
                     String get = c.read();
@@ -304,8 +307,8 @@ public class Controller{
                             }
                             c.send("N_RDY");
                             c.send("BD|"+c.board.toString());
+                            c.send("N_RDY");
                             c.send(ret.toString());
-                            c.send("RDY");
                         } else {
                             c.current_move = new Move(cmd[1]);
                             c.updateBoard();
@@ -318,7 +321,6 @@ public class Controller{
                                 boardStr += cmd[i] + "|";
                             }
                             c.board = new Standard8x8Board(boardStr);
-                            c.current_move = null;
                             c.updateBoard();
                             c.send("ACK");
                         }

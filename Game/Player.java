@@ -39,7 +39,7 @@ public class Player {
         //display board
         
         //get move
-        Move move = ui.getMove(controller.getBoard());
+        Move move = ui.getMove();
 
         //attempt to perform the move
         try{

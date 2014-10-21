@@ -14,6 +14,7 @@ public class TextInterface implements IInterface {
     private String colour;
     private String whatCase;
     Scanner keyboard = new Scanner(System.in);
+    IBoard board;
 
     public String getUsername(){
         System.out.print("Name: ");
@@ -31,10 +32,11 @@ public class TextInterface implements IInterface {
         System.out.println("Welcome to Chess, " + name + ". You are " + colour + ", which is displayed as " + whatCase + " case.");
         System.out.println("Moves are formatted as \"XY-XY\" ex \"B2-B4\"");
 
-        printBoard(board);
+        this.board = board;
+        printBoard();
     }
 
-    private void printBoard(IBoard board){
+    private void printBoard(){
        // Pawn(C(1,3), White, false)
         ArrayList<Piece> pieces = board.getPieces();
         char[][] boardStr = new char[8+1][8+1];
@@ -79,7 +81,7 @@ public class TextInterface implements IInterface {
         System.out.println();
     }
 
-    public Move getMove(IBoard board){
+    public Move getMove(){
         moveString = keyboard.nextLine();
 
         if((moveString.equals("Draw")) ||(moveString.equals("draw")) || (moveString.equals("DRAW"))){
