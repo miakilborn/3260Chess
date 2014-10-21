@@ -4,32 +4,52 @@ import RuleSets.*;
 import Pieces.*;
 import java.util.Scanner;
 public class FiftyMoveRule implements IRule {
-
-    /*
-        Each move, a counter must be increased if a capture did not occur
-        and a pawn was not moved.
-        
-        If either did occur, the counter must be reset
-        
-        If the counter reaches 50, a result with gameover set to true and appropriate
-        message is returned, and he game ends.
-    */
+    
+    //Moves passed since a capture or pawn movement has occured
+    private int movesSinceEvent;
 
     public FiftyMoveRule(){
-
+        movesSinceEvent = 0;
     }
     
     
-
-    
     public Result checkAndMakeMove(IBoard board, IRuleSet rules, Move move){
+        Result result = checkMove(board, rules, move);
         
-        return new Result(false);
+        return result;
     }
 
     public Result checkMove(IBoard board, IRuleSet rules, Move move){
         
+        //If Pawn is being moved
+        if (board.getPieceFromPosition(move.getCurrentPosition()) instanceof Pawn)
+        {
+            if (rules.checkMovePawn(board, move)))
+            {
+                movesSinceEvent = 0;
+            }
+            else
+            {
+                return new Result(false, "Generic invalid move");
+            }
+        }
+        //Piece Captured
+        else if (move.getPieceCaptured() != null)
+        {
+            movesSinceEvent = 0;
+        }
+        else
+        {
+            movesSinceEvent += 1;
+        }
         
-        return new Result(false, true, "Game Over due to 50 Moves rule.");
+        if (movesSinceEvent >= 50)
+        {
+            return new Result(true, true, "Game Over due to 50 Moves Rule.");
+        }
+        else
+        {
+            return new Result(false, "50 turns have not passed since a capture or pawn movement has occured.");
+        }
     }
 }
