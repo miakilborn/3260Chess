@@ -664,7 +664,7 @@ public class Standard8x8 implements IRuleSet {
 		Piece piece =  board.getPieceFromPosition(move.getCurrentPosition()); //players piece he/she wants to move
 		Coordinate nextPostion = move.getNextPosition();
 		Piece capture = getPieceFromPosition(board, nextPostion);
-
+                Result ruleResult = null;
 		if (capture != null)
 			move.setPieceCaptured(nextPostion);
 
@@ -678,10 +678,14 @@ public class Standard8x8 implements IRuleSet {
                         IRule rule = additionalRules.get(i);
                         Result result = rule.checkMove(board, this, move);
                         if (result != null && result.isValid()){
-                            return result;
+                            ruleResult = result;
                         } 
                     }
                 }
+                
+                //If a rule was applied, we ignore this RuleSet and just return here
+                if (ruleResult != null)
+                    return ruleResult;
                 
                 if (capture != null){
                     if (!checkOpponents(capture, piece)){ //if there is collision with the players OWN piece, invalid move!
