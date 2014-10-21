@@ -19,8 +19,8 @@ public class Move {
     public Move(String s){
         if(s.equals("Draw")){
             isDraw = true;
-            this.currentPosition = null;
-            this.nextPosition = null;
+            this.currentPosition = new Coordinate(-1,-1);
+            this.nextPosition = new Coordinate(-1,-1);
         }
         else if(s.charAt(0) == 'M'){
                 s = s.replaceAll("M\\(|\\)$","");
