@@ -16,5 +16,6 @@ public interface IInterface {
 	public void setPlayerColour(String colour);
 	public String getUsername();
 	public void displayMessage(String msg);
+    public void displayGameOver(String reason);
     public ArrayList<IRule> getRules();
 }

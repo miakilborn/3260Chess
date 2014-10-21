@@ -131,6 +131,18 @@ public class TextInterface implements IInterface {
             System.err.println(msg);
     }
 
+    public void displayGameOver(String reason){
+        //clear the screen
+        final String ANSI_CLS = "\u001b[2J";
+        final String ANSI_HOME = "\u001b[H";
+        System.out.print(ANSI_CLS + ANSI_HOME);
+        System.out.flush();
+
+        System.out.println("--- GAME OVER ---");
+        System.out.println(reason);
+        System.out.println("--- Thanks for playing. ---");
+    }
+
     public ArrayList<IRule> getRules(){
         String option;
         ArrayList<IRule> rules = new ArrayList<IRule>();
