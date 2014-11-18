@@ -15,7 +15,7 @@ public class Standard8x8 implements IRuleSet {
 	* Creates Pieces for the board, and sets up all their positions
 	* @author	Tim
 	*/
-	public void setupBoard(IBoard board){
+	public void setupBoard(Board board){
 		ArrayList<Piece> pieces = new ArrayList<Piece>();
 		String colour = "";
 
@@ -53,7 +53,7 @@ public class Standard8x8 implements IRuleSet {
 	* @return	The reference to the Piece object if found otherwise null
 	* @author	Tim
 	*/
-	private Piece getPieceFromPosition(IBoard board, Coordinate coord){
+	private Piece getPieceFromPosition(Board board, Coordinate coord){
 		return board.getPieceFromPosition(coord);
 	}
 
@@ -74,7 +74,7 @@ public class Standard8x8 implements IRuleSet {
 	/**
 	* @author	Tim
 	*/
-	public boolean checkMovePawn(IBoard board, Move move){
+	public boolean checkMovePawn(Board board, Move move){
 		ArrayList<Coordinate> validMoves = new ArrayList<Coordinate>();
 		Piece piece = board.getPieceFromPosition(move.getCurrentPosition());
 		Coordinate cPos = move.getCurrentPosition();
@@ -139,7 +139,7 @@ public class Standard8x8 implements IRuleSet {
 		return lastMove;
 	}
 
-	public boolean checkMoveKnight(IBoard board, Move move){
+	public boolean checkMoveKnight(Board board, Move move){
 		ArrayList<Coordinate> validMoves = new ArrayList<Coordinate>();
 		Coordinate cPos = move.getCurrentPosition();
 
@@ -163,7 +163,7 @@ public class Standard8x8 implements IRuleSet {
 		return false;
 	}
 
-	public boolean checkMoveBishop(IBoard board, Move move){
+	public boolean checkMoveBishop(Board board, Move move){
 		ArrayList<Coordinate> validMoves = new ArrayList<Coordinate>();
 		Coordinate cPos = move.getCurrentPosition();
 
@@ -235,7 +235,7 @@ public class Standard8x8 implements IRuleSet {
 		return false;
 	}
 
-	public boolean checkMoveRook(IBoard board, Move move){
+	public boolean checkMoveRook(Board board, Move move){
 		ArrayList<Coordinate> validMoves = new ArrayList<Coordinate>();
 		Coordinate cPos = move.getCurrentPosition();
 		ArrayList<Piece> pieces = board.getPieces();
@@ -332,7 +332,7 @@ public class Standard8x8 implements IRuleSet {
 		return validMoves;
 	}
 
-	public boolean checkMoveKing(IBoard board, Move move){
+	public boolean checkMoveKing(Board board, Move move){
 		Coordinate cPos = move.getCurrentPosition();
 		ArrayList<Piece> pieces = board.getPieces();
 
@@ -346,7 +346,7 @@ public class Standard8x8 implements IRuleSet {
 		return false;
 	}
 
-	public boolean checkMoveQueen(IBoard board, Move move){
+	public boolean checkMoveQueen(Board board, Move move){
 		ArrayList<Coordinate> validMoves = new ArrayList<Coordinate>();
 		Coordinate cPos = move.getCurrentPosition();
 		ArrayList<Piece> pieces = board.getPieces();
@@ -480,7 +480,7 @@ public class Standard8x8 implements IRuleSet {
 	* @param	board reference, and player colour (White/Black)
 	* @author 	Tim
 	*/
-	private Piece getKing(IBoard board, String colour){
+	private Piece getKing(Board board, String colour){
 		ArrayList<Piece> pieces = board.getPieces();
 		for (int i=0;i<pieces.size();i++){ //obtain position of King to that of specified colour
 			Piece piece = pieces.get(i);
@@ -496,7 +496,7 @@ public class Standard8x8 implements IRuleSet {
 	* @param	board reference, and player colour (White/Black)
 	* @author 	Tim
 	*/
-	private Coordinate getKingPosition(IBoard board, String colour){
+	private Coordinate getKingPosition(Board board, String colour){
 		Piece king = getKing(board, colour);
 		if (king != null)
 			return king.getPosition();
@@ -510,7 +510,7 @@ public class Standard8x8 implements IRuleSet {
 	* @param	board reference, and player colour (White/Black)
 	* @author 	Tim
 	*/
-	public boolean isInCheckMate(IBoard board, String colour){
+	public boolean isInCheckMate(Board board, String colour){
 		Piece king = getKing(board, colour);
 		Coordinate kingCoords = king.getPosition();
 		ArrayList<Coordinate> validMoves = getValidMovesKing(kingCoords);
@@ -537,7 +537,7 @@ public class Standard8x8 implements IRuleSet {
 	* @param	board reference, and player colour (White/Black)
 	* @author 	Tim
 	*/
-	public boolean isInCheck(IBoard board, String colour){
+	public boolean isInCheck(Board board, String colour){
 		ArrayList<Piece> pieces = board.getPieces();
 		Coordinate kingCoords = getKingPosition(board, colour);
 
@@ -560,7 +560,7 @@ public class Standard8x8 implements IRuleSet {
          * @return
          */
 
-        public boolean isGoingToBeInCheck(IBoard board, String colour, Move move){
+        public boolean isGoingToBeInCheck(Board board, String colour, Move move){
             Piece piece = board.getPieceFromPosition(move.getCurrentPosition());
             Piece capture = board.getPieceFromPosition(move.getNextPosition());
             piece.setPosition(move.getNextPosition());  //Perform the piece move temporarly, check if it makes the player in check who is making the move
@@ -586,7 +586,7 @@ public class Standard8x8 implements IRuleSet {
     * Checks if the opponents king is captured
     * @author Tim
     */
-    public boolean hasWon(IBoard board, String colour){
+    public boolean hasWon(Board board, String colour){
         String opponent = "White";
         if (colour.equals("White"))
         	opponent = "Black";
@@ -616,7 +616,7 @@ public class Standard8x8 implements IRuleSet {
 	* Checks which type of piece is being moved, and calls the appropriate method
 	* @author 	Tim
 	*/
-	private boolean checkMoveByPiece(IBoard board, Move move){
+	private boolean checkMoveByPiece(Board board, Move move){
 		Piece piece =  board.getPieceFromPosition(move.getCurrentPosition()); //players piece he/she wants to move
 		if (piece instanceof Pawn)
 			return checkMovePawn(board, move);
@@ -635,7 +635,7 @@ public class Standard8x8 implements IRuleSet {
 	}
 
 
-	public Result makeMove(IBoard board, Move move, ArrayList<IRule> additionalRules){
+	public Result makeMove(Board board, Move move, ArrayList<IRule> additionalRules){
             if (additionalRules != null){
                 for (int i=0;i<additionalRules.size();i++){
                     IRule rule = additionalRules.get(i);
@@ -666,7 +666,7 @@ public class Standard8x8 implements IRuleSet {
 	*			captured piece in the Move object if tile conflict occurs
 	* @author	Tim
 	*/
-	public Result checkMove(IBoard board, Move move, ArrayList<IRule> additionalRules){
+	public Result checkMove(Board board, Move move, ArrayList<IRule> additionalRules){
 		Piece piece =  board.getPieceFromPosition(move.getCurrentPosition()); //players piece he/she wants to move
 		Coordinate nextPostion = move.getNextPosition();
 		Piece capture = getPieceFromPosition(board, nextPostion);

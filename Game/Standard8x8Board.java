@@ -3,7 +3,7 @@ import Pieces.*;
 import Game.*;
 import java.util.ArrayList;
 
-public class Standard8x8Board implements IBoard {
+public class Standard8x8Board implements Board {
     private ArrayList<Piece> pieces;
 
     public Standard8x8Board(){

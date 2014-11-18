@@ -11,7 +11,7 @@ public class Player {
     private static String colour;
     private int score;
 
-    private IInterface ui;
+    private View ui;
     private Controller controller;
 
     /**
@@ -20,7 +20,7 @@ public class Player {
      */
     public Player(Controller controller){
         this.controller = controller;
-        ui = new TextInterface();
+        ui = new TextView();
         if(controller.isMaster()){
             colour = "White";
         } else {

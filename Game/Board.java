@@ -1,7 +1,7 @@
 package Game;
 import Pieces.*;
 import java.util.ArrayList;
-public interface IBoard {    
+public interface Board {    
     //List of pieces
     public boolean addPiece(Piece p);
     public void removePiece(Piece p);

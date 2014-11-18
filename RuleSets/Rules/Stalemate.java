@@ -23,12 +23,12 @@ public class Stalemate implements IRule {
     }
 
     
-    public Result checkAndMakeMove(IBoard board, IRuleSet rules, Move move){
+    public Result checkAndMakeMove(Board board, IRuleSet rules, Move move){
         
         return new Result(false);
     }
 
-    public Result checkMove(IBoard board, IRuleSet rules, Move move){
+    public Result checkMove(Board board, IRuleSet rules, Move move){
         
         return new Result(false, "Stalemate");
     }

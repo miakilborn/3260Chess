@@ -7,7 +7,7 @@ public class EnPassent implements IRule {
     public EnPassent(){
 
     }
-    public Result checkAndMakeMove(IBoard board, IRuleSet rules, Move move){
+    public Result checkAndMakeMove(Board board, IRuleSet rules, Move move){
         Move lastMove = rules.getLastMove();
         if(lastMove==null){
             return new Result(false);
@@ -33,7 +33,7 @@ public class EnPassent implements IRule {
         return new Result(false);
     }
 
-    public Result checkMove(IBoard board, IRuleSet rules, Move move){
+    public Result checkMove(Board board, IRuleSet rules, Move move){
         Move lastMove = rules.getLastMove();
         if(lastMove==null){
             return new Result(false);

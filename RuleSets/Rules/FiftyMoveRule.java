@@ -13,13 +13,13 @@ public class FiftyMoveRule implements IRule {
     }
     
     
-    public Result checkAndMakeMove(IBoard board, IRuleSet rules, Move move){
+    public Result checkAndMakeMove(Board board, IRuleSet rules, Move move){
         Result result = checkMove(board, rules, move);
         
         return result;
     }
 
-    public Result checkMove(IBoard board, IRuleSet rules, Move move){
+    public Result checkMove(Board board, IRuleSet rules, Move move){
         
         //If Pawn is being moved
         if (board.getPieceFromPosition(move.getCurrentPosition()) instanceof Pawn)

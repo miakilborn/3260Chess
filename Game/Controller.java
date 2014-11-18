@@ -21,7 +21,7 @@ public class Controller{
     private ControllerListener listener;
     private IRuleSet rules;
     private ArrayList<IRule> additionalRules;
-    private IBoard board;
+    private Board board;
     private Player p;
 
     /* Default constructor
@@ -215,7 +215,7 @@ public class Controller{
         }
     }
     
-    public void sendBoard(IBoard board)throws InterruptedException{
+    public void sendBoard(Board board)throws InterruptedException{
         while(!OTHER_RDY){Thread.sleep(100);System.err.println("sendBoard");};
         if (board != null){
             this.send("N_RDY");
@@ -264,7 +264,7 @@ public class Controller{
         c.start();
     }
 
-    public IBoard getBoard(){
+    public Board getBoard(){
         return this.board;
     }
     

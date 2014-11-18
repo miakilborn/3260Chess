@@ -61,7 +61,7 @@ public class Promotion implements IRule {
         return piece;
     }
     
-    public Result checkAndMakeMove(IBoard board, IRuleSet rules, Move move){
+    public Result checkAndMakeMove(Board board, IRuleSet rules, Move move){
         Piece newPiece = null;
         Result result = checkMove(board, rules, move);
         if (result.isValid()){
@@ -82,7 +82,7 @@ public class Promotion implements IRule {
         return result;
     }
 
-    public Result checkMove(IBoard board, IRuleSet rules, Move move){
+    public Result checkMove(Board board, IRuleSet rules, Move move){
         Piece piece = board.getPieceFromPosition(move.getCurrentPosition());
         
         //Verify is a pawn

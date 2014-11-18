@@ -7,14 +7,14 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
-public class TextInterface implements IInterface {
+public class TextView implements View {
     private String moveString;
     private final String inputPattern = "([A-Ha-h][1-8])\\-([A-Ha-h][1-8])";
     private String name;
     private String colour;
     private String whatCase;
     Scanner keyboard = new Scanner(System.in);
-    IBoard board;
+    Board board;
 
     public String getUsername(){
         System.out.print("Name: ");
@@ -22,7 +22,7 @@ public class TextInterface implements IInterface {
         return name;
     }
 
-    public void displayBoard(IBoard board){
+    public void displayBoard(Board board){
         //clear the screen
         final String ANSI_CLS = "\u001b[2J";
         final String ANSI_HOME = "\u001b[H";

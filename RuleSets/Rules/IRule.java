@@ -3,7 +3,7 @@ import Game.*;
 import RuleSets.IRuleSet;
 public interface IRule {
 
-    public Result checkAndMakeMove(IBoard board, IRuleSet rules, Move move);
-    public Result checkMove(IBoard board, IRuleSet rules, Move move);
+    public Result checkAndMakeMove(Board board, IRuleSet rules, Move move);
+    public Result checkMove(Board board, IRuleSet rules, Move move);
 
 }
