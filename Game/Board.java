@@ -8,5 +8,9 @@ public interface Board {
     public ArrayList<Piece> getPieces();
 
     public Piece getPieceFromPosition(Coordinate coord);
+    
+    public boolean isValidCoordinate(Coordinate coord);
+    
+    public void performMove(Move move);
 
 }

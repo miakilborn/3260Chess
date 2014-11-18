@@ -1,16 +1,16 @@
 package Game;
-import RuleSets.*;
-import RuleSets.Rules.*;
+import Rules.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Controller{
     public static final Boolean MASTER = true;
     public static final Boolean SLAVE = false;
     public static final int PORT = 5001;
     private static Boolean OTHER_RDY = false;
-    private static Move current_move = null;
     private Result result = null; //Result from latest move
 
     private Boolean mode;
@@ -19,8 +19,7 @@ public class Controller{
     private ServerSocket masterPipe;
     private Socket slavePipe;
     private ControllerListener listener;
-    private IRuleSet rules;
-    private ArrayList<IRule> additionalRules;
+    private Rules rules;
     private Board board;
     private Player p;
 
@@ -78,7 +77,7 @@ public class Controller{
         p = new Player(this);
 
         board = new Standard8x8Board();
-        rules = new Standard8x8();
+        rules = new BasicRules(board);
         rules.setupBoard(board);
 
         listener = new ControllerListener(this);
@@ -148,15 +147,6 @@ public class Controller{
             }
         }
         
-        if(this.isSlave()){
-            p.updateDisplay();
-            current_move = null;
-            return true;
-        }
-        if(current_move != null){
-            result = rules.makeMove(board, current_move, additionalRules);
-            current_move = null;
-        }
         p.updateDisplay();
         return true;
     }
@@ -166,34 +156,26 @@ public class Controller{
      * Note that the slave will see the board before the master has selected rules.
      * @author Mia
      */
-    private void getRules(){
+    private void decorateRules(){
         if(this.isMaster()) {
-            additionalRules = new ArrayList<IRule>();
-            ArrayList<IRule> rules = p.getRules();
-            if(rules == null){
-                return;
-            }
-
-            for(IRule rule : rules){
-                additionalRules.add(rule);
-            }
+            rules = p.decorateRules(rules);
         }
     }
 
-    public Result checkMove(Move m){
-        Result result = this.rules.checkMove(this.board,m, this.additionalRules);
-        this.result = result;
-        if(result.isValid()){
-            this.current_move = m;
-        }
-        return result;
-    }
+//    public Result checkMove(Move m){
+//        Result result = rules.checkMove(m);
+//        this.result = result;
+//        if(result.isValid()){
+//            this.current_move = m;
+//        }
+//        return result;
+//    }
 
     /* makeMove will be called by the player class and handled by the master controller
     *  @author bill
     *
     */
-    public void makeMove(Move m, ArrayList<IRule> addtionalRules) throws InterruptedException{
+    public void makeMove(Move m) throws InterruptedException{
         while(!OTHER_RDY){
             System.out.println("Other isn't ready");
             Thread.sleep(100);
@@ -201,35 +183,30 @@ public class Controller{
         }
 
         if(this.isMaster()){
-            this.result = rules.checkMove(this.board,m,additionalRules);
-            System.err.println("Resulant: " + result.isValid() + " > " + result.getMessage());
-            if(result.isValid()){
-                this.result = rules.makeMove(board, m, additionalRules);
-                this.sendBoard(board);
-            }
+            this.result = rules.makeMove(m);
+            this.send("BD|"+board.toString());
             updateBoard();
         }
         else{
-            current_move = m;
-            this.sendMove(m);
-        }
-    }
-    
-    public void sendBoard(Board board)throws InterruptedException{
-        while(!OTHER_RDY){Thread.sleep(100);System.err.println("sendBoard");};
-        if (board != null){
-            this.send("N_RDY");
-            this.send("BD|"+board.toString());
-        }
-    }
-
-    public void sendMove(Move m) throws InterruptedException{
-        while(!OTHER_RDY){Thread.sleep(100);System.err.println("sendMove");};
-        if (m != null){
-            this.send("N_RDY");
             this.send("MV|"+m.toString());
         }
     }
+    
+//    public void sendBoard(Board board)throws InterruptedException{
+//        while(!OTHER_RDY){Thread.sleep(100);System.err.println("sendBoard");};
+//        if (board != null){
+//            this.send("N_RDY");
+//            this.send("BD|"+board.toString());
+//        }
+//    }
+//
+//    public void sendMove(Move m) throws InterruptedException{
+//        while(!OTHER_RDY){Thread.sleep(100);System.err.println("sendMove");};
+//        if (m != null){
+//            this.send("N_RDY");
+//            this.send("MV|"+m.toString());
+//        }
+//    }
 
     /* Safely shutdown the socket
     *  @author bill
@@ -259,7 +236,7 @@ public class Controller{
         System.setErr(ps);
         
         Controller c = new Controller();
-        c.getRules();
+        c.decorateRules();
         c.updateBoard();
         c.start();
     }
@@ -306,16 +283,15 @@ public class Controller{
                     } else if(cmd[0].equals("MV")) {
                         if (c.isMaster()) {
                             Move m = new Move(cmd[1]);
-                            Result ret = c.checkMove(m);
-                            if (ret.isValid()) {
-                                //c.result  = null;
-                                c.current_move = m;
-                                c.updateBoard();
+                            try {
+                                c.makeMove(m);
+                            } catch (InterruptedException ex) {
+                                Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
                             }
-                            c.send("N_RDY");
+                            //c.send("N_RDY");
                             c.send("BD|"+c.board.toString());
-                            c.send("N_RDY");
-                            c.send(ret.toString());
+                           // c.send("N_RDY");
+                            c.send(c.result.toString());
                         }
                     } else if(cmd[0].equals("BD")) {
                         if (!c.isMaster() && cmd.length > 1) {
@@ -341,9 +317,7 @@ public class Controller{
                     } else if(cmd[0].equals("false")) {
                         c.result = new Result(false, Boolean.getBoolean(cmd[1]), cmd[2]);
                         c.updateBoard();
-                        c.current_move = null;
                         c.send("ACK");
-                        c.send("RDY");
                     }
 
                 }

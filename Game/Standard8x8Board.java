@@ -115,4 +115,21 @@ public class Standard8x8Board implements Board {
 
         return strBoard;
     }
+
+    @Override
+    public boolean isValidCoordinate(Coordinate coord) {
+        if (coord != null){
+            int x = coord.getX();
+            int y = coord.getY();
+            if (x > 0 && x <=8 && y > 0 && y <= 8)
+                return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void performMove(Move move) {
+        Piece p1 = this.getPieceFromPosition(move.getCurrentPosition());
+        p1.setPosition(move.getNextPosition());
+    }
 }

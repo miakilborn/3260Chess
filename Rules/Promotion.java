@@ -5,7 +5,9 @@
  */
 package Rules;
 
-import Game.Move;
+import Game.*;
+import Pieces.*;
+import java.util.Scanner;
 
 /**
  *
@@ -16,16 +18,102 @@ public class Promotion extends RulesDecorator {
     
     public Promotion(Rules rules){
         this.rules = rules;
+        this.board = rules.board;
+    }
+    
+    /*
+        Checks that the position the piece wishes to move is a
+        promotional tile
+    */
+    private boolean checkPosition(String colour, Coordinate nextPosition){
+        if (colour.equals("White")){
+            if (nextPosition.getY() != 8){
+                return false;
+            }
+        } else if (colour.equals("Black")){
+            if (nextPosition.getY() != 1){
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    /**
+     * Obtain the piece that the player wants to promote to
+     * @param colour
+     * @return a new Piece object
+     */
+    private Piece promptPromotion(String colour){
+        Piece piece = null;
+        Scanner keyboard = new Scanner(System.in);
+        System.out.println("What would you like to be promoted to? Options [q,n,r,b]");
+        while (piece == null){
+            System.out.print("$> ");
+            String pieceStr = keyboard.nextLine();
+            char p = pieceStr.toLowerCase().charAt(0);
+            switch(p){
+                case 'q':
+                    piece = new Queen(colour, new Coordinate(-1,-1));
+                    break;
+                case 'n':
+                    piece = new Knight(colour, new Coordinate(-1,-1));
+                    break;
+                case 'r':
+                    piece = new Rook(colour, new Coordinate(-1,-1));
+                    break;
+                case 'b':
+                    piece = new Bishop(colour, new Coordinate(-1,-1));
+                    break;
+                default:
+                    System.out.println("Invalid choice, try again");
+                    break;
+            }
+        }
+        return piece;
+    }
+    
+    /**
+     * Performs all checks to see if move if valid before making the move
+     * @param move
+     * @return validity of the move for this rule
+     */
+    private Result checkMove(Move move){
+        Piece piece = board.getPieceFromPosition(move.getCurrentPosition());
+        
+        //Verify is a pawn
+        if (!(piece instanceof Pawn)){
+            return new Result(false, "Piece is not a pawn");
+        }
+        
+        //Verify movement position is a promotional position
+        if (!checkPosition(piece.getColour(), move.getNextPosition())){
+            return new Result(false, "Not a promotional position");
+        }
+        
+        //Check if move is a valid move
+        Result result = rules.checkMovePawn(move);
+        if (result.isValid()){
+            return result;
+        } else {
+            return result;
+        }
     }
 
     @Override
-    public boolean checkMove(Move move) {
-        boolean valid = rules.checkMove(move);
-        if (valid) return true; //if another rule found this move valid
+    public Result makeMove(Move move) {
+        Result result = rules.makeMove(move);
+        boolean valid = result.isValid();
+        if (valid) return result; //if another rule already allowed the move, we don't need to do anything
         else {
-            //Do promotion checks
+            result = checkMove(move); //Do promotion checks
+            if (result.isValid()){ //perform the move
+                move.setPieceCaptured(move.getNextPosition());
+                Piece p = this.promptPromotion(move.getColour());
+                p.setPosition(move.getNextPosition());
+                board.removePiece(board.getPieceFromPosition(move.getCurrentPosition()));
+            }
             
-            return true; //or false;
+            return result; 
         }
     }
     

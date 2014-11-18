@@ -5,10 +5,12 @@
  */
 package Rules;
 
+import Game.*;
+
 /**
  *
  * @author Tim
  */
 public abstract class RulesDecorator extends Rules {
-    
+    public abstract Result makeMove(Move move);
 }

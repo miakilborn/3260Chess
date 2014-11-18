@@ -2,7 +2,7 @@ package Game;
 
 import Game.*;
 import Pieces.*;
-import RuleSets.Rules.IRule;
+import Rules.*;
 
 import java.util.ArrayList;
 
@@ -48,7 +48,7 @@ public class Player {
         //attempt to perform the move
         try{
             if (move != null){
-                controller.makeMove(move, null);
+                controller.makeMove(move);
             }
         }
         catch(InterruptedException e){
@@ -56,9 +56,9 @@ public class Player {
         }
     }
 
-    public ArrayList<IRule> getRules(){
+    public Rules decorateRules(Rules rules){
         //return type to be determined
-        return ui.getRules();
+        return ui.decorateRules(rules);
     }
 
     public void printResult(Result result){
