@@ -184,29 +184,38 @@ public class Controller{
 
         if(this.isMaster()){
             this.result = rules.makeMove(m);
-            this.send("BD|"+board.toString());
+            if (!m.getColour().equals(p.getColour())){
+                this.sendResult(result);
+                this.result = null;
+            }
+            this.sendBoard(board);
             updateBoard();
         }
         else{
-            this.send("MV|"+m.toString());
+            this.sendMove(m);
         }
     }
     
-//    public void sendBoard(Board board)throws InterruptedException{
-//        while(!OTHER_RDY){Thread.sleep(100);System.err.println("sendBoard");};
-//        if (board != null){
-//            this.send("N_RDY");
-//            this.send("BD|"+board.toString());
-//        }
-//    }
-//
-//    public void sendMove(Move m) throws InterruptedException{
-//        while(!OTHER_RDY){Thread.sleep(100);System.err.println("sendMove");};
-//        if (m != null){
-//            this.send("N_RDY");
-//            this.send("MV|"+m.toString());
-//        }
-//    }
+    public void sendResult(Result result)throws InterruptedException{
+        while(!OTHER_RDY){Thread.sleep(100);System.err.println("sendResult");};
+        if (result != null){
+            this.send(result.toString());
+        }
+    }
+    
+    public void sendBoard(Board board)throws InterruptedException{
+        while(!OTHER_RDY){Thread.sleep(100);System.err.println("sendBoard");};
+        if (board != null){
+            this.send("BD|"+board.toString());
+        }
+    }
+
+    public void sendMove(Move move) throws InterruptedException{
+        while(!OTHER_RDY){Thread.sleep(100);System.err.println("sendMove");};
+        if (move != null){
+            this.send("MV|"+move.toString());
+        }
+    }
 
     /* Safely shutdown the socket
     *  @author bill
@@ -280,7 +289,7 @@ public class Controller{
                         c.OTHER_RDY = true;
                     } else if(cmd[0].equals("N_RDY")) {
                         c.OTHER_RDY = false;
-                    } else if(cmd[0].equals("MV")) {
+                    } else if(cmd[0].equals("MV")){
                         if (c.isMaster()) {
                             Move m = new Move(cmd[1]);
                             try {
@@ -288,11 +297,8 @@ public class Controller{
                             } catch (InterruptedException ex) {
                                 Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
                             }
-                            //c.send("N_RDY");
-                            c.send("BD|"+c.board.toString());
-                           // c.send("N_RDY");
-                            c.send(c.result.toString());
                         }
+                        c.send("RDY");
                     } else if(cmd[0].equals("BD")) {
                         if (!c.isMaster() && cmd.length > 1) {
                             String boardStr = "";
@@ -301,8 +307,8 @@ public class Controller{
                             }
                             c.board = new Standard8x8Board(boardStr);
                             c.updateBoard();
-                            c.send("ACK");
                         }
+                        c.send("RDY");
                     } else if(cmd[0].equals("ACK")) {
                         if (c.isMaster()) {
                             c.send("ACK");
@@ -311,13 +317,11 @@ public class Controller{
                             c.send("RDY");
                         }
                     } else if(cmd[0].equals("true")) {
-                        c.result = new Result(false, Boolean.getBoolean(cmd[1]), cmd[2]);
-                        c.updateBoard();
-                        c.send("ACK");
+                        c.result = new Result(true, Boolean.getBoolean(cmd[1]), cmd[2]);
+                        c.send("RDY");
                     } else if(cmd[0].equals("false")) {
                         c.result = new Result(false, Boolean.getBoolean(cmd[1]), cmd[2]);
-                        c.updateBoard();
-                        c.send("ACK");
+                        c.send("RDY");
                     }
 
                 }

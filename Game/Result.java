@@ -44,7 +44,7 @@ public class Result{
 
     @Override
     public String toString(){
-            return isValid().toString() + "|" + isGameOver().toString() + "|" + getMessage();
+            return isValid().toString() + "|" + isGameOver().toString() + "|" + getMessage() + " |";
     }
 
 }
