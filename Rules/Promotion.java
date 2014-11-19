@@ -101,20 +101,16 @@ public class Promotion extends RulesDecorator {
 
     @Override
     public Result makeMove(Move move) {
-        Result result = rules.makeMove(move);
-        boolean valid = result.isValid();
-        if (valid) return result; //if another rule already allowed the move, we don't need to do anything
-        else {
-            result = checkMove(move); //Do promotion checks
-            if (result.isValid()){ //perform the move
-                move.setPieceCaptured(move.getNextPosition());
-                Piece p = this.promptPromotion(move.getColour());
-                p.setPosition(move.getNextPosition());
-                board.removePiece(board.getPieceFromPosition(move.getCurrentPosition()));
-            }
-            
-            return result; 
+        Result result = checkMove(move); //Do promotion checks
+        if (result.isValid()){ //perform the move
+            move.setPieceCaptured(move.getNextPosition());
+            Piece p = this.promptPromotion(move.getColour());
+            p.setPosition(move.getNextPosition());
+            board.removePiece(board.getPieceFromPosition(move.getCurrentPosition()));
+        } else { //this rule isn't applicable, try another rule
+            result = rules.makeMove(move);
         }
+        return result;
     }
     
     
