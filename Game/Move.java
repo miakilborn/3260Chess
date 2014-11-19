@@ -7,6 +7,7 @@ public class Move {
     private final Coordinate currentPosition;
     private final Coordinate nextPosition;
     private boolean isDraw = false;
+    private boolean performed = false; //defines if move was performed already or not
     private String colour = ""; //colour of player that made this move
 
     private Coordinate captured = null;
@@ -77,6 +78,10 @@ public class Move {
             return captured;
     }
     
+    public boolean getMoved(){
+            return performed;
+    }
+    
     public String getColour(){
         return colour;
     }
@@ -87,6 +92,10 @@ public class Move {
 
     public void setValid(boolean valid){
             this.valid = valid;
+    }
+    
+    public void setMoved(boolean performed){
+            this.performed = performed;
     }
 
     public String toString(){
