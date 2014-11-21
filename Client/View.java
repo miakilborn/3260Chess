@@ -1,4 +1,6 @@
-package Game;
+package Client;
+import Game.Board;
+import Game.Move;
 import Rules.*;
 
 /*
