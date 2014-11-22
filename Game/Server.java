@@ -19,6 +19,16 @@ import java.util.*;
 public class Server {
     private ArrayList<GameRoom> rooms;
 
+    private class ClientConnect implements Observer{
+        int id;
+        Socket s;
+
+        public ClientConnect(Socket s, int id){
+            this.s=s;
+            this.id=id;
+        }
+    }
+
     private class Connect extends Thread{
         ServerSocket socket;
         Server server;
