@@ -9,12 +9,30 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.net.*;
+import java.util.*;
 
 /**
  *
  * @author Tim
  */
 public class Server {
+    private ArrayList<GameRoom> rooms;
+
+    private class Connect extends Thread{
+        ServerSocket socket;
+        Server server;
+
+        public void run(){
+
+        }
+
+        public Connect(ServerSocket s, Server ser){
+            server = ser;
+            socket = s;
+        }
+    }
+
     public static void main(String []args) throws InterruptedException, FileNotFoundException{
         File file = new File("log_server.txt");
         FileOutputStream fos = new FileOutputStream(file);
