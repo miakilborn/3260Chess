@@ -21,7 +21,7 @@ public class Server {
     private ArrayList<GameRoom> rooms;
     private ArrayList<ClientConnect> clients;
 
-    private class ClientConnect extends Thread implements Observer{
+    private class ClientConnect extends Thread implements Observer {
         GameRoom room;
         int id;
         Role r;
@@ -102,7 +102,11 @@ public class Server {
                             break;
                         }
                         else{
-                            Result res = this.room.rules.makeMove(new Move(array[1]));
+                            String move = "";
+                            for (int i = 1; i < array.length ; i++){
+                                move += array[i] + "|";
+                            }
+                            Result res = this.room.rules.makeMove(new Move(move));
                             if(res.isValid()){
                                 System.err.println("Valid move! Move made, updating observers");
                                 this.room.setChanged();

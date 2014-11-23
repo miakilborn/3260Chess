@@ -8,6 +8,7 @@ public class Move {
     private final Coordinate nextPosition;
     private boolean isDraw = false;
     private boolean performed = false; //defines if move was performed already or not
+    private String data = "";
     private String colour = ""; //colour of player that made this move
 
     private Coordinate captured = null;
@@ -15,46 +16,47 @@ public class Move {
     public Move(String colour, Coordinate currentPosition, Coordinate nextPosition){
             this.currentPosition = currentPosition;
             this.nextPosition = nextPosition;
-            this.captured=null;
+            this.captured = null;
             this.colour = colour;
     }
 
     public Move(String s){
+        System.out.println("s: " + s);
         this.colour = colour;
-        String[] tokens = s.split(",");
-        if(tokens.length == 2 && tokens[0].equals("Draw")){
-            isDraw = true;
-            this.colour = tokens[1];
-            this.currentPosition = new Coordinate(-1,-1);
-            this.nextPosition = new Coordinate(-1,-1);
-        }
-        else if(s.charAt(0) == 'M'){
-                System.err.println(s);
-                s = s.replaceAll("M\\(|\\)$","");
-                String c = s.substring(0,s.lastIndexOf("),")+1);
-                s = s.replace(c+",","");
+        s = s.replaceAll("M\\(|\\)$","");
+        String[] tokens = s.split("[|]");
+        if (tokens.length >= 4){
+            
+            String c1 = tokens[0];
+            String c2 = tokens[1];
+            System.out.println("c1: " + c1);
+            System.out.println("c2: " + c2);
+            
+            currentPosition = new Coordinate(c1);
+            nextPosition = new Coordinate(c2);
+            if(tokens[2].equals("true")){
+                this.captured = new Coordinate(c2);
+            }
 
-                String c1 = c.substring(0,c.lastIndexOf("),")+1);
-                c = c.replace(c1+",","");
-                
-                tokens = s.split(",");
-                
-                currentPosition = new Coordinate(c1);
-                nextPosition = new Coordinate(c);
-                if(tokens[0].equals("true")){
-                        this.captured = new Coordinate(c);
-                }
-                
-                if (tokens[1].equals("true")){
-                    this.isDraw = true;
-                    System.err.println("This move is constructed with isDraw flag set TRUE");
-                }
-                this.colour = tokens[2];
-        }
-        else {
-                currentPosition = null;
-                nextPosition = null;
-                captured = null;
+            if (tokens[3].equals("true")){
+                this.isDraw = true;
+                System.err.println("This move is constructed with isDraw flag set TRUE");
+            }
+            if (tokens.length >= 5){
+                this.colour = tokens[4];
+            } 
+        } else if(tokens.length > 2){
+            if (tokens[0].equalsIgnoreCase("Draw"))
+                isDraw = true;
+            data = tokens[0];
+            this.colour = tokens[1];
+            this.currentPosition = null;
+            this.nextPosition = null;
+        }else {
+            System.err.println("Invalid move object, cannot construct properly: " + s);
+            currentPosition = null;
+            nextPosition = null;
+            captured = null;
         }
     }
 
@@ -76,6 +78,10 @@ public class Move {
 
     public Coordinate getPieceCaptured(){
             return captured;
+    }
+    
+    public String getData(){
+        return data;
     }
     
     public boolean getMoved(){
@@ -100,6 +106,12 @@ public class Move {
 
     public String toString(){
             //Should return a string that you can use in the constructor to rebuild the object.
-            return ("M("+currentPosition.toString()+","+nextPosition.toString()+","+(captured==null?"false":"true")+","+Boolean.toString(isDraw)+","+colour+")");
+        if (currentPosition == null || nextPosition == null){
+            return ("M("+data+"|"+colour+")");
+        } else {
+            return ("M("+currentPosition.toString()+"|"+nextPosition.toString()
+                +"|"+(captured==null?"false":"true")+"|"+Boolean.toString(isDraw)+"|"+colour+")");
+        }
+        
     }
 }

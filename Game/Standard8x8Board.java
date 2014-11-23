@@ -44,6 +44,10 @@ public class Standard8x8Board implements Board {
     }
 
     public Piece getPieceFromPosition(Coordinate coord){
+        if (coord == null){
+            return null;
+        }
+                
         for (int i=0;i<pieces.size();i++){
             Piece piece = pieces.get(i);
             if (piece.getPosition().equals(coord)){
