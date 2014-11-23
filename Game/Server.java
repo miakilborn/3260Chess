@@ -31,9 +31,15 @@ public class Server {
         private String answer;
 
         public void send(String s){
-            while(!ready); //Only write if client is ready
+            try{
+                while(!ready){Thread.sleep(5);}; //Only write if client is ready
+            }
+            catch(InterruptedException ie){
+                System.err.println(ie.toString());
+            }
             out.write(s+"\n");
             out.flush();
+            System.err.println("SENDING COMMAND TO ID: "+this.id+", "+s);
         }
 
         public String read(){
@@ -60,6 +66,7 @@ public class Server {
         }
 
         public void run(){
+            System.err.println ("Thread started for client: "+this.id);
             String line;
             String array[] = new String[1];
             while(true){
@@ -68,7 +75,7 @@ public class Server {
                 if(line == null){
                     continue;
                 }
-                System.err.println("COMMAND: "+line);
+                System.err.println("RECIEVED COMMAND: "+line);
                 if(-1 != line.indexOf("|")){
                     array = line.split("\\|");
                 }
@@ -90,6 +97,23 @@ public class Server {
                         this.ready=true;
                         break;
                     case "MV":
+                        if(this.r == Role.SPECTATOR){
+                            this.send("MSG|You can not make moves, you are registered as a spectator.");
+                            break;
+                        }
+                        else{
+                            Result res = this.room.rules.makeMove(new Move(array[1]));
+                            if(res.isValid()){
+                                System.err.println("Valid move! Move made, updating observers");
+                                this.room.setChanged();
+                                this.room.notifyObservers(this.room.board);
+                            }
+                            else{
+                                System.err.println("Invalid move. Notifying player.");
+                                this.send("MSG|Move could not be made: "+res.getMessage());
+                            }
+                        }
+
                         /*
                             Check that client is player,
                             Check that move is valid,
@@ -116,13 +140,15 @@ public class Server {
                         this.room.addObserver(this);
                         if(this.room.numPlayers < 2){
                             this.r = Role.PLAYER;
+                            this.send("ROLE|PLAYER");
+                            this.send("COLOUR|"+(this.id==0?"White":"Black"));
                         }
                         else{
                             this.r = Role.SPECTATOR;
+                            this.send("ROLE|SPECTATOR");
                         }
                         this.room.numPlayers++ ;
-                        System.out.println(this.room.board.toString());
-                        this.send("UP|"+this.room.board.toString());
+                        this.update(this.room,this.room.board);
                         //this.update(this.room,this.room.board.toString());
                         break;
                     default:
@@ -133,10 +159,13 @@ public class Server {
         }
 
         public void update(Observable o, Object obj){
+            this.send("UP|"+obj.toString());
         }
 
         public ClientConnect(Socket s, int id){
             try{
+                s.setKeepAlive(true);
+                s.setTcpNoDelay(true);
                 this.in=new BufferedReader(new InputStreamReader(s.getInputStream()));
                 this.out=new PrintWriter(s.getOutputStream());
                 ready=true;
@@ -144,8 +173,8 @@ public class Server {
             catch(IOException ioe){
                 System.err.println(ioe.toString());
             }
+
             this.id=id;
-            this.r = r;
         }
     }
 
@@ -163,7 +192,10 @@ public class Server {
 
         while(true){
             try{
+                System.err.println("Listening on port 5001");
                 ClientConnect newClient = new ClientConnect(socket.accept(), clients.size());
+                clients.add(newClient);
+                System.err.println("New Client Connected");
                 newClient.start();
             }
             catch(IOException ioe){

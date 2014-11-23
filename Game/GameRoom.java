@@ -28,6 +28,10 @@ public class GameRoom extends Observable{
         numPlayers = 0;
     }
 
+    public void setChanged(){
+        super.setChanged();
+    }
+
     public String toString(){
         return "Default Game Room";
     }

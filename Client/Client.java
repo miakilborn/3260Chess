@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package Client;
-import Game.Standard8x8Board;
+import Game.*;
 import java.util.*;
 import java.io.*;
 import java.net.*;
@@ -44,6 +44,10 @@ public class Client {
             String array[] = new String[1];
             while(true){
                 line = this.read();
+                if(line == null){
+                    continue;
+                }
+                System.err.println("RECIEVED COMMAND: "+line);
                 if(-1 != line.indexOf("|")){
                     array = line.split("\\|",2);
                 }
@@ -59,14 +63,23 @@ public class Client {
                         this.ready=true;
                     break;
                     case "UP":
-                        System.out.println("BOARD: "+array[1]);
                         this.client.view.displayBoard(new Standard8x8Board(array[1]));
+                        if(this.client.role.equals("PLAYER")){
+                            Move move = this.client.view.getMove();
+                            //this.send("NRDY");
+                            this.send("MV|"+move.toString());
+                            //this.send("RDY");
+                        }
                     break;
                     case "MSG":
                         this.client.view.displayMessage(array[1]);
-                    break;
-                    case "Q":
-                        this.send("A|"+this.client.view.question(array[1]));
+                        break;
+                    case "ROLE":
+                        this.client.role=array[1];
+                        break;
+                    case "COLOUR":
+                        this.client.view.setPlayerColour(array[1]);
+                        break;
                     default:
                     System.err.println("Unknown command: "+array[0]);
                     break;
@@ -99,6 +112,8 @@ public class Client {
 
     public TextView view;
     public Scanner keyboard;
+    public String role;
+
     public void go(){
         String pattern = "[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}";
         String input;
@@ -114,7 +129,6 @@ public class Client {
         c.send("RDY");
         c.send("ROOMS");
         String rooms = c.read();
-        System.out.println(rooms);
         String room[] = rooms.split("[{:,}]");
         for(int i = 2; i < room.length; i+=2){
             System.out.print(room[i]);
