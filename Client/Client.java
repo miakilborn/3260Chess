@@ -42,8 +42,10 @@ public class Client {
         public void makeMoveIfApplicable(){
             if(this.client.role.equals("PLAYER")){
                 Move move = this.client.view.getMove();
+                if(move!=null){
                 //this.send("NRDY");
-                this.send("MV|"+move.toString());
+                    this.send("MV|"+move.toString());
+                }
                 //this.send("RDY");
             }
         }
@@ -78,12 +80,12 @@ public class Client {
                         this.ready=true;
                     break;
                     case "UP":
+                        this.client.view.update = true;
                         this.client.view.displayBoard(new Standard8x8Board(array[1]));
-                        this.makeMoveIfApplicable();
+                        this.client.view.update = false;
                     break;
                     case "MSG":
                         this.client.view.displayMessage(array[1]);
-                        this.makeMoveIfApplicable();
                         break;
                     case "ROLE":
                         this.client.role=array[1];
@@ -153,6 +155,9 @@ public class Client {
         System.out.println("Which room would you like to join?");
         c.send("JOIN|"+keyboard.nextLine());
         c.start();
+        while(true){
+            c.send("MV|"+this.view.getMove().toString());
+        }
     }
 
     public Client(){
