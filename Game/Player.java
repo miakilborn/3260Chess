@@ -1,5 +1,6 @@
 package Game;
 
+import Client.*;
 import Game.*;
 import Pieces.*;
 import Rules.*;

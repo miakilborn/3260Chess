@@ -1,4 +1,4 @@
-package Game;
+package Client;
 import Game.*;
 import Pieces.*;
 import Rules.*;
@@ -123,6 +123,11 @@ public class TextView implements View {
             } else {
                     this.whatCase = "lower";
             }
+    }
+
+    public String question(String q){
+        System.out.println("Question: "+q);
+        return keyboard.nextLine();
     }
 
     public void displayMessage(String msg){
