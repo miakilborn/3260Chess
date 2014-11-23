@@ -130,6 +130,10 @@ public class Standard8x8Board implements Board {
     @Override
     public void performMove(Move move) {
         Piece p1 = this.getPieceFromPosition(move.getCurrentPosition());
+        Piece capture = this.getPieceFromPosition(move.getNextPosition());
+        if (capture != null){
+            capture.capture();
+        }
         p1.setPosition(move.getNextPosition());
     }
 }
