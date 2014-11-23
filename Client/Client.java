@@ -39,10 +39,25 @@ public class Client {
             }
         }
 
+        public void makeMoveIfApplicable(){
+            if(this.client.role.equals("PLAYER")){
+                Move move = this.client.view.getMove();
+                //this.send("NRDY");
+                this.send("MV|"+move.toString());
+                //this.send("RDY");
+            }
+        }
+
         public void run(){
             String line;
             String array[] = new String[1];
             while(true){
+                try{
+                    Thread.sleep(5);
+                }
+                catch(InterruptedException ie){
+                    System.err.println(ie.toString());
+                }
                 line = this.read();
                 if(line == null){
                     continue;
@@ -64,15 +79,11 @@ public class Client {
                     break;
                     case "UP":
                         this.client.view.displayBoard(new Standard8x8Board(array[1]));
-                        if(this.client.role.equals("PLAYER")){
-                            Move move = this.client.view.getMove();
-                            //this.send("NRDY");
-                            this.send("MV|"+move.toString());
-                            //this.send("RDY");
-                        }
+                        this.makeMoveIfApplicable();
                     break;
                     case "MSG":
                         this.client.view.displayMessage(array[1]);
+                        this.makeMoveIfApplicable();
                         break;
                     case "ROLE":
                         this.client.role=array[1];

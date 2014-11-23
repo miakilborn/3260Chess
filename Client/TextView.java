@@ -12,6 +12,7 @@ public class TextView implements View {
     private String name;
     private String colour;
     private String whatCase;
+    public Boolean update;
     Scanner keyboard = new Scanner(System.in);
     Board board;
 
@@ -23,6 +24,7 @@ public class TextView implements View {
 
     public void displayBoard(Board board){
         //clear the screen
+        update=true;
         final String ANSI_CLS = "\u001b[2J";
         final String ANSI_HOME = "\u001b[H";
         System.out.print(ANSI_CLS + ANSI_HOME);
@@ -34,6 +36,7 @@ public class TextView implements View {
 
         this.board = board;
         printBoard();
+        update=false;
     }
 
     private void printBoard(){
@@ -81,8 +84,28 @@ public class TextView implements View {
         System.out.println();
     }
 
+    public String fetchLine(){
+        while(!update){
+            if(keyboard.hasNextLine()){
+                moveString = keyboard.nextLine();
+                return moveString;
+            }
+            try{
+                Thread.sleep(50);
+            }
+            catch(InterruptedException ie){
+                System.err.println(ie.toString());
+            }
+        }
+        return null;
+    }
+
     public Move getMove(){
-        moveString = keyboard.nextLine();
+        moveString = fetchLine();
+        if(update){
+            return null;
+        }
+
         if((moveString.equals("Draw")) ||(moveString.equals("draw")) || (moveString.equals("DRAW"))){
             Move move = new Move("Draw"+","+colour);
             return move;
@@ -91,7 +114,10 @@ public class TextView implements View {
         while(!moveString.matches(inputPattern)){
             System.out.println("Incorrect format of input. See guidelines at top of window.");
             System.out.print("Your move: ");
-            moveString = keyboard.nextLine();
+            moveString = fetchLine();
+            if(update){
+                return null;
+            }
         }
 
         int x1 = (int)moveString.toUpperCase().charAt(0)-64;
