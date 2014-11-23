@@ -125,6 +125,11 @@ public class TextView implements View {
             }
     }
 
+    public String question(String q){
+        System.out.println("Question: "+q);
+        return keyboard.nextLine();
+    }
+
     public void displayMessage(String msg){
             System.out.println(msg);
             System.err.println(msg);

@@ -5,6 +5,7 @@
 */
 package Game;
 
+import Rules.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -16,7 +17,20 @@ import java.util.*;
 * @author Tim
 */
 public class GameRoom extends Observable{
+    Board board;
+    Rules rules;
+    int numPlayers;
 
+    public GameRoom(){
+        board = new Standard8x8Board();
+        rules = new BasicRules(board);
+        rules.setupBoard(board);
+        numPlayers = 0;
+    }
+
+    public String toString(){
+        return "Default Game Room";
+    }
 
     public static void main(String []args) throws InterruptedException, FileNotFoundException{
         File file = new File("log_client.txt");
