@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Rules;
 
 import Game.*;
@@ -102,11 +97,13 @@ public class Promotion extends RulesDecorator {
     @Override
     public Result makeMove(Move move) {
         Result result = checkMove(move); //Do promotion checks
-        if (result.isValid()){ //perform the move
+        if (!move.getMoved() && result.isValid()){ //perform the move
             move.setPieceCaptured(move.getNextPosition());
             Piece p = this.promptPromotion(move.getColour());
             p.setPosition(move.getNextPosition());
             board.removePiece(board.getPieceFromPosition(move.getCurrentPosition()));
+            move.setMoved(true);
+            rules.makeMove(move);
         } else { //this rule isn't applicable, try another rule
             result = rules.makeMove(move);
         }
