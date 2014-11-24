@@ -49,9 +49,7 @@ public class FiftyMoveRule extends RulesDecorator {
     @Override
     public Result makeMove(Move move) {
         Result result = checkMove(move); //Do promotion checks
-        if (result.isValid()){ //perform the move
-            return result;
-        } else { //this rule isn't applicable, try another rule
+        if (!result.isValid()){ //this rule isn't applicable, try another rule
             result = rules.makeMove(move);
         }
         return result;
