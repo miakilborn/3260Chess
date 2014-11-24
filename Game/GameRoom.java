@@ -20,6 +20,7 @@ public class GameRoom extends Observable{
     Board board;
     Rules rules;
     int numPlayers;
+    public String description = "";
 
     public GameRoom(char[] ruleDef){
         board = new Standard8x8Board();
@@ -29,15 +30,19 @@ public class GameRoom extends Observable{
             switch(letter){
                 case 'c':
                     rules = new Castling(rules);
+                    this.description += "Castling ";
                     break;
                 case 'd':
                     rules = new DrawByAgreement(rules);
+                    this.description += "Draw-by-Agreement ";
                     break;
                 case 'p':
                     rules = new Promotion(rules);
+                    this.description += "Promotion ";
                     break;
                 case 'f':
                     rules = new FiftyMoveRule(rules);
+                    this.description += "Fifty-Move ";
                     break;
             }
         }
@@ -51,6 +56,10 @@ public class GameRoom extends Observable{
     }
 
     public String toString(){
-        return "Default Game Room";
+        if (this.description != "") {
+            return "Enabled rules- " + this.description.trim();
+        } else {
+            return "Basic ruleset";
+        }
     }
 }
