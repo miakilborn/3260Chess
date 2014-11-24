@@ -137,7 +137,7 @@ public class Server {
                         if(this.room.numPlayers < 2){
                             this.r = Role.PLAYER;
                             this.send("ROLE|PLAYER");
-                            this.send("COLOUR|"+(this.id==0?"White":"Black"));
+                            this.send("COLOUR|"+(this.room.numPlayers==0?"White":"Black"));
                         }
                         else{
                             this.r = Role.SPECTATOR;
@@ -177,6 +177,7 @@ public class Server {
     public Server(){
         ServerSocket socket=null;
         rooms = new ArrayList<GameRoom>();
+        rooms.add(new GameRoom());
         rooms.add(new GameRoom());
         clients = new ArrayList<ClientConnect>();
         try{
