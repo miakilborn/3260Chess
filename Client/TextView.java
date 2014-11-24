@@ -94,9 +94,6 @@ public class TextView implements View {
 
         while(!moveString.matches(inputPattern)){
              return new Move("M(" + moveString + "|" + colour+")");
-//            System.out.println("Incorrect format of input. See guidelines at top of window.");
-//            System.out.print("Your move: ");
-            //moveString = keyboard.nextLine();
         }
 
         int x1 = (int)moveString.toUpperCase().charAt(0)-64;

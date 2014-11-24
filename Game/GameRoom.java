@@ -14,16 +14,34 @@ import java.net.*;
 import java.util.*;
 /**
 *
-* @author Tim
+* @author Tim and MIA. BITCH I DID THIIIIIIINGS.
 */
 public class GameRoom extends Observable{
     Board board;
     Rules rules;
     int numPlayers;
 
-    public GameRoom(){
+    public GameRoom(char[] ruleDef){
         board = new Standard8x8Board();
-        rules = new Castling(new DrawByAgreement(new Promotion(new BasicRules(board))));
+        rules = new BasicRules(board);
+
+        for(char letter : ruleDef){
+            switch(letter){
+                case 'c':
+                    rules = new Castling(rules);
+                    break;
+                case 'd':
+                    rules = new DrawByAgreement(rules);
+                    break;
+                case 'p':
+                    rules = new Promotion(rules);
+                    break;
+                case 'f':
+                    rules = new FiftyMoveRule(rules);
+                    break;
+            }
+        }
+
         rules.setupBoard(board);
         numPlayers = 0;
     }

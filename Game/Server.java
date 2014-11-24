@@ -177,8 +177,9 @@ public class Server {
     public Server(){
         ServerSocket socket=null;
         rooms = new ArrayList<GameRoom>();
-        rooms.add(new GameRoom());
-        rooms.add(new GameRoom());
+        //c,d,p,f are the options for new gameroom
+        rooms.add(new GameRoom("cdpf".toCharArray()));
+//        rooms.add(new GameRoom());
         clients = new ArrayList<ClientConnect>();
         try{
             socket = new ServerSocket(5001);
