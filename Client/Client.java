@@ -132,7 +132,8 @@ public class Client {
         String input;
 
         System.out.println ("Please enter the ip address of the server you would like to connect to.");
-        input = "127.0.0.1";//keyboard.nextLine();
+        input = "127.0.0.1";
+        //input = keyboard.nextLine();
         while(!input.matches(pattern)){
             System.out.println("Please enter a valid IP address!");
             input = keyboard.nextLine();
