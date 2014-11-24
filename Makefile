@@ -7,7 +7,7 @@ javaCLASS = ${javaSOURCE:.java=.class}
 javaMAINCLASS = Client.Client
 
 default: $(javaCLASS)
-	@ echo "Make completed - type 'make run' to run the application."
+	@ echo "Make completed - type 'make run' to start a client and ‘make server' to start the server. Server must be started before clients."
     
 $(javaCLASS): %.class:%.java
 	@echo "Building $@..."
@@ -16,6 +16,10 @@ $(javaCLASS): %.class:%.java
 run:
 	@ echo "Starting Chess Program..."
 	@ $(JRE) $(JREF) $(javaMAINCLASS)
+
+server:
+	@ echo "Starting Server..."
+	@ $(JRE) $(JREF) Game.Server
 	
 clean:
 	@ echo "Cleaning Up..."

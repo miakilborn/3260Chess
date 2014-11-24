@@ -143,18 +143,32 @@ public class Client {
         c.send("RDY");
         c.send("ROOMS");
         String rooms = c.read();
-        String room[] = rooms.split("[{:,}]");
-        for(int i = 2; i < room.length; i+=2){
-            System.out.print(room[i]);
-            if(i%4==0){
-                System.out.println();
+        String temp[] = rooms.split("[{:,}]");
+        ArrayList<String> room = new ArrayList<String>();
+
+        int i = 0;
+        for (String r : temp){
+            if(!r.matches(".*\\w.*")){
+               continue;
             }
-            else{
+            if(i%2 == 1) {
+                room.add(r);
+            }
+            i++;
+        }
+
+        for (i = 0; i < room.size(); i++){
+            System.out.print(room.get(i));
+            if(i%2 == 1){
+                System.out.print("\n");
+            } else{
                 System.out.print(": ");
             }
+
         }
+
         System.out.println("Which room would you like to join?");
-        c.send("JOIN|"+keyboard.nextLine());
+        c.send("JOIN|" + keyboard.nextLine());
         c.start();
         while(true){
             Move move = this.view.getMove();
