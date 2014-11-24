@@ -80,6 +80,8 @@ public class TextView implements View {
             System.out.print(c + " ");
 
         System.out.println();
+        if (colour != null)
+            System.out.print("Your move: ");
     }
 
     public Move getMove(){
@@ -114,7 +116,6 @@ public class TextView implements View {
             }
         } else {
             System.out.println("Please select a piece.");
-            System.out.print("Your move: ");
         }
         return move;
     }
@@ -126,11 +127,6 @@ public class TextView implements View {
             } else {
                     this.whatCase = "lower";
             }
-    }
-
-    public String question(String q){
-        System.out.println("Question: "+q);
-        return keyboard.nextLine();
     }
 
     public void displayMessage(String msg){
