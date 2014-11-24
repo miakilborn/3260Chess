@@ -16,12 +16,6 @@ public class TextView implements View {
     Scanner keyboard = new Scanner(System.in);
     Board board;
 
-    public String getUsername(){
-        System.out.print("Name: ");
-        name = keyboard.nextLine();
-        return name;
-    }
-
     public void displayBoard(Board board){
         //clear the screen
         final String ANSI_CLS = "\u001b[2J";
@@ -29,9 +23,15 @@ public class TextView implements View {
         System.out.print(ANSI_CLS + ANSI_HOME);
         System.out.flush();
 
-        System.out.println("Welcome to Chess, " + name + ". You are " + colour + ", which is displayed as " + whatCase + " case.");
-        System.out.println("Moves are formatted as \"XY-XY\" ex \"B2-B4\"");
-        System.out.println("To request a draw by agreement (if enabled) enter 'Draw' ");
+        if(colour == null){
+            //the view is for a client
+            System.out.println("Welcome to Chess. You have joined as an observer. Moves are not allowed");
+        } else {
+
+            System.out.println("Welcome to Chess. You are " + colour + ", which is displayed as " + whatCase + " case.");
+            System.out.println("Moves are formatted as \"XY-XY\" ex \"B2-B4\"");
+            System.out.println("To request a draw by agreement (if enabled) enter 'Draw' ");
+        }
 
         this.board = board;
         printBoard();
