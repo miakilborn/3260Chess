@@ -23,7 +23,7 @@ public class GameRoom extends Observable{
 
     public GameRoom(){
         board = new Standard8x8Board();
-        rules = new Promotion(new BasicRules(board));
+        rules = new Castling(new DrawByAgreement(new Promotion(new BasicRules(board))));
         rules.setupBoard(board);
         numPlayers = 0;
     }
