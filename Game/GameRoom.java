@@ -35,11 +35,4 @@ public class GameRoom extends Observable{
     public String toString(){
         return "Default Game Room";
     }
-
-    public static void main(String []args) throws InterruptedException, FileNotFoundException{
-        File file = new File("log_client.txt");
-        FileOutputStream fos = new FileOutputStream(file);
-        PrintStream ps = new PrintStream(fos);
-        System.setErr(ps);
-    }
 }

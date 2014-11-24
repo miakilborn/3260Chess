@@ -28,7 +28,6 @@ public class Server {
         PrintWriter out;
         BufferedReader in;
         public boolean ready=false;
-        private String answer;
 
         public void send(String s){
             try{
@@ -57,20 +56,11 @@ public class Server {
             this.send("MSG|"+m);
         }
 
-        public String question(String q){
-            this.answer = "";
-            this.send("Q|"+q);
-            while(this.answer.equals(""));
-            return this.answer;
-            //return this.read(); //This will block the process.
-        }
-
         public void run(){
             System.err.println ("Thread started for client: "+this.id);
             String line;
             String array[] = new String[1];
             while(true){
-                //Thread.sleep(10/);
                 line = this.read();
                 if(line == null){
                     continue;
@@ -83,12 +73,6 @@ public class Server {
                     array[0] = line;
                 }
 
-                // System.out.println("ARRAY");
-                // for (int i = 0; i < array.length; i++){
-                //     System.out.println(i+": "+array[i]);
-                // }
-                // System.out.println("END ARRAY");
-
                 switch(array[0]){
                     case "NRDY":
                         this.ready=false;
@@ -97,7 +81,7 @@ public class Server {
                         this.ready=true;
                         break;
                     case "PROMPT":
-                        System.err.println("Prompt response recieved.");
+                        System.out.println("Prompt response recieved.");
                     case "MV":
                         if(this.r == Role.SPECTATOR){
                             this.send("MSG|You can not make moves, you are registered as a spectator.");
@@ -119,6 +103,8 @@ public class Server {
                                 }
                             }
                             else{
+                                if (res.getMessage() == null || res.getMessage().length() == 0)
+                                    res = new Result(false, "Invalid input");
                                 System.err.println("Invalid move. Notifying player.");
                                 this.send("MSG|Move could not be made: "+res.getMessage());
                             }

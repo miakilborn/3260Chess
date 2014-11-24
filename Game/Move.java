@@ -26,11 +26,8 @@ public class Move {
         s = s.replaceAll("M\\(|\\)$","");
         String[] tokens = s.split("\\|");
         if (tokens.length >= 4){
-            
             String c1 = tokens[0];
             String c2 = tokens[1];
-            System.out.println("c1: " + c1);
-            System.out.println("c2: " + c2);
             
             currentPosition = new Coordinate(c1);
             nextPosition = new Coordinate(c2);
@@ -46,13 +43,14 @@ public class Move {
                 this.colour = tokens[4];
             } 
         } else if(tokens.length >= 2){
-            if (tokens[0].equalsIgnoreCase("Draw"))
+            if (tokens[0].equalsIgnoreCase("Draw")){
                 isDraw = true;
+            }
             this.data = tokens[0];
             this.colour = tokens[1];
             this.currentPosition = null;
             this.nextPosition = null;
-        }else {
+        } else {
             System.err.println("Invalid move object, cannot construct properly: " + s);
             currentPosition = null;
             nextPosition = null;
