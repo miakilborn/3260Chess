@@ -53,3 +53,4 @@ LIMITATIONS
 - Stalemate will not notify of end of game, and doesn't work all the time
 - Generally end-game messages are passed, but need to trigger the end game action...
 
+Test
