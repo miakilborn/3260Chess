@@ -96,6 +96,8 @@ public class Server {
                     case "RDY":
                         this.ready=true;
                         break;
+                    case "PROMPT":
+                        System.err.println("Prompt response recieved.");
                     case "MV":
                         if(this.r == Role.SPECTATOR){
                             this.send("MSG|You can not make moves, you are registered as a spectator.");
@@ -106,11 +108,15 @@ public class Server {
                             for (int i = 1; i < array.length ; i++){
                                 move += array[i] + "|";
                             }
+                            move = move.substring(0,move.length()-1);
                             Result res = this.room.rules.makeMove(new Move(move));
                             if(res.isValid()){
                                 System.err.println("Valid move! Move made, updating observers");
                                 this.room.setChanged();
                                 this.room.notifyObservers(this.room.board);
+                                if (res.getMessage().contains("PROMPT")){
+                                    this.send(res.getMessage());
+                                }
                             }
                             else{
                                 System.err.println("Invalid move. Notifying player.");
@@ -154,7 +160,7 @@ public class Server {
                         this.room.numPlayers++ ;
                         this.update(this.room,this.room.board);
                         //this.update(this.room,this.room.board.toString());
-                        break;
+                        break;                        
                     default:
                         System.err.println("Unknown command: "+array[0]);
                         break;

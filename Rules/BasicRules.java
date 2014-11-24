@@ -28,6 +28,9 @@ public class BasicRules extends Rules {
     
     @Override
     public Result makeMove(Move move){
+        if (move.getMoved()){
+            lastMove = move;
+        }
         Piece piece =  board.getPieceFromPosition(move.getCurrentPosition()); //players piece he/she wants to move
         Coordinate nextPostion = move.getNextPosition();
         Piece capture = board.getPieceFromPosition(nextPostion);

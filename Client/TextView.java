@@ -83,16 +83,18 @@ public class TextView implements View {
     }
 
     public Move getMove(){
+        Move move = null;
         moveString = keyboard.nextLine();
-        if((moveString.equals("Draw")) ||(moveString.equals("draw")) || (moveString.equals("DRAW"))){
-            Move move = new Move("Draw"+","+colour);
-            return move;
-        }
+//        if((moveString.equals("Draw")) ||(moveString.equals("draw")) || (moveString.equals("DRAW"))){
+//            Move move = new Move("Draw"+","+colour);
+//            return move;
+//        }
 
         while(!moveString.matches(inputPattern)){
-            System.out.println("Incorrect format of input. See guidelines at top of window.");
-            System.out.print("Your move: ");
-            moveString = keyboard.nextLine();
+             return new Move("M(" + moveString + "|" + colour+")");
+//            System.out.println("Incorrect format of input. See guidelines at top of window.");
+//            System.out.print("Your move: ");
+            //moveString = keyboard.nextLine();
         }
 
         int x1 = (int)moveString.toUpperCase().charAt(0)-64;
@@ -101,7 +103,7 @@ public class TextView implements View {
         int y2 = (int)moveString.toUpperCase().charAt(4)-48;
 
         Piece p = board.getPieceFromPosition(new Coordinate(x1,y1));
-        Move move = null;
+        
         if (p != null){
             move = new Move(p.getColour(), new Coordinate(x1,y1), new Coordinate(x2,y2));
 

@@ -43,10 +43,8 @@ public class Client {
             if(this.client.role.equals("PLAYER")){
                 Move move = this.client.view.getMove();
                 if(move!=null){
-                //this.send("NRDY");
                     this.send("MV|"+move.toString());
                 }
-                //this.send("RDY");
             }
         }
 
@@ -93,6 +91,8 @@ public class Client {
                     case "COLOUR":
                         this.client.view.setPlayerColour(array[1]);
                         break;
+                    case "PROMPT":
+                        this.client.view.displayMessage(array[1]);
                     default:
                     System.err.println("Unknown command: "+array[0]);
                     break;
@@ -156,7 +156,9 @@ public class Client {
         c.send("JOIN|"+keyboard.nextLine());
         c.start();
         while(true){
-            c.send("MV|"+this.view.getMove().toString());
+            Move move = this.view.getMove();
+            System.err.println("Sending server move: " + move);
+            c.send("MV|"+move);
         }
     }
 

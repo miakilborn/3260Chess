@@ -10,7 +10,7 @@ public class Coordinate{
 
     public Coordinate(String d){
         if(d.charAt(0)=='C'){
-            d = d.replaceAll("C|\\(|\\)","");
+            d = d.replaceAll("C\\(|\\)","");
             String [] sp = d.split(",");
             this.x = Integer.parseInt(sp[0]);
             this.y = Integer.parseInt(sp[1]);

@@ -21,10 +21,10 @@ public class Move {
     }
 
     public Move(String s){
-        System.out.println("s: " + s);
+        System.err.println("Constructing: " + s);
         this.colour = colour;
         s = s.replaceAll("M\\(|\\)$","");
-        String[] tokens = s.split("[|]");
+        String[] tokens = s.split("\\|");
         if (tokens.length >= 4){
             
             String c1 = tokens[0];
@@ -45,10 +45,10 @@ public class Move {
             if (tokens.length >= 5){
                 this.colour = tokens[4];
             } 
-        } else if(tokens.length > 2){
+        } else if(tokens.length >= 2){
             if (tokens[0].equalsIgnoreCase("Draw"))
                 isDraw = true;
-            data = tokens[0];
+            this.data = tokens[0];
             this.colour = tokens[1];
             this.currentPosition = null;
             this.nextPosition = null;
@@ -102,6 +102,15 @@ public class Move {
     
     public void setMoved(boolean performed){
             this.performed = performed;
+    }
+    
+    /**
+     * Temporary method for overriding this variable, for special cases to allow
+     * things promotion to maintain players turn when selecting piece type
+     * @param colour 
+     */
+    public void setColour(String colour){
+        this.colour = colour;
     }
 
     public String toString(){

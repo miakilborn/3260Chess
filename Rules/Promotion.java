@@ -10,6 +10,8 @@ import java.util.Scanner;
  */
 public class Promotion extends RulesDecorator {
     private Rules rules;
+    private Move lastMove;
+    private boolean expectPrompt;
     
     public Promotion(Rules rules){
         this.rules = rules;
@@ -33,36 +35,23 @@ public class Promotion extends RulesDecorator {
         return true;
     }
     
-    /**
-     * Obtain the piece that the player wants to promote to
-     * @param colour
-     * @return a new Piece object
-     */
-    private Piece promptPromotion(String colour){
+    private Piece parseChoice(String colour, String choice){
         Piece piece = null;
-        Scanner keyboard = new Scanner(System.in);
-        System.out.println("What would you like to be promoted to? Options [q,n,r,b]");
-        while (piece == null){
-            System.out.print("$> ");
-            String pieceStr = keyboard.nextLine();
-            char p = pieceStr.toLowerCase().charAt(0);
-            switch(p){
-                case 'q':
-                    piece = new Queen(colour, new Coordinate(-1,-1));
-                    break;
-                case 'n':
-                    piece = new Knight(colour, new Coordinate(-1,-1));
-                    break;
-                case 'r':
-                    piece = new Rook(colour, new Coordinate(-1,-1));
-                    break;
-                case 'b':
-                    piece = new Bishop(colour, new Coordinate(-1,-1));
-                    break;
-                default:
-                    System.out.println("Invalid choice, try again");
-                    break;
-            }
+        switch(choice.toLowerCase().charAt(0)){
+            case 'q':
+                piece = new Queen(colour, new Coordinate(-1,-1));
+                break;
+            case 'n':
+                piece = new Knight(colour, new Coordinate(-1,-1));
+                break;
+            case 'r':
+                piece = new Rook(colour, new Coordinate(-1,-1));
+                break;
+            case 'b':
+                piece = new Bishop(colour, new Coordinate(-1,-1));
+                break;
+            default:
+                break;
         }
         return piece;
     }
@@ -96,16 +85,38 @@ public class Promotion extends RulesDecorator {
 
     @Override
     public Result makeMove(Move move) {
-        Result result = checkMove(move); //Do promotion checks
-        if (!move.getMoved() && result.isValid()){ //perform the move
-            move.setPieceCaptured(move.getNextPosition());
-            Piece p = this.promptPromotion(move.getColour());
-            p.setPosition(move.getNextPosition());
-            board.removePiece(board.getPieceFromPosition(move.getCurrentPosition()));
+        Result result = null;
+        String moveData = move.getData();
+        System.err.println("Promotional: " + moveData + " " + expectPrompt + " "+ move);
+        if (expectPrompt && moveData != null && !move.getColour().equals(lastMove.getColour())){
+            Piece p = this.parseChoice(move.getColour(), moveData);
             move.setMoved(true);
+            if (p != null){
+                p.setPosition(lastMove.getNextPosition());
+                board.addPiece(p);
+                lastMove = move;
+                expectPrompt = false;
+                result = new Result(true);
+            } else {
+                result = new Result(true, "PROMPT|Invalid, try again. Options [q,n,r,b]");
+            }
             rules.makeMove(move);
-        } else { //this rule isn't applicable, try another rule
-            result = rules.makeMove(move);
+            
+        } else {
+            result = checkMove(move); //Do promotion checks
+            if (!move.getMoved() && result.isValid()){ //perform the move
+                lastMove = move;
+                lastMove.setColour((move.getColour().equals("White")?"Black":"White"));
+                move.setPieceCaptured(move.getNextPosition());
+                board.removePiece(board.getPieceFromPosition(move.getCurrentPosition()));
+                move.setMoved(true);
+                result = new Result(true, "PROMPT|What would you like to be promoted to? Options [q,n,r,b]");
+                expectPrompt = true;
+                rules.makeMove(move);
+
+            } else { //this rule isn't applicable, try another rule
+                result = rules.makeMove(move);
+            }
         }
         return result;
     }
