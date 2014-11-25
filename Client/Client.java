@@ -79,7 +79,11 @@ public class Client {
                     break;
                     case "UP":
                         this.client.view.update = true;
-                        this.client.view.displayBoard(new Standard8x8Board(array[1]));
+                        try {
+                            this.client.view.displayBoard(new Standard8x8Board(array[1]));
+                        } catch (Exception ignored){
+                            System.out.println(array[1]);
+                        }
                         this.client.view.update = false;
                     break;
                     case "MSG":

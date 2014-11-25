@@ -86,21 +86,29 @@ public class Server {
                         if(this.r == Role.SPECTATOR){
                             this.send("MSG|You can not make moves, you are registered as a spectator.");
                             break;
-                        }
-                        else{
+                        } else {
                             String move = "";
                             for (int i = 1; i < array.length ; i++){
                                 move += array[i] + "|";
                             }
                             move = move.substring(0,move.length()-1);
+                            if (this.room.isGameOver()){
+                                break;
+                            }
                             Result res = this.room.rules.makeMove(new Move(move));
                             if(res.isValid()){
                                 System.err.println("Valid move! Move made, updating observers");
-                                this.room.setChanged();
-                                this.room.notifyObservers(this.room.board);
-                                if (res.getMessage().contains("PROMPT")){
+                                if (res.isGameOver()){
+                                    this.room.setGameOver();
+                                    this.room.setChanged();
+                                    this.room.notifyObservers("*******GAME OVER******");
+                                    break;
+                                } else if (res.getMessage().contains("PROMPT")){
                                     this.send(res.getMessage());
                                 }
+                                this.room.setChanged();
+                                this.room.notifyObservers(this.room.board);
+                                
                             }
                             else{
                                 if (res.getMessage() == null || res.getMessage().length() == 0)

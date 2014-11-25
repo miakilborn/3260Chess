@@ -21,15 +21,23 @@ public class DrawByAgreement extends RulesDecorator {
         this.rules = rules;
         this.board = rules.board;
     }
+    
+    public Result checkMove(Move move){
+        if (move != null && move.getData() != null && move.getData().equalsIgnoreCase("draw")){
+            return new Result(true, "Draw move");
+        } else {
+            return new Result(false, "Not a draw move");
+        }
+    }
 
     @Override
     public Result makeMove(Move move) {
         Result result = null;
-        if (move.isDraw() && lastMove != null && lastMove.isDraw() && !lastMove.getColour().equals(move.getColour())) {
+        if (checkMove(lastMove).isValid() && checkMove(move).isValid()) {
             result = new Result(true, true, "Confirmed draw");
-        } else if (move.isDraw()){
+        } else if (checkMove(move).isValid()){
             lastMove = move;
-            result = new Result(true, false, "Draw");
+            result = new Result(true, false, "PROMPT|Other player requested draw, type 'draw' to confirm");
         } else {
             return rules.makeMove(move);
         }

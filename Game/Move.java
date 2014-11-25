@@ -6,7 +6,6 @@ public class Move {
     private boolean valid = false;
     private final Coordinate currentPosition;
     private final Coordinate nextPosition;
-    private boolean isDraw = false;
     private boolean performed = false; //defines if move was performed already or not
     private String data = "";
     private String colour = ""; //colour of player that made this move
@@ -34,18 +33,11 @@ public class Move {
             if(tokens[2].equals("true")){
                 this.captured = new Coordinate(c2);
             }
-
-            if (tokens[3].equals("true")){
-                this.isDraw = true;
-                System.err.println("This move is constructed with isDraw flag set TRUE");
-            }
-            if (tokens.length >= 5){
-                this.colour = tokens[4];
+            
+            if (tokens.length >= 4){
+                this.colour = tokens[3];
             } 
         } else if(tokens.length >= 2){
-            if (tokens[0].equalsIgnoreCase("Draw")){
-                isDraw = true;
-            }
             this.data = tokens[0];
             this.colour = tokens[1];
             this.currentPosition = null;
@@ -56,10 +48,6 @@ public class Move {
             nextPosition = null;
             captured = null;
         }
-    }
-
-    public boolean isDraw(){
-        return isDraw;
     }
     
     public boolean isValid(){
@@ -117,7 +105,7 @@ public class Move {
             return ("M("+data+"|"+colour+")");
         } else {
             return ("M("+currentPosition.toString()+"|"+nextPosition.toString()
-                +"|"+(captured==null?"false":"true")+"|"+Boolean.toString(isDraw)+"|"+colour+")");
+                +"|"+(captured==null?"false":"true")+"|"+colour+")");
         }
         
     }

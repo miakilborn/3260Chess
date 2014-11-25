@@ -20,6 +20,7 @@ public class GameRoom extends Observable{
     Board board;
     Rules rules;
     int numPlayers;
+    boolean gameOver;
     public String description = "";
 
     public GameRoom(char[] ruleDef){
@@ -53,6 +54,14 @@ public class GameRoom extends Observable{
 
     public void setChanged(){
         super.setChanged();
+    }
+    
+    public void setGameOver(){
+        gameOver = true;
+    }
+    
+    public boolean isGameOver(){
+        return gameOver;
     }
 
     public String toString(){
