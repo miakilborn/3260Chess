@@ -65,7 +65,6 @@ public class EnPassant extends RulesDecorator {
     
     @Override
     public Result makeMove(Move move) {
-        System.out.println("Checking En Passant");
         Result result = checkMove(move);
         if (result.isValid()){
             Piece myPiece = board.getPieceFromPosition(move.getCurrentPosition());
@@ -76,7 +75,6 @@ public class EnPassant extends RulesDecorator {
             board.setLastMove(move);
             rules.makeMove(move);
         } else {
-            System.out.println(result.getMessage());
             result = rules.makeMove(move);
         }
         return result;

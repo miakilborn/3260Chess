@@ -47,14 +47,93 @@ public class BasicRules extends Rules {
         }
 
         // Check for king in check (by temporarly performing the move)
-//        if (isGoingToBeInCheck(board, piece.getColour(), move)){
-//            return new Result(false, "This move puts you in check");
-//        }
+        if (isGoingToBeInCheck(piece.getColour(), move)){
+            return new Result(false, "This move puts/keeps you in check");
+        }
+        
         if (result.isValid()){
             board.performMove(move);
         }
         
         return result;
+    }
+    
+    /**
+    * Checks if specified colour is currently in check
+    * @param	board reference, and player colour (White/Black)
+    * @author 	Tim
+    */
+    public boolean isInCheck(Board board, String colour){
+        ArrayList<Piece> pieces = board.getPieces();
+        Coordinate kingCoords = getKingPosition(colour);
+
+        for (int i=0;i<pieces.size();i++){
+            Piece piece = pieces.get(i);
+            if (!piece.getColour().equals(colour)){
+                Move move = new Move(colour, piece.getPosition(), kingCoords);
+                if (checkMoveByPiece(move).isValid())
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Performs the move temporarily to verify if the move puts player in check
+     * @param board
+     * @param colour
+     * @author Tim
+     * @param move
+     * @return
+     */
+
+    public boolean isGoingToBeInCheck(String colour, Move move){
+        Piece piece = board.getPieceFromPosition(move.getCurrentPosition());
+        Piece capture = board.getPieceFromPosition(move.getNextPosition());
+        piece.setPosition(move.getNextPosition());  //Perform the piece move temporarly, check if it makes the player in check who is making the move
+
+        boolean isCheck = false;
+        if (capture != null){
+            capture.setPosition(new Coordinate(0,0));
+        }
+
+        if (isInCheck(board, piece.getColour())){ //this move has made player put him/herself in check, invalid move!
+            isCheck = true;
+        }
+
+        if (capture != null)
+            capture.setPosition(move.getNextPosition());
+        piece.setPosition(move.getCurrentPosition());
+
+        return isCheck;
+    }
+    
+    /**
+    * Gets the Piece object of the king owned by specified colour
+    * @author 	Tim
+    */
+    private Piece getKing(String colour){
+        ArrayList<Piece> pieces = board.getPieces();
+        for (int i=0;i<pieces.size();i++){ //obtain position of King to that of specified colour
+            Piece piece = pieces.get(i);
+            if (piece.getColour().equals(colour) && (piece instanceof King)){
+                    return piece;
+            }
+        }
+        return null;
+    }
+    
+    /**
+    * Gets the position of the king owned by specified colour
+    * @param	board reference, and player colour (White/Black)
+    * @author 	Tim
+    */
+    private Coordinate getKingPosition(String colour){
+            Piece king = getKing(colour);
+            if (king != null)
+                return king.getPosition();
+            else
+                return null;
     }
     
     /**
@@ -160,8 +239,8 @@ public class BasicRules extends Rules {
     public Result checkMoveKing(Move move){
         Coordinate cPos = move.getCurrentPosition();
 
-        ArrayList<Coordinate> logicalMoves = new ArrayList<Coordinate>();
-        ArrayList<Coordinate> validMoves = new ArrayList<Coordinate>();
+        ArrayList<Coordinate> logicalMoves = new ArrayList<>();
+        ArrayList<Coordinate> validMoves = new ArrayList<>();
         logicalMoves.add(new Coordinate(cPos.getX()-1, cPos.getY()+1));
         logicalMoves.add(new Coordinate(cPos.getX()+0, cPos.getY()+1));
         logicalMoves.add(new Coordinate(cPos.getX()+1, cPos.getY()+1));
