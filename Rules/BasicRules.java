@@ -13,9 +13,7 @@ import java.util.ArrayList;
  *
  * @author Tim
  */
-public class BasicRules extends Rules {
-    private Move lastMove = null;
-    
+public class BasicRules extends Rules {    
     public BasicRules(Board board){
         this.board = board;
     }
@@ -351,5 +349,10 @@ public class BasicRules extends Rules {
                 return new Result(true);
         }
         return new Result(false, "A knight may not move like that");
-    } 
+    }
+    
+    @Override
+    public Board getBoard(){
+        return board;
+    }
 }

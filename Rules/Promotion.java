@@ -10,7 +10,6 @@ import java.util.Scanner;
  */
 public class Promotion extends RulesDecorator {
     private Rules rules;
-    private Move lastMove;
     private boolean expectPrompt;
     
     public Promotion(Rules rules){

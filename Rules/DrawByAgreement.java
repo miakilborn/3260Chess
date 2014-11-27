@@ -15,7 +15,7 @@ import Game.Result;
  */
 public class DrawByAgreement extends RulesDecorator {
     private Rules rules;
-    private Move lastMove;
+    private Move lastMove; //storage locally to this rule so we don't affect the game
     
     public DrawByAgreement(Rules rules){
         this.rules = rules;

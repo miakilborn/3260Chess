@@ -9,6 +9,7 @@ import java.util.ArrayList;
  * @author Tim
  */
 public abstract class Rules {
+    Move lastMove = null;
     Board board =  null;
     
     public Result makeMove(Move move) {
@@ -73,5 +74,9 @@ public abstract class Rules {
 
         for (int i=0;i<pieces.size();i++)
             board.addPiece(pieces.get(i));
+    }
+    
+    public Board getBoard(){
+        return null;
     }
 }
