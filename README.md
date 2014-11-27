@@ -2,8 +2,9 @@
 =========
 
 Chess game for CIS*3260 Software Design 4
-
-Assumes there is only 2 players per gameroom, with as many spectators (observers) as one wants.
+Assumptions:
+- 2 players per chess game
+- Many observers per chess game
 
 GROUP MEMBERS
 =============
@@ -24,21 +25,20 @@ GAME PLAY
 To compile the program's source code, navigate to the directory where this README is located in a terminal window. On the command line, run:
 'make'
 
-This implementation of chess can be played as hotseat, but has been designed to run smoothly over a network. Given this, Running in hotseat mode requires two instances of the game to be run at the same time. This decision was made as the developers did not want to redesign and rewrite a lot of code to include networking in the future.
-Hotseat is defined as one keyboard, so running both game instances locally is considered hotseat.
+This implementation of chess runs on a client-server model architecture.
+When the server is started, the number of game rooms is dynamically decided by the starter of the server. Additionally, the rules are selected for each game room, by the person starting the server. 
 
-Instructions to Run:
-- Open terminal window #1, compile program
-- Open terminal window #2
-** both terminal windows need to be open in the same directory as this README
+RUNNING
+=======
+Compile the program(s) by opening a terminal in the same directory as this readme file and running the command 'make'
+Server:
+	- To start the server, type 'make server'
+Client(s):
+	- To start as a client type 'make run'
 
-- In a terminal, type make server
-- In another terminal, type make run
-- In another terminal, type make run
-
-After selecting the same gameroom in both terminals, one terminal should indicate that it is player 1, the other should indicate that it is player 2.
-
-The gameroom selection defines the rules for the game.
+Once the server is started and configured, clients may connect to the server and join the game room of their choice.
+Clients must choose the gameroom they wish to join, by number. Each gameroom has the rules described to help the client choose their game room.
+If the selected gameroom already has two player, the thrid, fourth, etc. client to join the room will be added as an observer.
 
 Instructions to Play
 - Each player (in each terminal window) is assigned a colour, and respective case to represent pieces on the board
