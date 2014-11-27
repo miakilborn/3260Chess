@@ -6,6 +6,8 @@ public interface Board {
     public boolean addPiece(Piece p);
     public void removePiece(Piece p);
     public ArrayList<Piece> getPieces();
+    public Move getLastMove();
+    public void setLastMove(Move move);
 
     public Piece getPieceFromPosition(Coordinate coord);
 

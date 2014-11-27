@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 public class Standard8x8Board implements Board {
     private ArrayList<Piece> pieces;
+    private Move lastMove;
 
     public Standard8x8Board(){
         pieces = new ArrayList<Piece>();
@@ -56,6 +57,14 @@ public class Standard8x8Board implements Board {
         }
         return null;
     }
+    
+    public Move getLastMove(){
+        return lastMove;
+    }
+    
+    public void setLastMove(Move move){
+        lastMove = move;
+    }
 
     public String toString(){
         String ret = this.getClass().getName() + "|";
@@ -85,5 +94,6 @@ public class Standard8x8Board implements Board {
         }
         p1.setPosition(move.getNextPosition());
         p1.setHasMoved(true);
+        setLastMove(move);
     }
 }

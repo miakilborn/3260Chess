@@ -9,7 +9,6 @@ import java.util.ArrayList;
  * @author Tim
  */
 public abstract class Rules {
-    Move lastMove = null;
     Board board =  null;
     
     public Result makeMove(Move move) {

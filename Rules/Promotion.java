@@ -84,6 +84,7 @@ public class Promotion extends RulesDecorator {
 
     @Override
     public Result makeMove(Move move) {
+        Move lastMove = board.getLastMove();
         Result result = null;
         String moveData = move.getData();
         System.err.println("Promotional: " + moveData + " " + expectPrompt + " "+ move);
@@ -93,7 +94,7 @@ public class Promotion extends RulesDecorator {
             if (p != null){
                 p.setPosition(lastMove.getNextPosition());
                 board.addPiece(p);
-                lastMove = move;
+                board.setLastMove(move);
                 expectPrompt = false;
                 result = new Result(true);
             } else {
@@ -104,15 +105,14 @@ public class Promotion extends RulesDecorator {
         } else {
             result = checkMove(move); //Do promotion checks
             if (!move.getMoved() && result.isValid()){ //perform the move
-                lastMove = move;
-                lastMove.setColour((move.getColour().equals("White")?"Black":"White"));
+                move.setColour((move.getColour().equals("White")?"Black":"White"));
                 move.setPieceCaptured(move.getNextPosition());
-                board.removePiece(board.getPieceFromPosition(move.getCurrentPosition()));
                 move.setMoved(true);
+                board.removePiece(board.getPieceFromPosition(move.getCurrentPosition()));
                 result = new Result(true, "PROMPT|What would you like to be promoted to? Options [q,n,r,b]");
                 expectPrompt = true;
+                board.setLastMove(move);
                 rules.makeMove(move);
-
             } else { //this rule isn't applicable, try another rule
                 result = rules.makeMove(move);
             }

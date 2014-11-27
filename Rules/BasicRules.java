@@ -20,8 +20,9 @@ public class BasicRules extends Rules {
     
     @Override
     public Result makeMove(Move move){
+        Move lastMove = board.getLastMove();
         if (move.getMoved()){
-            lastMove = move;
+            board.setLastMove(move);
         }
         Piece piece =  board.getPieceFromPosition(move.getCurrentPosition()); //players piece he/she wants to move
         Coordinate nextPostion = move.getNextPosition();
@@ -52,9 +53,7 @@ public class BasicRules extends Rules {
         if (result.isValid()){
             board.performMove(move);
         }
-
-        // If still valid, its a good move
-        lastMove = move;
+        
         return result;
     }
     
