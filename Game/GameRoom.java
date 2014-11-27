@@ -40,6 +40,10 @@ public class GameRoom extends Observable{
                     rules = new FiftyMoveRule(rules);
                     this.description += "Fifty-Move ";
                     break;
+                case 'e':
+                    rules = new EnPassant(rules);
+                    this.description += "En-Passant ";
+                    break;
             }
         }
 

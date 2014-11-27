@@ -13,10 +13,10 @@ import Pieces.*;
  *
  * @author Tim
  */
-public class EnPassent extends RulesDecorator {
+public class EnPassant extends RulesDecorator {
     private Rules rules;
     
-    public EnPassent(Rules rules){
+    public EnPassant(Rules rules){
         this.rules = rules;
         this.board = rules.board;
     }
