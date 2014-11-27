@@ -3,7 +3,7 @@
 
 Chess game for CIS*3260 Software Design 4
 
-Assumes there is only 2 players.
+Assumes there is only 2 players per gameroom, with as many spectators (observers) as one wants.
 
 GROUP MEMBERS
 =============
@@ -30,14 +30,15 @@ Hotseat is defined as one keyboard, so running both game instances locally is co
 Instructions to Run:
 - Open terminal window #1, compile program
 - Open terminal window #2
-** both terminal windows need to be open in the same direcory as this readme
+** both terminal windows need to be open in the same directory as this README
 
-- In terminal 1, type make run
-- In terminal 2, type make run
+- In a terminal, type make server
+- In another terminal, type make run
+- In another terminal, type make run
 
-Terminal 1 should indicate that it is player 1, terminal 2 should indicate that it is player 2. At this stage, both terminals should prompt for a name.
+After selecting the same gameroom in both terminals, one terminal should indicate that it is player 1, the other should indicate that it is player 2.
 
-Terminal 1 defines the rules for the game. Terminal 2 plays by the rules given by terminal 1.
+The gameroom selection defines the rules for the game.
 
 Instructions to Play
 - Each player (in each terminal window) is assigned a colour, and respective case to represent pieces on the board
@@ -47,10 +48,6 @@ Instructions to Play
 
 LIMITATIONS
 ===========
-- Both windows will always prompt user for their move, even when it is not their turn. But if it isn't their turn, they're notified
-- When game is ended by draw by agreement, the game doesn't actually end, but is confirmed that both players did agree on a draw
-- 50 move rule is not implemented
 - Stalemate will not notify of end of game, and doesn't work all the time
-- Generally end-game messages are passed, but need to trigger the end game action...
+- End-game messages are passed, but need to trigger the end game action...
 
-Test
