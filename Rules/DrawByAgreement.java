@@ -32,16 +32,17 @@ public class DrawByAgreement extends RulesDecorator {
 
     @Override
     public Result makeMove(Move move) {
-        Result result = null;
-        if (checkMove(lastMove).isValid() && checkMove(move).isValid()) {
-            result = new Result(true, true, "Confirmed draw");
+        if (checkMove(lastMove).isValid() && checkMove(move).isValid() && !lastMove.getColour().equals(move.getColour())) {
+            return new Result(true, true, "Confirmed draw");
         } else if (checkMove(move).isValid()){
             lastMove = move;
-            result = new Result(true, false, "PROMPT|Other player requested draw, type 'draw' to confirm");
+            return new Result(false, "Draw requested, to cancel request just make your move");
         } else {
-            return rules.makeMove(move);
+            Result result = rules.makeMove(move);
+            if (result.isValid()){
+                lastMove = move;
+            }
+            return result;
         }
-        rules.makeMove(move);
-        return result;
     }
 }

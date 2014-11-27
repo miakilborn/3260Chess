@@ -28,7 +28,7 @@ public class FiftyMoveRule extends RulesDecorator {
             } else {
                 movesSinceEvent += 1;
             }
-            if (movesSinceEvent >= 5){
+            if (movesSinceEvent >= 100){
                 return new Result(true, true, "Game Over due to 50 Moves Rule.");
             }
         }
