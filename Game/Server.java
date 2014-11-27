@@ -183,11 +183,37 @@ public class Server {
 
     public Server(){
         ServerSocket socket=null;
+        Scanner keyboard;
         rooms = new ArrayList<GameRoom>();
-        //c,d,p,f are the options for new gameroom
-        rooms.add(new GameRoom("".toCharArray(), new Standard8x8Board()));
-        rooms.add(new GameRoom("cp".toCharArray(), new Standard8x8Board()));
-        rooms.add(new GameRoom("cdpf".toCharArray(), new Standard8x8Board()));
+
+        System.out.println("Hello. Please enter the number of game rooms you would like to have on this server.");
+        keyboard = new Scanner(System.in);
+        int numGames = keyboard.nextInt();
+        String garbage = keyboard.nextLine();
+        System.out.println("Rules: \n\t Castling (c) \n\t Draw-By-Agreement (d) \n\t Promotion (p) \n\t Fifty-Move-Rule (f) \n\t En Passant (e)\n");
+
+        for (int i = 0; i < numGames; i++){
+            System.out.println("Rules for Game Room " + i + ": " + "(cdpf)");
+            String ruleLine = keyboard.nextLine();
+            String rules = "";
+            for (char letter : ruleLine.toCharArray()){
+                switch (letter){
+                    case 'c':
+                    case 'd':
+                    case 'p':
+                    case 'e':
+                    case 'f':
+                        rules += letter;
+                        break;
+                    default:
+                        System.out.println(letter + " is not a recognized rule. Skipping ....");
+                }
+            }
+            rooms.add(new GameRoom(rules.toCharArray(), new Standard8x8Board()));
+        }
+
+        System.out.println("Thank you. Server is running...");
+
         clients = new ArrayList<ClientConnect>();
         try{
             socket = new ServerSocket(5001);
