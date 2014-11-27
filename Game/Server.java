@@ -98,17 +98,16 @@ public class Server {
                             Result res = this.room.rules.makeMove(new Move(move));
                             if(res.isValid()){
                                 System.err.println("Valid move! Move made, updating observers");
+                                this.room.setChanged();
+                                this.room.notifyObservers(this.room.board);
                                 if (res.isGameOver()){
                                     this.room.setGameOver();
                                     this.room.setChanged();
-                                    this.room.notifyObservers("*******GAME OVER******");
+                                    this.room.notifyObservers("*******" + res.getMessage() + "******");
                                     break;
                                 } else if (res.getMessage().contains("PROMPT")){
                                     this.send(res.getMessage());
                                 }
-                                this.room.setChanged();
-                                this.room.notifyObservers(this.room.board);
-                                
                             }
                             else{
                                 if (res.getMessage() == null || res.getMessage().length() == 0)
@@ -186,9 +185,9 @@ public class Server {
         ServerSocket socket=null;
         rooms = new ArrayList<GameRoom>();
         //c,d,p,f are the options for new gameroom
-        rooms.add(new GameRoom("".toCharArray()));
-        rooms.add(new GameRoom("cp".toCharArray()));
-        rooms.add(new GameRoom("cdpf".toCharArray()));
+        rooms.add(new GameRoom("".toCharArray(), new Standard8x8Board()));
+        rooms.add(new GameRoom("cp".toCharArray(), new Standard8x8Board()));
+        rooms.add(new GameRoom("cdpf".toCharArray(), new Standard8x8Board()));
         clients = new ArrayList<ClientConnect>();
         try{
             socket = new ServerSocket(5001);

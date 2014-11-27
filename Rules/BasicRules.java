@@ -6,13 +6,7 @@
 package Rules;
 
 import Game.*;
-import Pieces.Bishop;
-import Pieces.King;
-import Pieces.Knight;
-import Pieces.Pawn;
-import Pieces.Piece;
-import Pieces.Queen;
-import Pieces.Rook;
+import Pieces.*;
 import java.util.ArrayList;
 
 /**

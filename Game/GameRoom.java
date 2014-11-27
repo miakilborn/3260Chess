@@ -6,11 +6,6 @@
 package Game;
 
 import Rules.*;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
-import java.net.*;
 import java.util.*;
 /**
 *
@@ -23,8 +18,8 @@ public class GameRoom extends Observable{
     boolean gameOver;
     public String description = "";
 
-    public GameRoom(char[] ruleDef){
-        board = new Standard8x8Board();
+    public GameRoom(char[] ruleDef, Board board){
+        this.board = board;
         rules = new BasicRules(board);
 
         for(char letter : ruleDef){
